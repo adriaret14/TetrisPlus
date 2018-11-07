@@ -49,8 +49,8 @@ tetrisPlus.gameState = {
         }
         
         //ASIGNAMOS LA PIEZA MEDIANTE UN TRUE RANDOM
-       currentPiece=Math.floor((Math.random() * 7) + 1);
-       //currentPiece=7;
+       //currentPiece=Math.floor((Math.random() * 7) + 1);
+       currentPiece=3;
         
        //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'R');
        //piece.scale.setTo(2);
@@ -71,12 +71,12 @@ tetrisPlus.gameState = {
         if(counter>=realDropSpeed)
             {
                 counter=0;
-                console.log(counter);
+                //console.log(counter);
                 for(var i=0; i<GridTetris.length; i++)
                     {
                         for(var j=0;j<GridTetris[i].length; j++)
                             {
-                                if(GridTetris[i][j]==1)
+                                if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
                                     {
                                         //tetrisPlus.movePieces();
                                         GridTetris[i][j]==null;
@@ -99,7 +99,7 @@ tetrisPlus.gameState = {
                             {
                                 for(var j=0;j<GridTetris[i].length; j++)
                                     {
-                                        if(GridTetris[i][j]==1)
+                                        if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
                                             {
                                                 //tetrisPlus.movePieces();
                                                 GridTetris[i][j]==null;
@@ -130,7 +130,7 @@ tetrisPlus.gameState = {
                             {
                                 for(var j=0;j<GridTetris[i].length; j++)
                                     {
-                                        if(GridTetris[i][j]==1)
+                                        if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
                                             {
                                                 //tetrisPlus.movePieces();
                                                 GridTetris[i][j]==null;
@@ -166,8 +166,176 @@ tetrisPlus.gameState = {
         {
              if(tapZ==false)
                  {
-                    console.log("Rota");  
+                     initialRot++;
+                     if(initialRot>=4)
+                         {
+                            initialRot=0;    
+                         }
                      
+                     switch(currentPiece)
+                         {
+                             case 1:
+                                 //Cubo
+                                 //EL CUBO NO ROTA
+                                 break;
+                             case 2:
+                                 //Barra
+                                 if(initialRot==1 || initialRot==3)
+                                     {
+                                         //ROTAMOS LA PIEZA
+                                         piece[0].position=piece[0].position;
+                                         piece[1].position.x+=distX;
+                                         piece[1].position.y+=distY;
+                                         piece[2].position.x+=distX*2;
+                                         piece[2].position.y+=distY*2;
+                                         piece[3].position.x-=distX;
+                                         piece[3].position.y-=distY;
+                                         
+                                         //CORREGIMOS LAS CASILLAS ACTIVAS
+                                         for(var i=0; i<GridTetris.length; i++)
+                                             {
+                                                 for(var j=0; j<GridTetris[i].length; j++)
+                                                     {
+                                                         if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
+                                                             {
+                                                                 GridTetris[i][j]=null;
+                                                                 if(GridTetris[i][j]==2)
+                                                                     {
+                                                                         GriTetris[i+1][j+1]=2;
+                                                                     }
+                                                                 if(GridTetris[i][j]==3)
+                                                                     {
+                                                                         GriTetris[i+2][j+2]=3;
+                                                                     }
+                                                                 if(GridTetris[i][j]==4)
+                                                                     {
+                                                                         GriTetris[i-1][j-1]=4;
+                                                                     }
+                                                             }
+                                                     }
+                                             }
+                                     }
+                                 else
+                                 {
+                                         //ROTAMOS LA PIEZA
+                                         piece[0].position=piece[0].position;
+                                         piece[1].position.x-=distX;
+                                         piece[1].position.y-=distY;
+                                         piece[2].position.x-=distX*2;
+                                         piece[2].position.y-=distY*2;
+                                         piece[3].position.x+=distX;
+                                         piece[3].position.y+=distY;
+                                     
+                                         //CORREGIMOS LAS CASILLAS ACTIVAS
+                                         for(var i=0; i<GridTetris.length; i++)
+                                             {
+                                                 for(var j=0; j<GridTetris[i].length; j++)
+                                                     {
+                                                         if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
+                                                             {
+                                                                 GridTetris[i][j]=null;
+                                                                 if(GridTetris[i][j]==2)
+                                                                     {
+                                                                         GriTetris[i-1][j-1]=2;
+                                                                     }
+                                                                 if(GridTetris[i][j]==3)
+                                                                     {
+                                                                         GriTetris[i-2][j-2]=3;
+                                                                     }
+                                                                 if(GridTetris[i][j]==4)
+                                                                     {
+                                                                         GriTetris[i+1][j+1]=4;
+                                                                     }
+                                                             }
+                                                     }
+                                             }
+                                 }
+                                 break;
+                             case 3:
+                                 //S
+                                 if(initialRot==1 || initialRot==3)
+                                     {
+                                         //ROTAMOS LA PIEZA
+                                         piece[0].position=piece[0].position;
+                                         piece[1].position.x-=distX;
+                                         piece[1].position.y-=distY;
+                                         piece[2].position.x+=distX;
+                                         piece[2].position.y-=distY;
+                                         piece[3].position.x+=distX*2;
+                                         
+                                         //CORREGIMOS LAS CASILLAS ACTIVAS
+                                         for(var i=0; i<GridTetris.length; i++)
+                                             {
+                                                 for(var j=0; j<GridTetris[i].length; j++)
+                                                     {
+                                                         if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
+                                                             {
+                                                                 GridTetris[i][j]=null;
+                                                                 if(GridTetris[i][j]==2)
+                                                                     {
+                                                                         GriTetris[i-1][j-1]=2;
+                                                                     }
+                                                                 if(GridTetris[i][j]==3)
+                                                                     {
+                                                                         GriTetris[i+1][j-1]=3;
+                                                                     }
+                                                                 if(GridTetris[i][j]==4)
+                                                                     {
+                                                                         GriTetris[i+2][j]=4;
+                                                                     }
+                                                             }
+                                                     }
+                                             }
+                                     }
+                                 else
+                                     {
+                                         //ROTAMOS LA PIEZA
+                                         piece[0].position=piece[0].position;
+                                         piece[1].position.x+=distX;
+                                         piece[1].position.y+=distY;
+                                         piece[2].position.x-=distX;
+                                         piece[2].position.y+=distY;
+                                         piece[3].position.x-=distX*2;
+                                         
+                                         //CORREGIMOS LAS CASILLAS ACTIVAS
+                                         for(var i=0; i<GridTetris.length; i++)
+                                             {
+                                                 for(var j=0; j<GridTetris[i].length; j++)
+                                                     {
+                                                         if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
+                                                             {
+                                                                 GridTetris[i][j]=null;
+                                                                 if(GridTetris[i][j]==2)
+                                                                     {
+                                                                         GriTetris[i+1][j+1]=2;
+                                                                     }
+                                                                 if(GridTetris[i][j]==3)
+                                                                     {
+                                                                         GriTetris[i-1][j+1]=3;
+                                                                     }
+                                                                 if(GridTetris[i][j]==4)
+                                                                     {
+                                                                         GriTetris[i-2][j]=4;
+                                                                     }
+                                                             }
+                                                     }
+                                             }
+                                     }
+                                 break;
+                             case 4:
+                                 //Z
+                                 break;
+                             case 5:
+                                 //J
+                                 break;
+                             case 6:
+                                 //L
+                                 break;
+                             case 7:
+                                 //T
+                                 break;
+                         }
+                     //console.log(initialRot);
                      tapZ=true;
                  }
         }
@@ -205,9 +373,9 @@ function newPiece()
          
          //ACTIVAMOS LAS CASILLAS
          GridTetris[startX][startY]=1;
-         GridTetris[startX][startY+1]=1;
-         GridTetris[startX-1][startY+1]=1;
-         GridTetris[startX-1][startY]=1;
+         GridTetris[startX][startY+1]=2;
+         GridTetris[startX-1][startY+1]=3;
+         GridTetris[startX-1][startY]=4;
          
          break;
      case 2:
@@ -231,9 +399,9 @@ function newPiece()
          
          //ACTIVAMOS LAS CASILLAS
          GridTetris[startX][startY]=1;
-         GridTetris[startX-1][startY]=1;
-         GridTetris[startX-2][startY]=1;
-         GridTetris[startX+1][startY]=1;
+         GridTetris[startX-1][startY]=2;
+         GridTetris[startX-2][startY]=3;
+         GridTetris[startX+1][startY]=4;
          
          break;
      case 3:
@@ -257,9 +425,9 @@ function newPiece()
          
          //ACTIVAMOS LAS CASILLAS
          GridTetris[startX][startY]=1;
-         GridTetris[startX+1][startY]=1;
-         GridTetris[startX][startY+1]=1;
-         GridTetris[startX-1][startY+1]=1;
+         GridTetris[startX+1][startY]=2;
+         GridTetris[startX][startY+1]=3;
+         GridTetris[startX-1][startY+1]=4;
          
          break;
      case 4:
@@ -283,9 +451,9 @@ function newPiece()
          
          //ACTIVAMOS LAS CASILLAS
          GridTetris[startX][startY]=1;
-         GridTetris[startX-1][startY]=1;
-         GridTetris[startX][startY+1]=1;
-         GridTetris[startX+1][startY+1]=1;
+         GridTetris[startX-1][startY]=2;
+         GridTetris[startX][startY+1]=3;
+         GridTetris[startX+1][startY+1]=4;
          
          break;
      case 5:
@@ -309,9 +477,9 @@ function newPiece()
          
          //ACTIVAMOS LAS CASILLAS
          GridTetris[startX][startY]=1;
-         GridTetris[startX+1][startY]=1;
-         GridTetris[startX+1][startY+1]=1;
-         GridTetris[startX-1][startY]=1;
+         GridTetris[startX+1][startY]=2;
+         GridTetris[startX+1][startY+1]=3;
+         GridTetris[startX-1][startY]=4;
          
          break;
      case 6:
@@ -335,9 +503,9 @@ function newPiece()
          
          //ACTIVAMOS LAS CASILLAS
          GridTetris[startX][startY]=1;
-         GridTetris[startX-1][startY]=1;
-         GridTetris[startX-1][startY+1]=1;
-         GridTetris[startX+1][startY]=1;
+         GridTetris[startX-1][startY]=2;
+         GridTetris[startX-1][startY+1]=3;
+         GridTetris[startX+1][startY]=4;
          
          break;
      case 7:
@@ -361,9 +529,9 @@ function newPiece()
          
          //ACTIVAMOS LAS CASILLAS
          GridTetris[startX][startY]=1;
-         GridTetris[startX][startY+1]=1;
-         GridTetris[startX-1][startY]=1;
-         GridTetris[startX+1][startY]=1;
+         GridTetris[startX][startY+1]=2;
+         GridTetris[startX-1][startY]=3;
+         GridTetris[startX+1][startY]=4;
          
          break;                              
     }
