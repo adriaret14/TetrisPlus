@@ -1,103 +1,239 @@
 var Phaser = Phaser || {};
 var tetrisPlus = tetrisPlus || {};
 
-
 var counter=0;
+var startX=4;
+var startY=1;
+var distX;
+var distY;
+var currentPiece;
+var nextPiece;
+var piece=new Array(4);
+
+var GridTetris;
+
 tetrisPlus.gameState = {
     preload:function(){
         this.stage.backgroundColor="00000";
         
+        tetrisPlus.game.load.image('R','assets/img/Box_Single.png');
+        tetrisPlus.game.load.image('I','assets/img/Bar_Single.png');
+        tetrisPlus.game.load.image('L','assets/img/L_Single.png');
+        tetrisPlus.game.load.image('J','assets/img/L_Inverted_Single.png');
+        tetrisPlus.game.load.image('S','assets/img/S_Single.png');
+        tetrisPlus.game.load.image('Z','assets/img/S_Inverted_Single.png');
+        tetrisPlus.game.load.image('T','assets/img/T_Single.png');
+        
     },
     create:function(){        
         
-        tetrisPlus.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
+        //tetrisPlus.game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
         //VARIABLES PARA DEFINIR EL CENTRO DE CADA CELDA DEL GRID(BASADAS EN LAS PIEZAS DEL TETRIS QUE SON DE 8X8 PX)
         
-        var distX=4;
-        var distY=distX;
+        distX=16;
+        distY=distX;
         
         //CREACIÓN DEL GRID DE JUEGO
-        
-        var columns1=new Array(10);
-        var columns2=new Array(10);
-        var columns3=new Array(10);
-        var columns4=new Array(10);
-        var columns5=new Array(10);
-        var columns6=new Array(10);
-        var columns7=new Array(10);
-        var columns8=new Array(10);
-        var columns9=new Array(10);
-        var columns10=new Array(10);
-        var columns11=new Array(10);
-        var columns12=new Array(10);
-        var columns13=new Array(10);
-        var columns14=new Array(10);
-        var columns15=new Array(10);
-        var columns16=new Array(10);
-        var columns17=new Array(10);
-        var columns18=new Array(10);
-        var columns19=new Array(10);
-        var columns20=new Array(10);
-        var columns21=new Array(10);
-        var columns22=new Array(10);
-        var columns23=new Array(10);
-        var columns24=new Array(10);
-        var columns25=new Array(10);
-        
-        columns20[4]=true;
-        columns3[2]=true;
- 
-        var GridTetris=new Array(25);
-        GridTetris[0]=columns1;
-        GridTetris[1]=columns2;
-        GridTetris[2]=columns3;
-        GridTetris[3]=columns4;
-        GridTetris[4]=columns5;
-        GridTetris[5]=columns6;
-        GridTetris[6]=columns7;
-        GridTetris[7]=columns8;
-        GridTetris[8]=columns9;
-        GridTetris[9]=columns10;
-        GridTetris[10]=columns11;
-        GridTetris[11]=columns12;
-        GridTetris[12]=columns13;
-        GridTetris[13]=columns14;
-        GridTetris[14]=columns15;
-        GridTetris[15]=columns16;
-        GridTetris[16]=columns17;
-        GridTetris[17]=columns18;
-        GridTetris[18]=columns19;
-        GridTetris[19]=columns20;
-        GridTetris[20]=columns21;
-        GridTetris[21]=columns22;
-        GridTetris[22]=columns23;
-        GridTetris[23]=columns24;
-        GridTetris[24]=columns25;
-        
-        var cont=0;
-
-       /* for(var i=0; i<GridTetris.length; i++)
+         
+        GridTetris=new Array(25);
+        for(var i=0; i<GridTetris.length; i++)
             {
-                for(var j=0; j<GridTetris[i].length; j++)
-                    {
-                        cont=cont+1;
-                        if(GridTetris[i][j]!=null)
+                GridTetris[i]=new Array(10);
+            }
+        
+        //ACTIVAMOS LA CASILLA DE SPAWN DEL COM DE LA PIEZA
+        GridTetris[startX][startY]=1;
+        
+        //ASIGNAMOS LA PIEZA MEDIANTE UN TRUE RANDOM
+       currentPiece=Math.floor((Math.random() * 7) + 1);
+       //currentPiece=7;
+        
+                        if(GridTetris[startX][startY]!=null)
                             {
-                                alert(i);
+                                //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'R');
+                                //piece.scale.setTo(2);
+                                //var PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game,distY*i, distX*j);
+                                switch(currentPiece)
+                                    {
+                                        case 1:
+                                            //Cubo
+                                             //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'R');
+                                            
+                                            //POSICIONES INICIALES
+                                            piece[0]=tetrisPlus.game.add.image(distY*startX, distX*startY,'R');
+                                            piece[1]=tetrisPlus.game.add.image(distY*(startX-1), distX*startY,'R');
+                                            piece[2]=tetrisPlus.game.add.image(distY*(startX-1), distX*(startY+1),'R');
+                                            piece[3]=tetrisPlus.game.add.image(distY*startX, distX*(startY+1),'R');
+                                            
+                                            //ESCALAMOS LAS PIEZAS
+                                            piece[0].scale.setTo(2);
+                                            piece[1].scale.setTo(2);
+                                            piece[2].scale.setTo(2);
+                                            piece[3].scale.setTo(2);
+                                            
+                                            //ROTACION INICIAL
+                                            
+                                            //ACTIVAMOS LAS CASILLAS
+
+                                            break;
+                                        case 2:
+                                            //Barra
+                                            //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'I');
+                                            
+                                            //POSICIONES INICIALES
+                                            piece[0]=tetrisPlus.game.add.image(distY*startX, distX*startY,'I');
+                                            piece[1]=tetrisPlus.game.add.image(distY*(startX-1), distX*startY,'I');
+                                            piece[2]=tetrisPlus.game.add.image(distY*(startX-2), distX*startY,'I');
+                                            piece[3]=tetrisPlus.game.add.image(distY*(startX+1), distX*startY,'I');
+                                            
+                                            //ESCALAMOS LAS PIEZAS
+                                            piece[0].scale.setTo(2);
+                                            piece[1].scale.setTo(2);
+                                            piece[2].scale.setTo(2);
+                                            piece[3].scale.setTo(2);
+                                            
+                                            //ROTACION INICIAL
+                                            
+                                            //ACTIVAMOS LAS CASILLAS
+                                            
+                                            break;
+                                        case 3:
+                                            //S
+                                            //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'S');
+                                            
+                                            //POSICIONES INICIALES
+                                            piece[0]=tetrisPlus.game.add.image(distY*startX, distX*startY,'S');
+                                            piece[1]=tetrisPlus.game.add.image(distY*(startX+1), distX*startY,'S');
+                                            piece[2]=tetrisPlus.game.add.image(distY*startX, distX*(startY+1),'S');
+                                            piece[3]=tetrisPlus.game.add.image(distY*(startX-1), distX*(startY+1),'S');
+                                            
+                                            //ESCALAMOS LAS PIEZAS
+                                            piece[0].scale.setTo(2);
+                                            piece[1].scale.setTo(2);
+                                            piece[2].scale.setTo(2);
+                                            piece[3].scale.setTo(2);
+                                            
+                                            //ROTACION INICIAL
+                                            
+                                            //ACTIVAMOS LAS CASILLAS
+                                            
+                                            break;
+                                        case 4:
+                                            //Z
+                                            //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'Z');
+                                            
+                                            //POSICIONES INICIALES
+                                            piece[0]=tetrisPlus.game.add.image(distY*startX, distX*startY,'Z');
+                                            piece[1]=tetrisPlus.game.add.image(distY*(startX-1), distX*startY,'Z');
+                                            piece[2]=tetrisPlus.game.add.image(distY*startX, distX*(startY+1),'Z');
+                                            piece[3]=tetrisPlus.game.add.image(distY*(startX+1), distX*(startY+1),'Z');
+                                            
+                                            //ESCALAMOS LAS PIEZAS
+                                            piece[0].scale.setTo(2);
+                                            piece[1].scale.setTo(2);
+                                            piece[2].scale.setTo(2);
+                                            piece[3].scale.setTo(2);
+                                            
+                                            //ROTACION INICIAL
+                                            
+                                            //ACTIVAMOS LAS CASILLAS
+                                            
+                                            break;
+                                        case 5:
+                                            //J
+                                            //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'J');
+                                            
+                                            //POSICIONES INICIALES
+                                            piece[0]=tetrisPlus.game.add.image(distY*startX, distX*startY,'J');
+                                            piece[1]=tetrisPlus.game.add.image(distY*(startX+1), distX*startY,'J');
+                                            piece[2]=tetrisPlus.game.add.image(distY*(startX+1), distX*(startY+1),'J');
+                                            piece[3]=tetrisPlus.game.add.image(distY*(startX-1), distX*startY,'J');
+                                            
+                                            //ESCALAMOS LAS PIEZAS
+                                            piece[0].scale.setTo(2);
+                                            piece[1].scale.setTo(2);
+                                            piece[2].scale.setTo(2);
+                                            piece[3].scale.setTo(2);
+                                            
+                                            //ROTACION INICIAL
+                                            
+                                            //ACTIVAMOS LAS CASILLAS
+                                            
+                                            break;
+                                        case 6:
+                                            //L
+                                            //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'L');
+                                            
+                                            //POSICIONES INICIALES
+                                            piece[0]=tetrisPlus.game.add.image(distY*startX, distX*startY,'L');
+                                            piece[1]=tetrisPlus.game.add.image(distY*(startX-1), distX*startY,'L');
+                                            piece[2]=tetrisPlus.game.add.image(distY*(startX-1), distX*(startY+1),'L');
+                                            piece[3]=tetrisPlus.game.add.image(distY*(startX+1), distX*startY,'L');
+                                            
+                                            //ESCALAMOS LAS PIEZAS
+                                            piece[0].scale.setTo(2);
+                                            piece[1].scale.setTo(2);
+                                            piece[2].scale.setTo(2);
+                                            piece[3].scale.setTo(2);
+                                            
+                                            //ROTACION INICIAL
+                                            
+                                            //ACTIVAMOS LAS CASILLAS
+                                            
+                                            break;
+                                        case 7:
+                                            //T
+                                            //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'T');
+                                            
+                                            //POSICIONES INICIALES
+                                            piece[0]=tetrisPlus.game.add.image(distY*startX, distX*startY,'T');
+                                            piece[1]=tetrisPlus.game.add.image(distY*startX, distX*(startY+1),'T');
+                                            piece[2]=tetrisPlus.game.add.image(distY*(startX-1), distX*startY,'T');
+                                            piece[3]=tetrisPlus.game.add.image(distY*(startX+1), distX*startY,'T');
+                                            
+                                            //ESCALADO DE PIEZAS
+                                            piece[0].scale.setTo(2);
+                                            piece[1].scale.setTo(2);
+                                            piece[2].scale.setTo(2);
+                                            piece[3].scale.setTo(2);
+                                            
+                                            //ROTACIÓN INICIAL
+                                            
+                                            //ACTIVAMOS LAS CASILLAS
+                                            
+                                            break;
+                                    }
                             }
-                    }
-            }*/
-        
-       
-        
 
     },
     update:function(){
-         alert(counter);
+        counter++;
+        if(counter>=80)
+            {
+                counter=0;
+                console.log(counter);
+                for(var i=0; i<GridTetris.length; i++)
+                    {
+                        for(var j=0;j<GridTetris[i].length; j++)
+                            {
+                                if(GridTetris[i][j]==1)
+                                    {
+                                        tetrisPlus.movePieces();
+                                        GridTetris[i][j]==null;
+                                        GridTetris[i+1][j]==1;
+                                        piece[0].position.y+=distY;
+                                        piece[1].position.y+=distY;
+                                        piece[2].position.y+=distY;
+                                        piece[3].position.y+=distY;
+                                    }
+                            }
+                    }
+
+            }
         
     },
-    updateCounter:function(){
-        counter=counter+1;
+    movePieces:function(var i, var j, var direction){
+        
     }
 };
 
