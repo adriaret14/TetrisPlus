@@ -8,6 +8,7 @@ var distX;
 var distY;
 var currentPiece;
 var nextPiece;
+var PieceActive;
 var piece=new Array(4);
 var blocks=new Array();
 var tapL=false;
@@ -49,13 +50,13 @@ tetrisPlus.gameState = {
         }
         
         //ASIGNAMOS LA PIEZA MEDIANTE UN TRUE RANDOM
-       //currentPiece=Math.floor((Math.random() * 7) + 1);
-       currentPiece=7;
+       currentPiece=Math.floor((Math.random() * 7) + 1);
+       //currentPiece=7;
         
        //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'R');
        //piece.scale.setTo(2);
-       //var PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game,15, 5);
-       //tetrisPlus.game.add.existing(PieceActive);
+       PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game,5*distX, 15*distY);
+       tetrisPlus.game.add.existing(PieceActive);
        newPiece();
         
         //ASIGNAMOS LOS INPUTS
@@ -68,6 +69,7 @@ tetrisPlus.gameState = {
 
     },
     update:function(){
+        //PieceActive.move();
         counter++;
         if(counter>=realDropSpeed)
             {
@@ -96,6 +98,7 @@ tetrisPlus.gameState = {
             {
                 if(tapL==false)
                     {
+                        PieceActive.move(1, distX);
                          for(var i=0; i<GridTetris.length; i++)
                             {
                                 for(var j=0;j<GridTetris[i].length; j++)
@@ -127,6 +130,7 @@ tetrisPlus.gameState = {
         {
                 if(tapR==false)
                     {
+                        PieceActive.move(2, distX);
                          for(var i=0; i<GridTetris.length; i++)
                             {
                                 for(var j=0;j<GridTetris[i].length; j++)
