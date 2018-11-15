@@ -23,7 +23,7 @@ var GridTetris;
 tetrisPlus.gameState = {
     preload:function(){
         this.stage.backgroundColor="00000";
-        //Añadimos las imagenes simples
+        
         tetrisPlus.game.load.image('R','assets/img/Box_Single.png');
         tetrisPlus.game.load.image('I','assets/img/Bar_Single.png');
         tetrisPlus.game.load.image('L','assets/img/L_Single.png');
@@ -32,15 +32,12 @@ tetrisPlus.gameState = {
         tetrisPlus.game.load.image('Z','assets/img/S_Inverted_Single.png');
         tetrisPlus.game.load.image('T','assets/img/T_Single.png');
         
-        //Añadimos las imagenes completas
-        tetrisPlus.game.load.image('R_Complete','assets/img/Box.png');
-        tetrisPlus.game.load.image('I_Complete','assets/img/Bar.png');
-        tetrisPlus.game.load.image('L_Complete','assets/img/L.png');
-        tetrisPlus.game.load.image('J_Complete','assets/img/L_Inverted.png');
-        tetrisPlus.game.load.image('S_Complete','assets/img/S.png');
-        tetrisPlus.game.load.image('Z_Complete','assets/img/S_Inverted.png');
-        tetrisPlus.game.load.image('T_Complete','assets/img/T.png');
-    
+        //PLAYER
+        this.game.load.image('bg1', 'assets/img/Fondo1.png');
+        
+        //PERSONAJE
+        this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
+        
     },
     create:function(){        
         
@@ -64,7 +61,7 @@ tetrisPlus.gameState = {
         
        //var piece=tetrisPlus.game.add.image(distY*i, distX*j,'R');
        //piece.scale.setTo(2);
-       PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game,0*distX, 1*distY);
+       PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game,5*distX, 15*distY);
        tetrisPlus.game.add.existing(PieceActive);
        newPiece();
         
@@ -82,7 +79,6 @@ tetrisPlus.gameState = {
         counter++;
         if(counter>=realDropSpeed)
             {
-                PieceActive.move(3, distY);
                 counter=0;
                 //console.log(counter);
                 for(var i=0; i<GridTetris.length; i++)
