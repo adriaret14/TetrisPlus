@@ -18,6 +18,16 @@ var dropSpeed=80;
 var realDropSpeed=dropSpeed;
 var initialRot=0;
 
+var Piecei1;
+var Piecej1;
+var Piecei2;
+var Piecej2;
+var Piecei3;
+var Piecej3;
+var Piecei4;
+var Piecej1;
+
+
 var GridTetris;
 
 tetrisPlus.gameState = {
@@ -58,6 +68,76 @@ tetrisPlus.gameState = {
             GridTetris[i]=new Array(10);
         }
         
+
+        //GridTetris[18][4]=5;
+        GridTetris[0][0]=5;
+        GridTetris[1][0]=5;
+        GridTetris[2][0]=5;
+        GridTetris[3][0]=5;
+        GridTetris[4][0]=5;
+        GridTetris[5][0]=5;
+        GridTetris[6][0]=5;
+        GridTetris[7][0]=5;
+        GridTetris[8][0]=5;
+        GridTetris[9][0]=5;
+        GridTetris[10][0]=5;
+        GridTetris[11][0]=5;
+        GridTetris[12][0]=5;
+        GridTetris[13][0]=5;
+        
+        GridTetris[0][11]=5;
+        GridTetris[1][11]=5;
+        GridTetris[2][11]=5;
+        GridTetris[3][11]=5;
+        GridTetris[4][11]=5;
+        GridTetris[5][11]=5;
+        GridTetris[6][11]=5;
+        GridTetris[7][11]=5;
+        GridTetris[8][11]=5;
+        GridTetris[9][11]=5;
+        GridTetris[10][11]=5;
+        GridTetris[11][11]=5;
+        GridTetris[12][11]=5;
+        GridTetris[13][11]=5;
+        
+        GridTetris[13][1]=5;
+        GridTetris[13][2]=5;
+        GridTetris[13][3]=5;
+        GridTetris[13][4]=5;
+        GridTetris[13][5]=5;
+        GridTetris[13][6]=5;
+        GridTetris[13][7]=5;
+        GridTetris[13][8]=5;
+        GridTetris[13][9]=5;
+        GridTetris[13][10]=5;
+        
+        //GridTetris[18][6]=5;
+        
+        for(var i=0; i<GridTetris.length; i++)
+            {
+                for(var j=0; j< GridTetris[i].length; j++)
+                    {
+                        if(GridTetris[i][j]==5)
+                            {
+                                var a=tetrisPlus.game.add.image(distX*j, distY*i ,'R');
+                                a.scale.setTo(2);
+                                a.anchor.setTo(0.5);
+                            }
+                    }
+            }
+
+        
+        
+
+       /*var b=tetrisPlus.game.add.image(distX*4, distY*18 ,'R');
+        b.scale.setTo(2);
+        b.anchor.setTo(0.5);
+        var c=tetrisPlus.game.add.image(distX*6, distY*18 ,'R');
+        c.scale.setTo(2);
+        c.anchor.setTo(0.5);*/
+
+        
+        
         //ASIGNAMOS LA PIEZA MEDIANTE UN TRUE RANDOM
        currentPiece=Math.floor((Math.random() * 7) + 1);
        //currentPiece=7;
@@ -82,7 +162,7 @@ tetrisPlus.gameState = {
        /*PieceActive = new tetrisPlus.Box_Piece(tetrisPlus.game,5*distX, 2*distY, 5, 2);
        tetrisPlus.game.add.existing(PieceActive);
        PieceActive.startGrid(GridTetris);*/
-       PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game,5*distX, 2*distY, 5, 2);
+       PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game,5*distX, 2*distY, 5, 2, GridTetris);
        tetrisPlus.game.add.existing(PieceActive);
        PieceActive.startGrid(GridTetris);
         
@@ -99,11 +179,13 @@ tetrisPlus.gameState = {
 
     },
     update:function(){
-        //PieceActive.move();
+        
+        //Drop the piece
         counter++;
         if(counter>=realDropSpeed)
         {
-            PieceActive.move(3, distY, GridTetris);
+            console.log(PieceActive.cantMoveDown);
+            PieceActive.move(3, distY);
             counter=0;
         }
         
@@ -112,7 +194,7 @@ tetrisPlus.gameState = {
         {
             if(tapL==false)
             {
-                PieceActive.move(1, distX, GridTetris);                        
+                PieceActive.move(1, distX);                        
                 tapL=true;
             }
            
@@ -127,7 +209,7 @@ tetrisPlus.gameState = {
         {
                 if(tapR==false)
                 {
-                    PieceActive.move(2, distX, GridTetris);                        
+                    PieceActive.move(2, distX);                        
                     tapR=true;
                 }
             }
@@ -156,7 +238,7 @@ tetrisPlus.gameState = {
                  {
                     initialRot=0;    
                  }
-                 PieceActive.rotate(initialRot, GridTetris);
+                 PieceActive.rotate(initialRot);
 
                  console.log(initialRot);
                  tapZ=true;
@@ -166,6 +248,14 @@ tetrisPlus.gameState = {
         {
             tapZ=false;
         }
+        
+        //SPAWNEAR NUEVA PIEZA
+        if(PieceActive.cantMoveDown)
+            {
+                //console.log("A");
+                
+                //PieceActive.destroy();
+            }
         
     }
 
