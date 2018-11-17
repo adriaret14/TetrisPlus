@@ -1,30 +1,18 @@
 var Phaser = Phaser || {};
 var tetrisPlus = tetrisPlus || {};
 
-tetrisPlus.Z_Piece = function(game, x1, y1, startj, starti)
+tetrisPlus.Mace = function(game, x1, y1, startj, starti)
 {
-    //Phaser.Sprite.call(this,game,x1,y1,'T');
-    //Phaser.Sprite.call(this,game,x2,y2,'T');
-    Phaser.Sprite.call(this,game,x1,y1,'Z_Complete');
+    Phaser.Sprite.call(this, game, x1, y1, 'MaceCompleted');
     this.scale.setTo(2);
     this.x1=x1;
     this.y1=y1;
     this.starti=starti;
     this.startj=startj;
-//  this.anchor.setTo(0.5, 0.25);
 };
 
 tetrisPlus.Mace.prototype = Object.create(Phaser.Sprite.prototype);
-
-tetrisPlus.Mace = function(game, x1, y1, startj, starti)
-{
-    Phaser.Sprite.call(this,game,x1,y1,'Mace');
-    this.x1=x1;
-    this.y1=y1;
-    this.starti=starti;
-    this.startj=startj;
-    this.anchor.setTo(0.5, 0.5);
-};
+tetrisPlus.Mace.prototype.constructor = tetrisPlus.Mace;
 
 tetrisPlus.Mace.prototype.startGrid=function(GridTetris)
 {

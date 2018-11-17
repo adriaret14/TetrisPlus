@@ -13,10 +13,11 @@ tetrisPlus.J_Piece = function(game, x1, y1, startj, starti)
     this.startj=startj;
     this.anchor.setTo(0.5, 0.25);
     
-   
-
-    
+    //FISICAS
+    this.game.physics.arcade.enable(this);
+    this.body.collideWorldBounds = true;
 };
+
 tetrisPlus.J_Piece.prototype = Object.create(Phaser.Sprite.prototype);
 tetrisPlus.J_Piece.prototype.constructor = tetrisPlus.J_Piece;
 tetrisPlus.J_Piece.prototype.startGrid=function(GridTetris)

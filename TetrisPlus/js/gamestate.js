@@ -27,10 +27,30 @@ var Piecej3;
 var Piecei4;
 var Piecej1;
 
+//PLAYER
+var Player;
+
+//MAZA
+var Mace;
 
 var GridTetris;
 
 tetrisPlus.gameState = {
+    
+    //NEW FUNCTIONS
+    collideHandler:function()
+    {
+        console.log("UEEEEE");
+    },
+    
+    init:function(){
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        
+        //VARIABLES FISICAS
+        this.game.physics.arcade.gravity.y = 0;
+    },
+    
     preload:function(){
         this.stage.backgroundColor="00000";
         //Añadimos las imagenes simples
@@ -52,11 +72,33 @@ tetrisPlus.gameState = {
         tetrisPlus.game.load.image('T_Complete','assets/img/T.png');
         
         //Añadimos extras
-        tetrisPlus.game.load.image('Mace','assets/img/Sierra.png');
+        tetrisPlus.game.load.image('MaceCompleted','assets/img/Sierra.png');
+        
+        //FONDO
+        this.game.load.image('bg1', 'assets/img/Fondo1.png');
+        
+        //PERSONAJE
+        this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
     
     },
     create:function(){        
         
+        //BACKGROUND
+        this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');
+        
+        //TRANSFORMACIONES
+        this.bg1.anchor.setTo(.5);
+        this.bg1.scale.setTo(2);
+        
+        //MAZA 
+        Mace = new tetrisPlus.Mace(tetrisPlus.game, (this.game.world.centerX-81.5), (this.game.world.centerY - 245), 25, 25);
+        tetrisPlus.game.add.existing(Mace);
+                
+        //PREFAB PLAYER 
+        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 124);
+        tetrisPlus.game.add.existing(Player);
+        
+        /************************ FRET ********************************/
         //tetrisPlus.game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
         //VARIABLES PARA DEFINIR EL CENTRO DE CADA CELDA DEL GRID(BASADAS EN LAS PIEZAS DEL TETRIS QUE SON DE 8X8 PX)
         
@@ -122,7 +164,7 @@ tetrisPlus.gameState = {
                     {
                         if(GridTetris[i][j]==5)
                             {
-                                var a=tetrisPlus.game.add.image(distX*j, distY*i ,'R');
+                                var a=tetrisPlus.game.add.image((1024 / 2) - (89) + (distX*j), (800 / 2) - (60) + distY*i ,'R');
                                 a.scale.setTo(2);
                                 a.anchor.setTo(0.5);
                             }
@@ -165,12 +207,18 @@ tetrisPlus.gameState = {
        /*PieceActive = new tetrisPlus.Box_Piece(tetrisPlus.game,5*distX, 2*distY, 5, 2);
        tetrisPlus.game.add.existing(PieceActive);
        PieceActive.startGrid(GridTetris);*/
-       PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game,5*distX, 2*distY, 5, 2, GridTetris);
+       /*PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game,5*distX, 2*distY, 5, 2, GridTetris);
        tetrisPlus.game.add.existing(PieceActive);
-       PieceActive.startGrid(GridTetris);
-    
+       PieceActive.startGrid(GridTetris);*/
         
+        PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), ((800 / 2) - (60) + (distY*2)), 5, 2, GridTetris);
+        tetrisPlus.game.add.existing(PieceActive);
+        PieceActive.startGrid(GridTetris);
+
         //newPiece();
+        
+        //COLLISION WITH PIECES
+        this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler, null, this);
         
         //ASIGNAMOS LOS INPUTS
         key_right=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -260,9 +308,7 @@ tetrisPlus.gameState = {
                 //PieceActive.destroy();
             }
         
-    }
-
+    },
 };
-
 
 
