@@ -27,6 +27,7 @@ tetrisPlus.L_Piece.prototype.startGrid=function(GridTetris)
     GridTetris[this.starti+1][this.startj-1]=3;
     GridTetris[this.starti][this.startj+1]=4;
 };
+
 tetrisPlus.L_Piece.prototype.move=function(direction, distance, GridTetris)
 {
     //MOVEMOS LA PIEZA POR EL GRID DEL MAPA

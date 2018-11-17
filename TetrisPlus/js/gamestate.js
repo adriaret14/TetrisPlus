@@ -37,11 +37,7 @@ var GridTetris;
 
 tetrisPlus.gameState = {
     
-    //NEW FUNCTIONS
-    collideHandler:function()
-    {
-        console.log("UEEEEE");
-    },
+  
     
     init:function(){
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -217,8 +213,7 @@ tetrisPlus.gameState = {
 
         //newPiece();
         
-        //COLLISION WITH PIECES
-        this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler, null, this);
+        
         
         //ASIGNAMOS LOS INPUTS
         key_right=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -230,6 +225,10 @@ tetrisPlus.gameState = {
 
     },
     update:function(){
+        
+        //COLLISION WITH PIECES
+        this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler, null, this);
+        
         
         //Drop the piece
         counter++;
@@ -309,6 +308,14 @@ tetrisPlus.gameState = {
             }
         
     },
+     //NEW FUNCTIONS
+    collideHandler:function()
+    {
+        //Flip/Flop diretion player
+        Player.CollideHorizontal();
+    },
 };
+
+ 
 
 

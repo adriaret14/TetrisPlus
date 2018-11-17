@@ -94,4 +94,17 @@ tetrisPlus.Player.prototype.update = function(){
     }
 };
 
-
+//Collide horizontal
+tetrisPlus.Player.prototype.CollideHorizontal=function()
+{
+    if(this.ColRight==true)
+    {
+        this.ColRight=false;
+        this.ColLeft=true;
+    }
+    else if (this.ColLeft==true)
+    {
+        this.ColLeft=false;
+        this.ColRight=true;            
+    }
+}

@@ -37,7 +37,10 @@ tetrisPlus.Bar_Piece = function(game, x1, y1, startj, starti, GridTetris)
     this.contIzq;
     this.contDown=0;
     
-   
+   //FISICAS
+    this.game.physics.arcade.enable(this);
+    this.body.collideWorldBounds = true;
+    this.body.immovable = true;
 
     
 };
