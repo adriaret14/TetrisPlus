@@ -12,13 +12,11 @@ tetrisPlus.Z_Piece = function(game, x1, y1, startj, starti)
     this.starti=starti;
     this.startj=startj;
     this.anchor.setTo(0.5, 0.25);
-    
-   
-
-    
 };
+
 tetrisPlus.Z_Piece.prototype = Object.create(Phaser.Sprite.prototype);
 tetrisPlus.Z_Piece.prototype.constructor = tetrisPlus.Z_Piece;
+
 tetrisPlus.Z_Piece.prototype.startGrid=function(GridTetris)
 {
     //INICIAMOS LA PIEZA EN EL GRID
@@ -27,6 +25,7 @@ tetrisPlus.Z_Piece.prototype.startGrid=function(GridTetris)
     GridTetris[this.starti+1][this.startj]=3;
     GridTetris[this.starti+1][this.startj+1]=4;
 };
+
 tetrisPlus.Z_Piece.prototype.move=function(direction, distance, GridTetris)
 {
     //MOVEMOS LA PIEZA POR EL GRID DEL MAPA

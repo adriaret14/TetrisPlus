@@ -50,6 +50,9 @@ tetrisPlus.gameState = {
         tetrisPlus.game.load.image('S_Complete','assets/img/S.png');
         tetrisPlus.game.load.image('Z_Complete','assets/img/S_Inverted.png');
         tetrisPlus.game.load.image('T_Complete','assets/img/T.png');
+        
+        //Añadimos extras
+        tetrisPlus.game.load.image('Mace','assets/img/Sierra.png');
     
     },
     create:function(){        
@@ -165,7 +168,7 @@ tetrisPlus.gameState = {
        PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game,5*distX, 2*distY, 5, 2, GridTetris);
        tetrisPlus.game.add.existing(PieceActive);
        PieceActive.startGrid(GridTetris);
-        
+    
         
         //newPiece();
         
