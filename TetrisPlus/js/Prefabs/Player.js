@@ -1,10 +1,10 @@
 var Phaser = Phaser || {};
 var tetrisPlus = tetrisPlus || {};
 
-tetrisPlus.Player = function(game, x, y)
+tetrisPlus.Player = function(game, x, y, PlayerAnimSubida)
 {
     //NOMBRE DEL PREFAB
-    Phaser.Sprite.call(this,game,x,y,'Player');
+    Phaser.Sprite.call(this, game, x, y, 'Player');
     
     //VARIABLES
     this.x=x;
@@ -12,13 +12,13 @@ tetrisPlus.Player = function(game, x, y)
     this.anchor.setTo(.5);
     this.scale.setTo(2);
     
-    //ANIMATIONS        
+    //ANIMATIONS (MOVEMENT)        
     this.animations.add('walkingLeft', [5, 6, 7], 10, true);
     this.animations.add('walkingRight', [10, 11, 12], 10, true);
     this.animations.add('falling', [15, 16, 17], 10, true);
-    this.Collisionleft = this.animations.add('collisionLeft', [8, 9], 10, true);
+    this.animations.add('collisionLeft', [8, 9], 10, true);
     this.animations.add('collisionRight', [13, 14], 10, true);
-    
+        
     //PRINCIPIO DE MOVIMIENTO
     this.ColRight = true;
     this.ColLeft = false;
@@ -42,7 +42,6 @@ tetrisPlus.Player = function(game, x, y)
     
     //FLAG ANIMACIONS DE CHOQUE
     this.flagAnimationCollide = false;
-        
 };
 tetrisPlus.Player.prototype = Object.create(Phaser.Sprite.prototype);
 tetrisPlus.Player.prototype.constructor = tetrisPlus.Player;
@@ -129,6 +128,7 @@ tetrisPlus.Player.prototype.update = function(){
 //Collide horizontal
 tetrisPlus.Player.prototype.CollideHorizontal=function()
 {
+    //CHOQUE HORIZONTAL
     if(this.flagAnimationCollide == false)
     {
          if(this.ColRight==true)
@@ -144,8 +144,12 @@ tetrisPlus.Player.prototype.CollideHorizontal=function()
             this.ColAnimationLeft = false;
             this.flagAnimationCollide = true;
         }
-    }
-}
+    }  
+},
+tetrisPlus.Player.prototype.UpPiece=function()
+{
+    //this.y = this.y - 1;
+},
 tetrisPlus.Player.prototype.Die=function()
 {
     //Hacer Animacion

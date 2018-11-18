@@ -77,6 +77,7 @@ tetrisPlus.gameState = {
         
         //PERSONAJE
         this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
+        this.PlayerAnimSubida = this.load.spritesheet('PlayerSubida', 'assets/img/SpriteSheetSubida.png', 16, 24);
     
     },
     create:function(){        
@@ -93,7 +94,7 @@ tetrisPlus.gameState = {
         tetrisPlus.game.add.existing(Mace);
                 
         //PREFAB PLAYER 
-        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 124);
+        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 124, this.PlayerAnimSubida);
         tetrisPlus.game.add.existing(Player);
         
         /************************ FRET ********************************/
@@ -228,11 +229,13 @@ tetrisPlus.gameState = {
     },
     update:function(){
         
+        //OVERLAP
+        this.game.physics.arcade.overlap(Player, PieceActive, this.collideOverlap, null, this);
+        
         //COLLISION WITH PIECES
         this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler, null, this);
         this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
-        
-        
+                
         //Drop the piece
         counter++;
         counterMace++;
@@ -317,13 +320,19 @@ tetrisPlus.gameState = {
             }
         
     },
-     //NEW FUNCTIONS
+    
+    
+    //NEW FUNCTIONS
     collideHandler:function()
     {
         //Flip/Flop diretion player
         Player.CollideHorizontal();
     },
-     loseGame:function()
+    collideOverlap:function()
+    {
+        Player.UpPiece();
+    },
+    loseGame:function()
     {
         //Flip/Flop diretion player
         Player.Die();
