@@ -2,7 +2,6 @@ var Phaser = Phaser || {};
 var tetrisPlus = tetrisPlus || {};
 
 var counter=0;
-var maceCounter=0;
 var startX=4;
 var startY=1;
 var distX;
@@ -16,7 +15,6 @@ var tapL=false;
 var tapR=false;
 var tapZ=false;
 var dropSpeed=80;
-var dropMaceSpeed=260;
 var realDropSpeed=dropSpeed;
 var initialRot=0;
 
@@ -89,7 +87,7 @@ tetrisPlus.gameState = {
         this.bg1.scale.setTo(2);
         
         //MAZA 
-        Mace = new tetrisPlus.Mace(tetrisPlus.game, (this.game.world.centerX-81.5), (this.game.world.centerY - 245), 0, 0);
+        Mace = new tetrisPlus.Mace(tetrisPlus.game, (this.game.world.centerX-81.5), (this.game.world.centerY - 245), 25, 25);
         tetrisPlus.game.add.existing(Mace);
                 
         //PREFAB PLAYER 
@@ -226,28 +224,19 @@ tetrisPlus.gameState = {
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
 
     },
-    update:function()
-    {
+    update:function(){
         
         //COLLISION WITH PIECES
-        this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler(), null, this);       
+        this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler, null, this);
         
         
-        //Droping pieces
+        //Drop the piece
         counter++;
-        maceCounter++;
-        
         if(counter>=realDropSpeed)
         {
             console.log(PieceActive.cantMoveDown);
             PieceActive.move(3, distY);
             counter=0;
-        }
-        //Mace Drop
-         if(maceCounter>=dropMaceSpeed)
-        {
-            Mace.fall(distY);
-            maceCounter=0;
         }
         
         //MOVER HACIA LA IZQUIERDA
@@ -319,11 +308,11 @@ tetrisPlus.gameState = {
             }
         
     },
-     //NEW FUNCTIONS for collision
+     //NEW FUNCTIONS
     collideHandler:function()
-    {       
+    {
         //Flip/Flop diretion player
-        Player.CollideHorizontal();    
+        Player.CollideHorizontal();
     },
 };
 

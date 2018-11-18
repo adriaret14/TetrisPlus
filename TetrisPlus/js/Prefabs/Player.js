@@ -143,7 +143,6 @@ tetrisPlus.Player.prototype.CollideHorizontal=function()
             this.ColAnimationRight = true;
             this.ColAnimationLeft = false;
             this.flagAnimationCollide = true;
-            
         }
     }
 }
