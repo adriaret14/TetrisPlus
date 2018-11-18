@@ -148,7 +148,7 @@ tetrisPlus.Player.prototype.CollideHorizontal=function()
 },
 tetrisPlus.Player.prototype.UpPiece=function()
 {
-    //this.y = this.y - 1;
+    this.y = this.y - 1;
 },
 tetrisPlus.Player.prototype.Die=function()
 {
