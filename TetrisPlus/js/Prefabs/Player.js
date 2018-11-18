@@ -35,6 +35,7 @@ tetrisPlus.Player = function(game, x, y, PlayerAnimSubida)
     this.game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
     this.body.immovable = true;
+    this.body.gravity = 1;
     
     //ANIMACIONES SEGUN EL CASO
     this.ColAnimationRight = false;
@@ -148,7 +149,7 @@ tetrisPlus.Player.prototype.CollideHorizontal=function()
 },
 tetrisPlus.Player.prototype.UpPiece=function()
 {
-    this.y = this.y - 1;
+    this.y = this.y - 16;
 },
 tetrisPlus.Player.prototype.Die=function()
 {

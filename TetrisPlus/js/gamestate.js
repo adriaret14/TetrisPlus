@@ -230,7 +230,10 @@ tetrisPlus.gameState = {
     update:function(){
         
         //OVERLAP
-        this.game.physics.arcade.overlap(Player, PieceActive, this.collideOverlap, null, this);
+        if(PieceActive.cantMoveDown)
+        {
+            this.game.physics.arcade.overlap(Player, PieceActive, this.collideOverlap, null, this);
+        }
         
         //COLLISION WITH PIECES
         this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler, null, this);
