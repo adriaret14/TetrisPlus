@@ -146,3 +146,8 @@ tetrisPlus.Player.prototype.CollideHorizontal=function()
         }
     }
 }
+tetrisPlus.Player.prototype.Die=function()
+{
+    //Hacer Animacion
+    this.destroy();
+}

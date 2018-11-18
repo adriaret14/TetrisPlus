@@ -2,6 +2,7 @@ var Phaser = Phaser || {};
 var tetrisPlus = tetrisPlus || {};
 
 var counter=0;
+var counterMace=0;
 var startX=4;
 var startY=1;
 var distX;
@@ -15,6 +16,7 @@ var tapL=false;
 var tapR=false;
 var tapZ=false;
 var dropSpeed=80;
+var dropMaceSpeed=260;
 var realDropSpeed=dropSpeed;
 var initialRot=0;
 
@@ -228,15 +230,22 @@ tetrisPlus.gameState = {
         
         //COLLISION WITH PIECES
         this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler, null, this);
+        this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
         
         
         //Drop the piece
         counter++;
+        counterMace++;
         if(counter>=realDropSpeed)
         {
             console.log(PieceActive.cantMoveDown);
             PieceActive.move(3, distY);
             counter=0;
+        }
+         if(counterMace>=dropMaceSpeed)
+        {
+           Mace.fall(distY);
+            counterMace=0;
         }
         
         //MOVER HACIA LA IZQUIERDA
@@ -313,6 +322,11 @@ tetrisPlus.gameState = {
     {
         //Flip/Flop diretion player
         Player.CollideHorizontal();
+    },
+     loseGame:function()
+    {
+        //Flip/Flop diretion player
+        Player.Die();
     },
 };
 
