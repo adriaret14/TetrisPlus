@@ -16,6 +16,7 @@ var tapL=false;
 var tapR=false;
 var tapZ=false;
 var dropSpeed=80;
+var dropMaceSpeed=260;
 var realDropSpeed=dropSpeed;
 var initialRot=0;
 
@@ -225,11 +226,11 @@ tetrisPlus.gameState = {
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
 
     },
-    update:function(){
+    update:function()
+    {
         
         //COLLISION WITH PIECES
-        this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler(), null, this);
-        this.game.physics.arcade.collide(Mace, Player, this.maceCollidesWithPlayer(), null, this);
+        this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler(), null, this);       
         
         
         //Droping pieces
@@ -243,7 +244,7 @@ tetrisPlus.gameState = {
             counter=0;
         }
         //Mace Drop
-         if(maceCounter>=realDropSpeed/2)
+         if(maceCounter>=dropMaceSpeed)
         {
             Mace.fall(distY);
             maceCounter=0;
@@ -322,13 +323,7 @@ tetrisPlus.gameState = {
     collideHandler:function()
     {       
         //Flip/Flop diretion player
-        Player.CollideHorizontal();        
-    },
-    
-    maceCollidesWithPlayer:function()
-    {
-        //Flip/Flop diretion player
-        //Player.destroy();        
+        Player.CollideHorizontal();    
     },
 };
 
