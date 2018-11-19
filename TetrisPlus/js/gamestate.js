@@ -281,7 +281,8 @@ tetrisPlus.gameState = {
         counterMace++;
         if(counter>=realDropSpeed)
         {
-            console.log(PieceActive.cantMoveDown);
+            //console.log(PieceActive.cantMoveDown);
+            console.log(PieceActive.cantMoveLeft);
             PieceActive.move(3, distY);
             counter=0;
         }
@@ -416,7 +417,33 @@ tetrisPlus.gameState = {
     },
     createNewPiece:function()
     {
-        PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+        currentPiece=Math.floor((Math.random() * 7) + 1);
+        switch(currentPiece)
+            {
+                case 1:
+                    PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    break;
+                case 2:
+                    PieceActive = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    break;
+                case 3:
+                    PieceActive = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    break;
+                case 4:
+                    PieceActive = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    break;
+                case 5:
+                    PieceActive = new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    break;
+                case 6:
+                    PieceActive = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    break;
+                case 7:
+                    PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    break;
+            }
+        
+        
         tetrisPlus.game.add.existing(PieceActive);
         PieceActive.startGrid(GridTetris);
         initialRot=0;
