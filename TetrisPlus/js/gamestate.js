@@ -301,16 +301,6 @@ tetrisPlus.gameState = {
                     }
             }*/
         
-        //OVERLAP
-        if(PieceActive.cantMoveDown)
-        {
-            this.game.physics.arcade.overlap(Player, PieceActive, this.collideOverlap, null, this);
-        }
-        
-        //COLLISION WITH PIECES
-        this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler, null, this);
-        this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
-                
         //Drop the piece
         counter++;
         counterMace++;
@@ -433,6 +423,14 @@ tetrisPlus.gameState = {
                 this.makeLines();
             }
         
+        //COLLISION WITH PIECES
+        //IZQUIERDA
+        /*console.log(destroyables);*/
+        this.collision = this.game.physics.arcade.collide(Player, [destroyables], this.collideHandler, null, this);
+        //console.log(this.collision);
+    
+        //DIE PLAYER
+        this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
     },
     
     
@@ -440,7 +438,16 @@ tetrisPlus.gameState = {
     collideHandler:function()
     {
         //Flip/Flop diretion player
-        Player.CollideHorizontal();
+        if(Player.left && destroyables.right)
+        {
+            Player.ColLeft = true;
+            Player.ColRight = false;
+        }
+        else if(Player.left&& destroyables.right)
+        {
+            Player.ColLeft = false;
+            Player.ColRight = true;
+        }
     },
     collideOverlap:function()
     {
