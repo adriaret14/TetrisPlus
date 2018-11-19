@@ -111,7 +111,7 @@ tetrisPlus.gameState = {
         
         //CREACIÓN DEL GRID DE JUEGO
          
-        GridTetris=new Array(25);
+        GridTetris=new Array(30);
         for(var i=0; i<GridTetris.length; i++)
         {
             GridTetris[i]=new Array(10);
@@ -142,6 +142,13 @@ tetrisPlus.gameState = {
         GridTetris[20][0]=5;
         GridTetris[21][0]=5;
         GridTetris[22][0]=5;
+        GridTetris[23][0]=5;
+        GridTetris[24][0]=5;
+        GridTetris[25][0]=5;
+        GridTetris[26][0]=5;
+        GridTetris[27][0]=5;
+        GridTetris[28][0]=5;
+        GridTetris[29][0]=5;
         
         GridTetris[0][11]=5;
         GridTetris[1][11]=5;
@@ -166,17 +173,35 @@ tetrisPlus.gameState = {
         GridTetris[20][11]=5;
         GridTetris[21][11]=5;
         GridTetris[22][11]=5;
+        GridTetris[23][11]=5;
+        GridTetris[24][11]=5;
+        GridTetris[25][11]=5;
+        GridTetris[26][11]=5;
+        GridTetris[27][11]=5;
+        GridTetris[28][11]=5;
+        GridTetris[29][11]=5;
         
         GridTetris[22][1]=5;
         GridTetris[22][2]=5;
-        GridTetris[22][3]=5;
+        //GridTetris[22][3]=5;
         GridTetris[22][4]=5;
         GridTetris[22][5]=5;
         GridTetris[22][6]=5;
-        GridTetris[22][7]=5;
+        //GridTetris[22][7]=5;
         GridTetris[22][8]=5;
         GridTetris[22][9]=5;
         GridTetris[22][10]=5;
+        
+        GridTetris[29][1]=5;
+        GridTetris[29][2]=5;
+        GridTetris[29][3]=5;
+        GridTetris[29][4]=5;
+        GridTetris[29][5]=5;
+        GridTetris[29][6]=5;
+        GridTetris[29][7]=5;
+        GridTetris[29][8]=5;
+        GridTetris[29][9]=5;
+        GridTetris[29][10]=5;
         
         //GridTetris[18][6]=5;
         
@@ -187,14 +212,19 @@ tetrisPlus.gameState = {
                         if(GridTetris[i][j]==5)
                             {
                                 //var a=tetrisPlus.game.add.image((1024 / 2) - (89) + (distX*j), (800 / 2) - (60) + distY*i ,'R');
-                                var a=tetrisPlus.game.add.image((1024 / 2) - (89) + (distX*j), (800/4)+distY*i ,'R');
-                                a.scale.setTo(2);
-                                a.anchor.setTo(0.5);
+                                if(i<29 && (j>0 && j<11))
+                                    {
+                                      /*var a=tetrisPlus.game.add.image((1024 / 2) - (89) + (distX*j), (800/4) - 4 +distY*i ,'R');
+                                      a.scale.setTo(2);
+                                      a.anchor.setTo(0.5);*/
+                                      var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
+                                      destroyables.add(Static);
+                                    }
                             }
                     }
             }
 
-        
+        console.log(destroyables.children.length);
         
 
        /*var b=tetrisPlus.game.add.image(distX*4, distY*18 ,'R');
@@ -254,6 +284,11 @@ tetrisPlus.gameState = {
 
     },
     update:function(){
+        console.log(destroyables.children.length);
+        /*for(var i=0; i<destroyables.length; i++)
+            {
+                console.log(i);
+            }*/
         //console.log(PieceActive.cantMoveDown);
         /*for(var i=0; i<GridTetris.length; i++)
             {
@@ -282,7 +317,7 @@ tetrisPlus.gameState = {
         if(counter>=realDropSpeed)
         {
             //console.log(PieceActive.cantMoveDown);
-            console.log(PieceActive.cantMoveLeft);
+            //console.log(PieceActive.cantMoveLeft);
             PieceActive.move(3, distY);
             counter=0;
         }
@@ -355,7 +390,7 @@ tetrisPlus.gameState = {
         //SPAWNEAR NUEVA PIEZA
         if(PieceActive.cantMoveDown)
             {
-                //console.log("A");
+                
                 
                 Piecei1=PieceActive.previ1;
                 Piecej1=PieceActive.prevj1;
@@ -366,13 +401,13 @@ tetrisPlus.gameState = {
                 Piecei4=PieceActive.previ4;
                 Piecej4=PieceActive.prevj4;
                 
-                var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej1)), (800/4) + distY*(Piecei1+1) , Piecej1, Piecei1, GridTetris);
+                var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej1)), (800/4) -4 + distY*(Piecei1+1) , Piecej1, Piecei1, GridTetris);
                 destroyables.add(Static);
-                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej2)), (800/4) + distY*(Piecei2+1) , Piecej2, Piecei2, GridTetris);
+                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej2)), (800/4) -4 + distY*(Piecei2+1) , Piecej2, Piecei2, GridTetris);
                 destroyables.add(Static);
-                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej3)), (800/4) + distY*(Piecei3+1) , Piecej3, Piecei3, GridTetris);
+                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej3)), (800/4) -4 + distY*(Piecei3+1) , Piecej3, Piecei3, GridTetris);
                 destroyables.add(Static);
-                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej4)), (800/4) + distY*(Piecei4+1) , Piecej4, Piecei4, GridTetris);
+                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej4)), (800/4) -4 + distY*(Piecei4+1) , Piecej4, Piecei4, GridTetris);
                 destroyables.add(Static);
                 
                 this.GridTetris=PieceActive.GridTetris;
@@ -389,12 +424,13 @@ tetrisPlus.gameState = {
                 }
         
                 
-                console.log(Piecei1+1+","+Piecej1);
-                console.log(GridTetris[21][5]);
+                //console.log(Piecei1+1+","+Piecej1);
+                //console.log(GridTetris[21][5]);
                 
                 //console.log(Piecei1);
                 PieceActive.destroy();
                 this.createNewPiece();
+                this.makeLines();
             }
         
     },
@@ -417,29 +453,41 @@ tetrisPlus.gameState = {
     },
     createNewPiece:function()
     {
+        for(var i=0; i<GridTetris.length; i++)
+            {
+                for(var j=0; j<GridTetris[i].length; j++)
+                    {
+                        if(GridTetris[i][j]==5)
+                            {
+                                console.log(i+","+j);
+                            }
+                    }
+            }
+        
         currentPiece=Math.floor((Math.random() * 7) + 1);
+        //currentPiece=2;
         switch(currentPiece)
             {
                 case 1:
-                    PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
                     break;
                 case 2:
-                    PieceActive = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    PieceActive = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
                     break;
                 case 3:
-                    PieceActive = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    PieceActive = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
                     break;
                 case 4:
-                    PieceActive = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    PieceActive = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
                     break;
                 case 5:
-                    PieceActive = new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    PieceActive = new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
                     break;
                 case 6:
-                    PieceActive = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    PieceActive = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
                     break;
                 case 7:
-                    PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+                    PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
                     break;
             }
         
@@ -447,6 +495,56 @@ tetrisPlus.gameState = {
         tetrisPlus.game.add.existing(PieceActive);
         PieceActive.startGrid(GridTetris);
         initialRot=0;
+    },
+    makeLines:function()
+    {
+        console.log(destroyables.children.length);
+        /*for(var i=0; i<GridTetris.length; i++)
+            {
+                for(var j=0; j<GridTetris[i].length; j++)
+                    {
+                        if(GridTetris[i][j]==5)
+                            {
+                                console.log(i+","+j);
+                            }
+                    }
+            }*/
+        
+        for(var i=0; i<GridTetris.length; i++)
+            {
+                if(i!=29)
+                    {
+                       if(GridTetris[i][1]==5 && GridTetris[i][2]==5 && GridTetris[i][3]==5 && GridTetris[i][4]==5 && GridTetris[i][5]==5 && GridTetris[i][6]==5 && GridTetris[i][7]==5 && GridTetris[i][8]==5 && GridTetris[i][9]==5 && GridTetris[i][10]==5)
+                        {
+                            console.log("BORRAR LINEA: "+i);
+                            //Borrar la linea y dropear todos los 5's de encima hacia abajo
+                            GridTetris[i][1]=null;
+                            GridTetris[i][2]=null;
+                            GridTetris[i][3]=null;
+                            GridTetris[i][4]=null;
+                            GridTetris[i][5]=null;
+                            GridTetris[i][6]=null;
+                            GridTetris[i][7]=null;
+                            GridTetris[i][8]=null;
+                            GridTetris[i][9]=null;
+                            GridTetris[i][10]=null;
+
+                            for(var j=0; j<destroyables.children.length; j++)
+                                {
+                                    console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                                    if(destroyables.children[j].starti==i-1 && (destroyables.children[j].startj==1 || destroyables.children[j].startj==2 || destroyables.children[j].startj==3 || destroyables.children[j].startj==4 || destroyables.children[j].startj==5 || destroyables.children[j].startj==6 || destroyables.children[j].startj==7 || destroyables.children[j].startj==8 || destroyables.children[j].startj==9 || destroyables.children[j].startj==10))
+                                        {
+                                            console.log("ELIMINA: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                                            var aux=destroyables.children[j];
+                                            //destroyables.remove(aux);
+                                            //aux.destroy;
+                                            aux.kill();
+                                        }
+                                }
+                        } 
+                    }
+                
+            }
     }
 };
 

@@ -70,7 +70,7 @@ tetrisPlus.Z_Piece.prototype.move=function(direction, distance)
             if(this.GridTetris[i][j]==1 || this.GridTetris[i][j]==2 || this.GridTetris[i][j]==3 || this.GridTetris[i][j]==4)
             {
                 //Abajo
-                console.log("VAL: "+this.GridTetris[i][j]+" ["+i+","+j+"]");
+                //console.log("VAL: "+this.GridTetris[i][j]+" ["+i+","+j+"]");
                 if(this.GridTetris[i+1][j]==5)
                 {
                    
