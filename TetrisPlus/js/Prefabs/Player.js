@@ -34,8 +34,8 @@ tetrisPlus.Player = function(game, x, y, PlayerAnimSubida)
     //FISICAS
     this.game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.immovable = true;
-    this.body.gravity = 1;
+    //this.body.immovable = true;
+    //this.body.gravity.y = 100;
     
     //ANIMACIONES SEGUN EL CASO
     this.ColAnimationRight = false;
@@ -51,10 +51,7 @@ tetrisPlus.Player.prototype.constructor = tetrisPlus.Player;
 tetrisPlus.Player.prototype.update = function(){    
     //MOVIMIENTO (FRAMES REDUCIDOS)
     this.positionX = this.x - this.game.world.centerX;         
-        
     
-    if((this.ColAnimationLeft == false) && (this.ColAnimationRight == false))
-    {
         //COLLISION IZQUIERDA
         if(this.ColRight == true )
         {
@@ -68,7 +65,9 @@ tetrisPlus.Player.prototype.update = function(){
                 //ANIMATION LEFT
                 this.ColAnimationLeft = true;
                 this.ColAnimationRight = false;
-                this.flagAnimationCollide = false;
+                
+                this.ColLeft = true;
+                this.ColRight = false;
             }
         }
 
@@ -85,71 +84,16 @@ tetrisPlus.Player.prototype.update = function(){
                 //ANIMATION RIGHT
                 this.ColAnimationRight = true;
                 this.ColAnimationLeft = false;
-                this.flagAnimationCollide = false;
-            }
-        }
-    }
-        
-        
-    //ANIMACIONES DE COLISION SEGUN EL CASO
-    if(this.ColAnimationRight == true)
-    {
-        this.animations.play('collisionRight', 5, true);
-        if(this.animations.currentAnim.frame == 14)
-        {
-            this.CountCollRight++;
-            if(this.CountCollRight == 12)
-            {
-                this.ColRight = true;
+                
                 this.ColLeft = false;
-                this.CountCollRight = 0;
-                this.ColAnimationRight = false;
-                this.ColAnimationLeft = false;
+                this.ColRight = true;
             }
         }
-    }
-    else if(this.ColAnimationLeft == true)
-    {
-        this.animations.play('collisionLeft', 5, true);
-        if(this.animations.currentAnim.frame == 9)
-        {
-            this.CountCollLeft++;
-            if(this.CountCollLeft == 12)
-            {
-                this.ColLeft = true;
-                this.ColRight = false;
-                this.CountCollLeft = 0;
-                this.ColAnimationRight = false;
-                this.ColAnimationLeft = false;
-            }
-        }    
-    }
 };
 
-//Collide horizontal
-tetrisPlus.Player.prototype.CollideHorizontal=function()
-{
-    //CHOQUE HORIZONTAL
-    if(this.flagAnimationCollide == false)
-    {
-         if(this.ColRight==true)
-        {
-            this.ColAnimationRight = false;
-            this.ColAnimationLeft = true;
-            this.flagAnimationCollide = true;
-        }
-    
-        if (this.ColLeft==true)
-        {
-            this.ColAnimationRight = true;
-            this.ColAnimationLeft = false;
-            this.flagAnimationCollide = true;
-        }
-    }  
-},
 tetrisPlus.Player.prototype.UpPiece=function()
 {
-    this.y = this.y - 16;
+    this.y = this.y - 8;
 },
 tetrisPlus.Player.prototype.Die=function()
 {

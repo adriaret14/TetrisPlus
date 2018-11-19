@@ -266,22 +266,12 @@ tetrisPlus.gameState = {
                     }
             }*/
         
-        //OVERLAP
-        if(PieceActive.cantMoveDown)
-        {
-            this.game.physics.arcade.overlap(Player, PieceActive, this.collideOverlap, null, this);
-        }
-        
-        //COLLISION WITH PIECES
-        this.game.physics.arcade.collide(Player, PieceActive, this.collideHandler, null, this);
-        this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
-                
         //Drop the piece
         counter++;
         counterMace++;
         if(counter>=realDropSpeed)
         {
-            console.log(PieceActive.cantMoveDown);
+            //console.log(PieceActive.cantMoveDown);
             PieceActive.move(3, distY);
             counter=0;
         }
@@ -387,15 +377,19 @@ tetrisPlus.gameState = {
                         }
                 }
         
-                
-                console.log(Piecei1+1+","+Piecej1);
-                console.log(GridTetris[21][5]);
-                
                 //console.log(Piecei1);
                 PieceActive.destroy();
                 this.createNewPiece();
             }
         
+        //COLLISION WITH PIECES
+        //IZQUIERDA
+        /*console.log(destroyables);*/
+        this.collision = this.game.physics.arcade.collide(Player, [destroyables], this.collideHandler, null, this);
+        //console.log(this.collision);
+    
+        //DIE PLAYER
+        this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
     },
     
     
@@ -403,7 +397,16 @@ tetrisPlus.gameState = {
     collideHandler:function()
     {
         //Flip/Flop diretion player
-        Player.CollideHorizontal();
+        if(Player.left && destroyables.right)
+        {
+            Player.ColLeft = true;
+            Player.ColRight = false;
+        }
+        else if(Player.left&& destroyables.right)
+        {
+            Player.ColLeft = false;
+            Player.ColRight = true;
+        }
     },
     collideOverlap:function()
     {
