@@ -29,6 +29,8 @@ var Piecej3;
 var Piecei4;
 var Piecej1;
 
+var destroyables;
+
 //PLAYER
 var Player;
 
@@ -98,6 +100,9 @@ tetrisPlus.gameState = {
         tetrisPlus.game.add.existing(Player);
         
         /************************ FRET ********************************/
+        //CREAMOS EL GRUPO DE PIEZAS ESTATICAS
+        destroyables=tetrisPlus.game.add.group();
+        
         //tetrisPlus.game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
         //VARIABLES PARA DEFINIR EL CENTRO DE CADA CELDA DEL GRID(BASADAS EN LAS PIEZAS DEL TETRIS QUE SON DE 8X8 PX)
         
@@ -128,6 +133,15 @@ tetrisPlus.gameState = {
         GridTetris[11][0]=5;
         GridTetris[12][0]=5;
         GridTetris[13][0]=5;
+        GridTetris[14][0]=5;
+        GridTetris[15][0]=5;
+        GridTetris[16][0]=5;
+        GridTetris[17][0]=5;
+        GridTetris[18][0]=5;
+        GridTetris[19][0]=5;
+        GridTetris[20][0]=5;
+        GridTetris[21][0]=5;
+        GridTetris[22][0]=5;
         
         GridTetris[0][11]=5;
         GridTetris[1][11]=5;
@@ -143,17 +157,26 @@ tetrisPlus.gameState = {
         GridTetris[11][11]=5;
         GridTetris[12][11]=5;
         GridTetris[13][11]=5;
+        GridTetris[14][11]=5;
+        GridTetris[15][11]=5;
+        GridTetris[16][11]=5;
+        GridTetris[17][11]=5;
+        GridTetris[18][11]=5;
+        GridTetris[19][11]=5;
+        GridTetris[20][11]=5;
+        GridTetris[21][11]=5;
+        GridTetris[22][11]=5;
         
-        GridTetris[13][1]=5;
-        GridTetris[13][2]=5;
-        GridTetris[13][3]=5;
-        GridTetris[13][4]=5;
-        GridTetris[13][5]=5;
-        GridTetris[13][6]=5;
-        GridTetris[13][7]=5;
-        GridTetris[13][8]=5;
-        GridTetris[13][9]=5;
-        GridTetris[13][10]=5;
+        GridTetris[22][1]=5;
+        GridTetris[22][2]=5;
+        GridTetris[22][3]=5;
+        GridTetris[22][4]=5;
+        GridTetris[22][5]=5;
+        GridTetris[22][6]=5;
+        GridTetris[22][7]=5;
+        GridTetris[22][8]=5;
+        GridTetris[22][9]=5;
+        GridTetris[22][10]=5;
         
         //GridTetris[18][6]=5;
         
@@ -163,7 +186,8 @@ tetrisPlus.gameState = {
                     {
                         if(GridTetris[i][j]==5)
                             {
-                                var a=tetrisPlus.game.add.image((1024 / 2) - (89) + (distX*j), (800 / 2) - (60) + distY*i ,'R');
+                                //var a=tetrisPlus.game.add.image((1024 / 2) - (89) + (distX*j), (800 / 2) - (60) + distY*i ,'R');
+                                var a=tetrisPlus.game.add.image((1024 / 2) - (89) + (distX*j), (800/4)+distY*i ,'R');
                                 a.scale.setTo(2);
                                 a.anchor.setTo(0.5);
                             }
@@ -210,9 +234,11 @@ tetrisPlus.gameState = {
        tetrisPlus.game.add.existing(PieceActive);
        PieceActive.startGrid(GridTetris);*/
         
-        PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), ((800 / 2) - (60) + (distY*2)), 5, 2, GridTetris);
-        tetrisPlus.game.add.existing(PieceActive);
-        PieceActive.startGrid(GridTetris);
+        //PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), ((800 / 2) - (60) + (distY*2)), 5, 2, GridTetris);
+        //PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+        //tetrisPlus.game.add.existing(PieceActive);
+        //PieceActive.startGrid(GridTetris);
+        this.createNewPiece();
 
         //newPiece();
         
@@ -228,6 +254,17 @@ tetrisPlus.gameState = {
 
     },
     update:function(){
+        //console.log(PieceActive.cantMoveDown);
+        /*for(var i=0; i<GridTetris.length; i++)
+            {
+                for(var j=0; j<GridTetris[i].length; j++)
+                    {
+                        if(GridTetris[i][j]!=null)
+                            {
+                                console.log("VALUE: "+GridTetris[i][j]+" // ["+i+","+j+"]");
+                            }
+                    }
+            }*/
         
         //OVERLAP
         if(PieceActive.cantMoveDown)
@@ -305,7 +342,7 @@ tetrisPlus.gameState = {
                  }
                  PieceActive.rotate(initialRot);
 
-                 console.log(initialRot);
+                 //console.log(initialRot);
                  tapZ=true;
              }
         }
@@ -319,7 +356,44 @@ tetrisPlus.gameState = {
             {
                 //console.log("A");
                 
-                //PieceActive.destroy();
+                Piecei1=PieceActive.previ1;
+                Piecej1=PieceActive.prevj1;
+                Piecei2=PieceActive.previ2;
+                Piecej2=PieceActive.prevj2;
+                Piecei3=PieceActive.previ3;
+                Piecej3=PieceActive.prevj3;
+                Piecei4=PieceActive.previ4;
+                Piecej4=PieceActive.prevj4;
+                
+                var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej1)), (800/4) + distY*(Piecei1+1) , Piecej1, Piecei1, GridTetris);
+                destroyables.add(Static);
+                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej2)), (800/4) + distY*(Piecei2+1) , Piecej2, Piecei2, GridTetris);
+                destroyables.add(Static);
+                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej3)), (800/4) + distY*(Piecei3+1) , Piecej3, Piecei3, GridTetris);
+                destroyables.add(Static);
+                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej4)), (800/4) + distY*(Piecei4+1) , Piecej4, Piecei4, GridTetris);
+                destroyables.add(Static);
+                
+                this.GridTetris=PieceActive.GridTetris;
+                
+                for(var i=0; i<GridTetris.length; i++)
+                {
+                    for(var j=0; j<GridTetris[i].length; j++)
+                        {
+                            if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
+                                {
+                                    GridTetris[i][j]=5;
+                                }
+                        }
+                }
+        
+                
+                console.log(Piecei1+1+","+Piecej1);
+                console.log(GridTetris[21][5]);
+                
+                //console.log(Piecei1);
+                PieceActive.destroy();
+                this.createNewPiece();
             }
         
     },
@@ -340,6 +414,13 @@ tetrisPlus.gameState = {
         //Flip/Flop diretion player
         Player.Die();
     },
+    createNewPiece:function()
+    {
+        PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) + distY*2 , 5, 2, GridTetris);
+        tetrisPlus.game.add.existing(PieceActive);
+        PieceActive.startGrid(GridTetris);
+        initialRot=0;
+    }
 };
 
  

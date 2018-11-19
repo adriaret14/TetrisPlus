@@ -20,7 +20,7 @@ tetrisPlus.Bar_Piece = function(game, x1, y1, startj, starti, GridTetris)
     this.previ1;
     this.prevj1;
     this.previ2;
-    this.prej2;
+    this.prevj2;
     this.previ3;
     this.prevj3;
     this.previ4;
@@ -68,6 +68,7 @@ tetrisPlus.Bar_Piece.prototype.move=function(direction, distance)
             if(this.GridTetris[i][j]==1 || this.GridTetris[i][j]==2 || this.GridTetris[i][j]==3 || this.GridTetris[i][j]==4)
             {
                 //Abajo
+                console.log("VAL: "+this.GridTetris[i][j]+" ["+i+","+j+"]");
                 if(this.GridTetris[i+1][j]==5)
                 {
                    
