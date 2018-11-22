@@ -97,7 +97,8 @@ tetrisPlus.gameState = {
         tetrisPlus.game.add.existing(Mace);
                 
         //PREFAB PLAYER 
-        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 124, this.PlayerAnimSubida);
+        //Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 124, this.PlayerAnimSubida);
+        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 92, this.PlayerAnimSubida);
         tetrisPlus.game.add.existing(Player);
         
         //COUNTER PLAYER
@@ -146,13 +147,6 @@ tetrisPlus.gameState = {
         GridTetris[20][0]=5;
         GridTetris[21][0]=5;
         GridTetris[22][0]=5;
-        GridTetris[23][0]=5;
-        GridTetris[24][0]=5;
-        GridTetris[25][0]=5;
-        GridTetris[26][0]=5;
-        GridTetris[27][0]=5;
-        GridTetris[28][0]=5;
-        GridTetris[29][0]=5;
         
         GridTetris[0][11]=5;
         GridTetris[1][11]=5;
@@ -185,27 +179,38 @@ tetrisPlus.gameState = {
         GridTetris[28][11]=5;
         GridTetris[29][11]=5;
         
+        GridTetris[20][1]=5;
+        GridTetris[20][2]=5;
+        //GridTetris[22][3]=5;
+        GridTetris[20][4]=5;
+        GridTetris[20][5]=5;
+        GridTetris[20][6]=5;
+        //GridTetris[22][7]=5;
+        GridTetris[20][8]=5;
+        GridTetris[20][9]=5;
+        GridTetris[20][10]=5;
+        
+        GridTetris[21][1]=5;
+        GridTetris[21][2]=5;
+        GridTetris[21][3]=5;
+        GridTetris[21][4]=5;
+        //GridTetris[21][5]=5;
+        GridTetris[21][6]=5;
+        GridTetris[21][7]=5;
+        GridTetris[21][8]=5;
+        GridTetris[21][9]=5;
+        GridTetris[21][10]=5;
+        
         GridTetris[22][1]=5;
         GridTetris[22][2]=5;
-        //GridTetris[22][3]=5;
+        GridTetris[22][3]=5;
         GridTetris[22][4]=5;
         GridTetris[22][5]=5;
         GridTetris[22][6]=5;
-        //GridTetris[22][7]=5;
+        GridTetris[22][7]=5;
         GridTetris[22][8]=5;
         GridTetris[22][9]=5;
         GridTetris[22][10]=5;
-        
-        GridTetris[29][1]=5;
-        GridTetris[29][2]=5;
-        GridTetris[29][3]=5;
-        GridTetris[29][4]=5;
-        GridTetris[29][5]=5;
-        GridTetris[29][6]=5;
-        GridTetris[29][7]=5;
-        GridTetris[29][8]=5;
-        GridTetris[29][9]=5;
-        GridTetris[29][10]=5;
         
         //GridTetris[18][6]=5;
         
@@ -216,7 +221,7 @@ tetrisPlus.gameState = {
                         if(GridTetris[i][j]==5)
                             {
                                 //var a=tetrisPlus.game.add.image((1024 / 2) - (89) + (distX*j), (800 / 2) - (60) + distY*i ,'R');
-                                if(i<29 && (j>0 && j<11))
+                                if(i<22 && (j>0 && j<11))
                                     {
                                       /*var a=tetrisPlus.game.add.image((1024 / 2) - (89) + (distX*j), (800/4) - 4 +distY*i ,'R');
                                       a.scale.setTo(2);
@@ -531,7 +536,7 @@ tetrisPlus.gameState = {
         
         for(var i=0; i<GridTetris.length; i++)
             {
-                if(i!=29)
+                if(i!=22)
                     {
                        if(GridTetris[i][1]==5 && GridTetris[i][2]==5 && GridTetris[i][3]==5 && GridTetris[i][4]==5 && GridTetris[i][5]==5 && GridTetris[i][6]==5 && GridTetris[i][7]==5 && GridTetris[i][8]==5 && GridTetris[i][9]==5 && GridTetris[i][10]==5)
                         {
