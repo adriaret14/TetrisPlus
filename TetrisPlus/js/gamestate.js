@@ -233,7 +233,7 @@ tetrisPlus.gameState = {
                     }
             }
 
-        console.log(destroyables.children.length);
+        //console.log(destroyables.children.length);
         
 
        /*var b=tetrisPlus.game.add.image(distX*4, distY*18 ,'R');
@@ -293,7 +293,7 @@ tetrisPlus.gameState = {
 
     },
     update:function(){
-        console.log(destroyables.children.length);
+        //console.log(destroyables.children.length);
         /*for(var i=0; i<destroyables.length; i++)
             {
                 console.log(i);
@@ -386,11 +386,29 @@ tetrisPlus.gameState = {
             tapZ=false;
         }
         
+        //OVERLAP
+        //this.game.physics.arcade.overlap(Player, destroyables, this.collideOverlap, null, this);
+        
+        if(Player.ColLeft == true)
+        {
+            this.collision = this.game.physics.arcade.collide(Player, destroyables, this.collideLeft, null, this);
+            /*if(this.collision == true)
+            {
+                Player.y = Player.y + 2;
+            }*/
+        }
+        else if(Player.ColRight == true)
+        {
+            this.collision = this.game.physics.arcade.collide(Player, destroyables, this.collideRight, null, this);
+            /*if(this.collision == true)
+            {
+                Player.y = Player.y + 2;
+            }*/
+        }        
+        
         //SPAWNEAR NUEVA PIEZA
         if(PieceActive.cantMoveDown)
             {
-                
-                
                 Piecei1=PieceActive.previ1;
                 Piecej1=PieceActive.prevj1;
                 Piecei2=PieceActive.previ2;
@@ -433,22 +451,7 @@ tetrisPlus.gameState = {
             }
         
         this.seconds = Math.floor(this.time.totalElapsedSeconds());
-        
-        //COLLISION WITH PIECES
-        if(Player.ColLeft == true)
-        {
-            this.game.physics.arcade.collide(Player, destroyables, this.collideLeft, null, this);
-        }
-        else if(Player.ColRight == true)
-        {
-            this.collision = this.game.physics.arcade.collide(Player, destroyables, this.collideRight, null, this);
-        }
-        
-        /*if(Player.right && destroyables.right)
-        {
-            this.game.physics.arcade.overlap(Player, destroyables, this.collideOverlap, null, this);
-            throw error("BIENVENIDO");
-        }*/
+        this.game.physics.arcade.overlap(Player, destroyables, this.collideOverlap, null, this);
         
         //DIE PLAYER
         this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
@@ -468,7 +471,7 @@ tetrisPlus.gameState = {
     },
     collideOverlap:function()
     {
-        Player.y = Player.y - 50;
+        Player.y = Player.y - 1;
     },
     loseGame:function()
     {
@@ -483,7 +486,7 @@ tetrisPlus.gameState = {
                     {
                         if(GridTetris[i][j]==5)
                             {
-                                console.log(i+","+j);
+                                //console.log(i+","+j);
                             }
                     }
             }
@@ -522,7 +525,7 @@ tetrisPlus.gameState = {
     },
     makeLines:function()
     {
-        console.log(destroyables.children.length);
+        //console.log(destroyables.children.length);
         /*for(var i=0; i<GridTetris.length; i++)
             {
                 for(var j=0; j<GridTetris[i].length; j++)
