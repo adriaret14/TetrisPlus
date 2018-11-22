@@ -33,6 +33,7 @@ var destroyables;
 
 //PLAYER
 var Player;
+var LastCollision;
 
 //MAZA
 var Mace;
@@ -98,6 +99,9 @@ tetrisPlus.gameState = {
         //PREFAB PLAYER 
         Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 124, this.PlayerAnimSubida);
         tetrisPlus.game.add.existing(Player);
+        
+        //COUNTER PLAYER
+        this.LastCollision = 0;
         
         /************************ FRET ********************************/
         //CREAMOS EL GRUPO DE PIEZAS ESTATICAS
@@ -423,35 +427,43 @@ tetrisPlus.gameState = {
                 this.makeLines();
             }
         
+        this.seconds = Math.floor(this.time.totalElapsedSeconds());
+        
         //COLLISION WITH PIECES
-        //IZQUIERDA
-        /*console.log(destroyables);*/
-        this.collision = this.game.physics.arcade.collide(Player, [destroyables], this.collideHandler, null, this);
-        //console.log(this.collision);
-    
+        if(Player.ColLeft == true)
+        {
+            this.game.physics.arcade.collide(Player, destroyables, this.collideLeft, null, this);
+        }
+        else if(Player.ColRight == true)
+        {
+            this.collision = this.game.physics.arcade.collide(Player, destroyables, this.collideRight, null, this);
+        }
+        
+        /*if(Player.right && destroyables.right)
+        {
+            this.game.physics.arcade.overlap(Player, destroyables, this.collideOverlap, null, this);
+            throw error("BIENVENIDO");
+        }*/
+        
         //DIE PLAYER
         this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
     },
     
     
     //NEW FUNCTIONS
-    collideHandler:function()
+    collideLeft:function()
     {
-        //Flip/Flop diretion player
-        if(Player.left && destroyables.right)
-        {
-            Player.ColLeft = true;
-            Player.ColRight = false;
-        }
-        else if(Player.left&& destroyables.right)
-        {
-            Player.ColLeft = false;
-            Player.ColRight = true;
-        }
+        Player.ColLeft = false;
+        Player.ColRight = true;
+    },
+    collideRight:function()
+    {
+        Player.ColLeft = true;
+        Player.ColRight = false;
     },
     collideOverlap:function()
     {
-        Player.UpPiece();
+        Player.y = Player.y - 50;
     },
     loseGame:function()
     {
