@@ -12,14 +12,7 @@ tetrisPlus.R_Single = function(game, x1, y1, startj, starti, GridTetris)
     this.starti=starti;
     this.startj=startj;
     this.anchor.setTo(0.625, 0.5);
-    this.cantMoveDown=false;
-    this.cantMoveLeft=false;
-    this.cantMoveRight=false;
-    this.cantRotate=false;
     this.GridTetris=GridTetris;
-    this.contDer;
-    this.contIzq;
-    this.contDown=0;
     
    //FISICAS
     this.game.physics.arcade.enable(this);

@@ -242,6 +242,7 @@ tetrisPlus.gameState = {
     },
     update:function(){        
         //Drop the piece
+        //console.log(destroyables.length);
         counter++;
         counterMace++;
         if(counter>=realDropSpeed)
@@ -495,25 +496,29 @@ tetrisPlus.gameState = {
                                             //destroyables.remove(aux);
                                             //aux.destroy;
                                             aux.kill();
+                                            //aux.destroy;
                                         }
                                 }
                             
                             this.makeStaticsFall(i);
                         } 
                     }  
-            }        
+            }
+        this.clearGrid();
+        
     },
     makeStaticsFall:function(row)
     {
-        console.log("Bajar las siguientes piezas: ");
-        //console.log(GridTetris.length);
+        //console.log("Bajar las siguientes piezas: "+row);
+        //console.log(GridTetris.length-1);
         for(var i=GridTetris.length-1; i>=0; i--)
         {
             for(var j=0; j<GridTetris[i].length; j++)
             {
+                //if(GridTetris[i][j]==5 && (j>0 && j<11))
                 if(i<row && GridTetris[i][j]==5 && (j>0 && j<11))
                 {
-                    console.log(i+","+j);
+                    //console.log(i+","+j);
                     this.makeSingleFall(i, j);
                 }
             }
@@ -526,15 +531,37 @@ tetrisPlus.gameState = {
         
         for(var j=0; j<destroyables.children.length; j++)
             {
-                if(destroyables.children[j].starti==row && destroyables.children[j].startj==col)
+                if(destroyables.children[j].starti!=22)
                     {
-                        console.log("Previous: "+destroyables.children[j].y+"//"+destroyables.children[j].starti);
-                        destroyables.children[j].starti+=1;
-                        //destroyables.children[j].y+=16;
-                        destroyables.children[j].moveSingle(distY);
-                        console.log("Updated: "+destroyables.children[j].y+"//"+destroyables.children[j].starti);
+                        destroyables.children[j].kill();
                     }
+                
+                //if(destroyables.children[j].starti==row && destroyables.children[j].startj==col)
+                    //{
+                        //destroyables.children[j].kill();
+                        //console.log("Previous: "+destroyables.children[j].y+"//"+destroyables.children[j].starti);
+                        //destroyables.children[j].starti+=1;
+                        //destroyables.children[j].y+=16;
+                        //destroyables.children[j].moveSingle(distY);
+                        //console.log("Updated: "+destroyables.children[j].y+"//"+destroyables.children[j].starti);
+                    //}
             }
+        
+    },
+    clearGrid:function()
+    {
+        for(var i=GridTetris.length-1; i>=0; i--)
+        {
+            for(var j=0; j<GridTetris[i].length; j++)
+            {
+                if(GridTetris[i][j]==5 && (j>0 && j<11) && i!=22)
+                {
+                    //console.log(i+","+j);
+                    var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
+                    destroyables.add(Static);
+                }
+            }
+        }
     }
 };
 
