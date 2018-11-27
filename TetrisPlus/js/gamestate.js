@@ -339,6 +339,12 @@ tetrisPlus.gameState = {
            Player.DontMove = true; 
         }
         
+        //WIN 
+        if(Player.y >= (this.game.world.centerY + 124))
+        {
+           Player.body.gravity.y = 0;
+        }
+        
         this.game.physics.arcade.overlap(Player, destroyables, this.overlapScale, null, this);
         
         //SPAWNEAR NUEVA PIEZA
