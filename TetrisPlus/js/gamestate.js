@@ -220,7 +220,7 @@ tetrisPlus.gameState = {
                             {
                                 if(i<22 && (j>0 && j<11))
                                     {
-                                      var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i, GridTetris);
+                                      var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
                                       destroyables.add(Static);
                                     }
                             }
@@ -528,11 +528,11 @@ tetrisPlus.gameState = {
             {
                 if(destroyables.children[j].starti==row && destroyables.children[j].startj==col)
                     {
+                        console.log("Previous: "+destroyables.children[j].y+"//"+destroyables.children[j].starti);
                         destroyables.children[j].starti+=1;
-                        console.log("Previous: "+destroyables.children[j].y);
                         //destroyables.children[j].y+=16;
                         destroyables.children[j].moveSingle(distY);
-                        console.log("Updated: "+destroyables.children[j].y);
+                        console.log("Updated: "+destroyables.children[j].y+"//"+destroyables.children[j].starti);
                     }
             }
     }
