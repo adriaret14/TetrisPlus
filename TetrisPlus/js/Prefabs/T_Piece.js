@@ -354,19 +354,19 @@ tetrisPlus.T_Piece.prototype.rotate=function(currentRotation)
                                      }
                                  if(this.GridTetris[i][j]==2)
                                      {
-                                         //this.GridTetris[i-1][j+1]=2;
+                                         //this.GridTetris[i-1][j-1]=2;
                                          this.previ2=i;
                                          this.prevj2=j;
                                      }
                                  if(this.GridTetris[i][j]==3)
                                      {
-                                         //this.GridTetris[i+1][j+1]=3;
+                                         //this.GridTetris[i-2][j]=3;
                                          this.previ3=i;
                                          this.prevj3=j;
                                      }
                                  if(this.GridTetris[i][j]==4)
                                      {
-                                         //this.GridTetris[i-1][j-1]=4;
+                                         //this.GridTetris[i+1][j+1]=4;
                                          this.previ4=i;
                                          this.prevj4=j;
                                      }
@@ -378,7 +378,7 @@ tetrisPlus.T_Piece.prototype.rotate=function(currentRotation)
             this.GridTetris[this.previ2][this.prevj2]=null;
             this.GridTetris[this.previ3][this.prevj3]=null;
             this.GridTetris[this.previ4][this.prevj4]=null;
-                
+            
             this.GridTetris[this.previ1][this.prevj1]=1;
             this.GridTetris[this.previ2-1][this.prevj2+1]=2;
             this.GridTetris[this.previ3+1][this.prevj3+1]=3;
@@ -399,19 +399,19 @@ tetrisPlus.T_Piece.prototype.rotate=function(currentRotation)
                                      }
                                  if(this.GridTetris[i][j]==2)
                                      {
-                                         //this.GridTetris[i-1][j-1]=2;
+                                         //this.GridTetris[i+1][j-1]=2;
                                          this.previ2=i;
                                          this.prevj2=j;
                                      }
                                  if(this.GridTetris[i][j]==3)
                                      {
-                                         //this.GridTetris[i-1][j+1]=3;
+                                         //this.GridTetris[i][j-2]=3;
                                          this.previ3=i;
                                          this.prevj3=j;
                                      }
                                  if(this.GridTetris[i][j]==4)
                                      {
-                                         //this.GridTetris[i+1][j-1]=4;
+                                         //this.GridTetris[i-1][j+1]=4;
                                          this.previ4=i;
                                          this.prevj4=j;
                                      }
@@ -423,7 +423,7 @@ tetrisPlus.T_Piece.prototype.rotate=function(currentRotation)
             this.GridTetris[this.previ2][this.prevj2]=null;
             this.GridTetris[this.previ3][this.prevj3]=null;
             this.GridTetris[this.previ4][this.prevj4]=null;
-                
+            
             this.GridTetris[this.previ1][this.prevj1]=1;
             this.GridTetris[this.previ2-1][this.prevj2-1]=2;
             this.GridTetris[this.previ3-1][this.prevj3+1]=3;
@@ -444,19 +444,19 @@ tetrisPlus.T_Piece.prototype.rotate=function(currentRotation)
                                      }
                                  if(this.GridTetris[i][j]==2)
                                      {
-                                         //this.GridTetris[i+1][j-1]=2;
+                                         //this.GridTetris[i+1][j+1]=2;
                                          this.previ2=i;
                                          this.prevj2=j;
                                      }
                                  if(this.GridTetris[i][j]==3)
                                      {
-                                         //this.GridTetris[i-1][j-1]=3;
+                                         //this.GridTetris[i+2][j]=3;
                                          this.previ3=i;
                                          this.prevj3=j;
                                      }
                                  if(this.GridTetris[i][j]==4)
                                      {
-                                         //this.GridTetris[i+1][j+1]=4;
+                                         //this.GridTetris[i-1][j-1]=4;
                                          this.previ4=i;
                                          this.prevj4=j;
                                      }
@@ -468,7 +468,7 @@ tetrisPlus.T_Piece.prototype.rotate=function(currentRotation)
             this.GridTetris[this.previ2][this.prevj2]=null;
             this.GridTetris[this.previ3][this.prevj3]=null;
             this.GridTetris[this.previ4][this.prevj4]=null;
-                
+            
             this.GridTetris[this.previ1][this.prevj1]=1;
             this.GridTetris[this.previ2+1][this.prevj2-1]=2;
             this.GridTetris[this.previ3-1][this.prevj3-1]=3;
@@ -481,20 +481,20 @@ tetrisPlus.T_Piece.prototype.rotate=function(currentRotation)
                      {
                          if(this.GridTetris[i][j]==1 || this.GridTetris[i][j]==2 || this.GridTetris[i][j]==3 || this.GridTetris[i][j]==4)
                              {
-                                 if(this.GridTetris[i][j]==1)
+                                  if(this.GridTetris[i][j]==1)
                                      {
                                          this.previ1=i;
                                          this.prevj1=j;
                                      }
                                  if(this.GridTetris[i][j]==2)
                                      {
-                                         //this.GridTetris[i+1][j+1]=2;
+                                         //this.GridTetris[i-1][j+1]=2;
                                          this.previ2=i;
                                          this.prevj2=j;
                                      }
                                  if(this.GridTetris[i][j]==3)
                                      {
-                                         //this.GridTetris[i-1][j+1]=3;
+                                         //this.GridTetris[i][j+2]=3;
                                          this.previ3=i;
                                          this.prevj3=j;
                                      }
@@ -512,13 +512,13 @@ tetrisPlus.T_Piece.prototype.rotate=function(currentRotation)
             this.GridTetris[this.previ2][this.prevj2]=null;
             this.GridTetris[this.previ3][this.prevj3]=null;
             this.GridTetris[this.previ4][this.prevj4]=null;
-                
+            
             this.GridTetris[this.previ1][this.prevj1]=1;
             this.GridTetris[this.previ2+1][this.prevj2+1]=2;
-            this.GridTetris[this.previ3-1][this.prevj3+1]=3;
-            this.GridTetris[this.previ4+1][this.prevj4-1]=4;
+            this.GridTetris[this.previ3+1][this.prevj3-1]=3;
+            this.GridTetris[this.previ4-1][this.prevj4+1]=4;
         }
-    } 
+    }
 
 };
 

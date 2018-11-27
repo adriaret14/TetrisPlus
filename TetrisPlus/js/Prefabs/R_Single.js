@@ -30,3 +30,7 @@ tetrisPlus.R_Single = function(game, x1, y1, startj, starti, GridTetris)
 };
 tetrisPlus.R_Single.prototype = Object.create(Phaser.Sprite.prototype);
 tetrisPlus.R_Single.prototype.constructor = tetrisPlus.R_Single;
+tetrisPlus.R_Single.prototype.moveSingle=function(distance)
+{
+    this.y+=distance;
+}
