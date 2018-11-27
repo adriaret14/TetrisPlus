@@ -96,8 +96,10 @@ tetrisPlus.gameState = {
         Mace = new tetrisPlus.Mace(tetrisPlus.game, (this.game.world.centerX-81.5), (this.game.world.centerY - 245), 25, 25);
         tetrisPlus.game.add.existing(Mace);
                 
-        //PREFAB PLAYER 
-        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 92, this.PlayerAnimSubida);
+        //PREFAB PLAYER
+        //92
+        
+        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40, this.PlayerAnimSubida);
         tetrisPlus.game.add.existing(Player);
         
         //COUNTER PLAYER
@@ -106,6 +108,9 @@ tetrisPlus.gameState = {
         /************************ FRET ********************************/
         //CREAMOS EL GRUPO DE PIEZAS ESTATICAS
         destroyables=tetrisPlus.game.add.group();
+        
+        //FISICAS JUEGO
+        this.game.physics.arcade.enable(destroyables);
         
         //VARIABLES PARA DEFINIR EL CENTRO DE CADA CELDA DEL GRID(BASADAS EN LAS PIEZAS DEL TETRIS QUE SON DE 8X8 PX)
         
@@ -312,25 +317,28 @@ tetrisPlus.gameState = {
             tapZ=false;
         }
         
-        //OVERLAP
-        //this.game.physics.arcade.overlap(Player, destroyables, this.collideOverlap, null, this);
+        //COLLISION ARRIBA
+        this.collisionUp = this.game.physics.arcade.collide(Player, destroyables, this.collideHandler, null, this);
         
-        if(Player.ColLeft == true)
+        if(this.collisionUp == true)
         {
-            this.collision = this.game.physics.arcade.collide(Player, destroyables, this.collideLeft, null, this);
-            /*if(this.collision == true)
+            //COLLISION LATERAL
+            if(Player.ColLeft == true)
             {
-                Player.y = Player.y + 2;
-            }*/
+                this.game.physics.arcade.collide(Player, destroyables, this.collideLeft, null, this);
+            }
+            else if(Player.ColRight == true)
+            {
+                 this.game.physics.arcade.collide(Player, destroyables, this.collideRight, null, this);   
+            }
+            Player.DontMove = false;
         }
-        else if(Player.ColRight == true)
+        else
         {
-            this.collision = this.game.physics.arcade.collide(Player, destroyables, this.collideRight, null, this);
-            /*if(this.collision == true)
-            {
-                Player.y = Player.y + 2;
-            }*/
-        }        
+           Player.DontMove = true; 
+        }
+        
+        this.game.physics.arcade.overlap(Player, destroyables, this.overlapScale, null, this);
         
         //SPAWNEAR NUEVA PIEZA
         if(PieceActive.cantMoveDown)
@@ -377,7 +385,6 @@ tetrisPlus.gameState = {
             }
         
         this.seconds = Math.floor(this.time.totalElapsedSeconds());
-        this.game.physics.arcade.overlap(Player, destroyables, this.collideOverlap, null, this);
         
         //DIE PLAYER
         this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
@@ -395,9 +402,17 @@ tetrisPlus.gameState = {
         Player.ColLeft = true;
         Player.ColRight = false;
     },
-    collideOverlap:function()
+    collideUp:function(Player, destroyables)
     {
-        Player.y = Player.y - 1;
+        //ENCIMA DE LAS PIEZAS
+        if(Player.body.touching.down && destroyables.body.touching.up)
+        {
+            Player.body.gravity.y = 0;
+        }    
+    },
+    overlapScale:function()
+    {
+        Player.y -= 1;
     },
     loseGame:function()
     {

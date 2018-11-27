@@ -35,7 +35,8 @@ tetrisPlus.Player = function(game, x, y, PlayerAnimSubida)
     this.game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
     //this.body.immovable = true;
-    //this.body.gravity.y = 100;
+    this.body.gravity.y = 100;
+    this.body.setSize(16, 16);
     
     //ANIMACIONES SEGUN EL CASO
     this.ColAnimationRight = false;
@@ -43,6 +44,9 @@ tetrisPlus.Player = function(game, x, y, PlayerAnimSubida)
     
     //FLAG ANIMACIONS DE CHOQUE
     this.flagAnimationCollide = false;
+    
+    //MOVIMIENTO ACTIVADO
+    this.DontMove = false;
 };
 tetrisPlus.Player.prototype = Object.create(Phaser.Sprite.prototype);
 tetrisPlus.Player.prototype.constructor = tetrisPlus.Player;
@@ -53,6 +57,8 @@ tetrisPlus.Player.prototype.update = function(){
     this.positionX = this.x - this.game.world.centerX;         
     
         //COLLISION IZQUIERDA
+    if(!this.DontMove)
+    {
         if(this.ColRight == true )
         {
             if(this.positionX != this.LimitLeft)        
@@ -88,7 +94,9 @@ tetrisPlus.Player.prototype.update = function(){
                 this.ColLeft = false;
                 this.ColRight = true;
             }
-        }
+        } 
+    }
+        
 };
 
 tetrisPlus.Player.prototype.UpPiece=function()
