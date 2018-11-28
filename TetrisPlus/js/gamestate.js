@@ -33,7 +33,7 @@ var destroyables;
 
 //PLAYER
 var Player;
-var LastCollision;
+var PlayerVictory;
 
 //MAZA
 var Mace;
@@ -78,9 +78,9 @@ tetrisPlus.gameState = {
         //FONDO
         this.game.load.image('bg1', 'assets/img/Fondo1.png');
         
-        //PERSONAJE
+        //PERSONAJE ANIMS
         this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
-        this.PlayerAnimSubida = this.load.spritesheet('PlayerSubida', 'assets/img/SpriteSheetSubida.png', 16, 24);
+        this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);
     
     },
     create:function(){        
@@ -98,8 +98,7 @@ tetrisPlus.gameState = {
                 
         //PREFAB PLAYER
         //92
-        
-        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40, this.PlayerAnimSubida);
+        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40);
         tetrisPlus.game.add.existing(Player);
         
         //COUNTER PLAYER
@@ -318,6 +317,22 @@ tetrisPlus.gameState = {
             tapZ=false;
         }
         
+        //SI NO HA GANADO
+        if(PlayerVictory == null)
+        {
+            //GANAR
+            if(Player.y >= (this.game.world.centerY + 124))
+            {
+                Player.y = this.game.world.centerY + 124;
+                Player.body.gravity.y = 0;
+
+                //CHANGE PREFAB
+                PlayerVictory = new tetrisPlus.PlayerWin(tetrisPlus.game, (Player.x - 8), (Player.y - 12));
+                Player.destroy();
+                tetrisPlus.game.add.existing(PlayerVictory);
+            }
+        }
+    
         //COLLISION ARRIBA
         this.collisionUp = this.game.physics.arcade.collide(Player, destroyables, this.collideHandler, null, this);
         
@@ -327,24 +342,24 @@ tetrisPlus.gameState = {
             if(Player.ColLeft == true)
             {
                 this.game.physics.arcade.collide(Player, destroyables, this.collideLeft, null, this);
+                this.collisionLateral = true;
             }
             else if(Player.ColRight == true)
             {
-                 this.game.physics.arcade.collide(Player, destroyables, this.collideRight, null, this);   
+                this.game.physics.arcade.collide(Player, destroyables, this.collideRight, null, this);
+                this.collisionLateral = true;
             }
             Player.DontMove = false;
         }
         else
         {
-           Player.DontMove = true; 
+            Player.DontMove = true; 
         }
         
         //WIN 
-        if(Player.y >= (this.game.world.centerY + 124))
-        {
-           Player.body.gravity.y = 0;
-        }
         
+        
+        //OVERLAP
         this.game.physics.arcade.overlap(Player, destroyables, this.overlapScale, null, this);
         
         //SPAWNEAR NUEVA PIEZA
@@ -419,7 +434,7 @@ tetrisPlus.gameState = {
     },
     overlapScale:function()
     {
-        Player.y -= 1;
+        Player.y -= 1
     },
     loseGame:function()
     {
