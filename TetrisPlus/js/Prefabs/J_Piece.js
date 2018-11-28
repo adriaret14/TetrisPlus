@@ -36,6 +36,8 @@ tetrisPlus.J_Piece = function(game, x1, y1, startj, starti, GridTetris)
     this.contDer;
     this.contIzq;
     this.contDown=0;
+    this.currRot=0;
+    this.RotFlag=false;
     
    //FISICAS
     this.game.physics.arcade.enable(this);
@@ -311,211 +313,138 @@ tetrisPlus.J_Piece.prototype.move=function(direction, distance)
 };
 tetrisPlus.J_Piece.prototype.rotate=function(currentRotation, GridTetris)
 {
+    //SETEAMOS EL VALOR DE LA FLAG
+    this.RotFlag=false;
+    
+    
+    //RECOGEMOS LOS VALORES DE LAS PIEZAS
+    for(var i=0; i<this.GridTetris.length; i++)
+    {
+        for(var j=0; j<this.GridTetris[i].length; j++)
+        {
+            if(this.GridTetris[i][j]==1 || this.GridTetris[i][j]==2 || this.GridTetris[i][j]==3 || this.GridTetris[i][j]==4)
+            {
+                if(this.GridTetris[i][j]==1)
+                {
+                    this.previ1=i;
+                    this.prevj1=j;
+                }
+                if(this.GridTetris[i][j]==2)
+                {
+                    this.previ2=i;
+                    this.prevj2=j;
+                }
+                if(this.GridTetris[i][j]==3)
+                {
+                    this.previ3=i;
+                    this.prevj3=j;
+                }
+                if(this.GridTetris[i][j]==4)
+                {
+                    this.previ4=i;
+                    this.prevj4=j;
+                }
+            }
+        }
+    }
+    
     //ROTAMOS LA PIEZA
     if(!this.cantMoveDown)
     {
         if(currentRotation==1)
         {
-            //console.log("1");
-            this.angle=-90;
+            if(this.GridTetris[this.previ1][this.prevj1]!=5 && this.GridTetris[this.previ2-1][this.prevj2-1]!=5 && this.GridTetris[this.previ3-2][this.prevj3]!=5 && this.GridTetris[this.previ4+1][this.prevj4+1]!=5)
+                {
+                    //console.log("1");
+                    this.angle=-90;
+                    this.RotFlag=true;
+                    this.currRot=currentRotation;
+                }
         }
         else if(currentRotation==2)
         {
-            //console.log("2");
-            this.angle=-180;
+            if(this.GridTetris[this.previ1][this.prevj1]!=5 && this.GridTetris[this.previ2+1][this.prevj2-1]!=5 && this.GridTetris[this.previ3][this.prevj3-2]!=5 && this.GridTetris[this.previ4-1][this.prevj4+1]!=5)
+                {
+                    //console.log("2");
+                    this.angle=-180;
+                    this.RotFlag=true;
+                    this.currRot=currentRotation;
+                }
         }
         else if(currentRotation==3)
         {
-            //console.log("3");
-            this.angle=-270; 
+            if(this.GridTetris[this.previ1][this.prevj1]!=5 && this.GridTetris[this.previ2+1][this.prevj2+1]!=5 && this.GridTetris[this.previ3+2][this.prevj3]!=5 && this.GridTetris[this.previ4-1][this.prevj4-1]!=5)
+                {
+                    //console.log("3");
+                    this.angle=-270;
+                    this.RotFlag=true;
+                    this.currRot=currentRotation;
+                }
         }
         else
         {
-            //console.log("4");
-            this.angle=0;
+            if(this.GridTetris[this.previ1][this.prevj1]!=5 && this.GridTetris[this.previ2-1][this.prevj2+1]!=5 && this.GridTetris[this.previ3][this.prevj3+2]!=5 && this.GridTetris[this.previ4+1][this.prevj4-1]!=5)
+                {
+                   //console.log("4");
+                    this.angle=0;
+                    this.RotFlag=true;
+                    this.currRot=currentRotation;
+                }
         }
 
         //ARREGLAMOS EL GRID DE POSICIONES(Para el cálculo de colisiones de piezas)
+        if(this.RotFlag)
+        {
+           if(currentRotation==1)
+            {            
+                this.GridTetris[this.previ1][this.prevj1]=null;
+                this.GridTetris[this.previ2][this.prevj2]=null;
+                this.GridTetris[this.previ3][this.prevj3]=null;
+                this.GridTetris[this.previ4][this.prevj4]=null;
 
-        if(currentRotation==1)
-        {
-             for(var i=0; i<this.GridTetris.length; i++)
-             {
-                 for(var j=0; j<this.GridTetris[i].length; j++)
-                     {
-                         if(this.GridTetris[i][j]==1 || this.GridTetris[i][j]==2 || this.GridTetris[i][j]==3 || this.GridTetris[i][j]==4)
-                             {
-                                 if(this.GridTetris[i][j]==1)
-                                     {
-                                         this.previ1=i;
-                                         this.prevj1=j;
-                                     }
-                                 if(this.GridTetris[i][j]==2)
-                                     {
-                                         //this.GridTetris[i-1][j-1]=2;
-                                         this.previ2=i;
-                                         this.prevj2=j;
-                                     }
-                                 if(this.GridTetris[i][j]==3)
-                                     {
-                                         //this.GridTetris[i-2][j]=3;
-                                         this.previ3=i;
-                                         this.prevj3=j;
-                                     }
-                                 if(this.GridTetris[i][j]==4)
-                                     {
-                                         //this.GridTetris[i+1][j+1]=4;
-                                         this.previ4=i;
-                                         this.prevj4=j;
-                                     }
-                             }
-                     }
-             }
-            
-            this.GridTetris[this.previ1][this.prevj1]=null;
-            this.GridTetris[this.previ2][this.prevj2]=null;
-            this.GridTetris[this.previ3][this.prevj3]=null;
-            this.GridTetris[this.previ4][this.prevj4]=null;
-            
-            this.GridTetris[this.previ1][this.prevj1]=1;
-            this.GridTetris[this.previ2-1][this.prevj2-1]=2;
-            this.GridTetris[this.previ3-2][this.prevj3]=3;
-            this.GridTetris[this.previ4+1][this.prevj4+1]=4;
+                this.GridTetris[this.previ1][this.prevj1]=1;
+                this.GridTetris[this.previ2-1][this.prevj2-1]=2;
+                this.GridTetris[this.previ3-2][this.prevj3]=3;
+                this.GridTetris[this.previ4+1][this.prevj4+1]=4;
+            }
+            else if(currentRotation==2)
+            {
+                this.GridTetris[this.previ1][this.prevj1]=null;
+                this.GridTetris[this.previ2][this.prevj2]=null;
+                this.GridTetris[this.previ3][this.prevj3]=null;
+                this.GridTetris[this.previ4][this.prevj4]=null;
+
+                this.GridTetris[this.previ1][this.prevj1]=1;
+                this.GridTetris[this.previ2+1][this.prevj2-1]=2;
+                this.GridTetris[this.previ3][this.prevj3-2]=3;
+                this.GridTetris[this.previ4-1][this.prevj4+1]=4;
+            }
+            else if(currentRotation==3)
+            {
+                this.GridTetris[this.previ1][this.prevj1]=null;
+                this.GridTetris[this.previ2][this.prevj2]=null;
+                this.GridTetris[this.previ3][this.prevj3]=null;
+                this.GridTetris[this.previ4][this.prevj4]=null;
+
+                this.GridTetris[this.previ1][this.prevj1]=1;
+                this.GridTetris[this.previ2+1][this.prevj2+1]=2;
+                this.GridTetris[this.previ3+2][this.prevj3]=3;
+                this.GridTetris[this.previ4-1][this.prevj4-1]=4;
+            }
+            else
+            {
+                this.GridTetris[this.previ1][this.prevj1]=null;
+                this.GridTetris[this.previ2][this.prevj2]=null;
+                this.GridTetris[this.previ3][this.prevj3]=null;
+                this.GridTetris[this.previ4][this.prevj4]=null;
+
+                this.GridTetris[this.previ1][this.prevj1]=1;
+                this.GridTetris[this.previ2-1][this.prevj2+1]=2;
+                this.GridTetris[this.previ3][this.prevj3+2]=3;
+                this.GridTetris[this.previ4+1][this.prevj4-1]=4;
+            } 
         }
-        else if(currentRotation==2)
-        {
-            for(var i=0; i<this.GridTetris.length; i++)
-             {
-                 for(var j=0; j<this.GridTetris[i].length; j++)
-                     {
-                         if(this.GridTetris[i][j]==1 || this.GridTetris[i][j]==2 || this.GridTetris[i][j]==3 || this.GridTetris[i][j]==4)
-                             {
-                                 if(this.GridTetris[i][j]==1)
-                                     {
-                                         this.previ1=i;
-                                         this.prevj1=j;
-                                     }
-                                 if(this.GridTetris[i][j]==2)
-                                     {
-                                         //this.GridTetris[i+1][j-1]=2;
-                                         this.previ2=i;
-                                         this.prevj2=j;
-                                     }
-                                 if(this.GridTetris[i][j]==3)
-                                     {
-                                         //this.GridTetris[i][j-2]=3;
-                                         this.previ3=i;
-                                         this.prevj3=j;
-                                     }
-                                 if(this.GridTetris[i][j]==4)
-                                     {
-                                         //this.GridTetris[i-1][j+1]=4;
-                                         this.previ4=i;
-                                         this.prevj4=j;
-                                     }
-                             }
-                     }
-             }
-            
-            this.GridTetris[this.previ1][this.prevj1]=null;
-            this.GridTetris[this.previ2][this.prevj2]=null;
-            this.GridTetris[this.previ3][this.prevj3]=null;
-            this.GridTetris[this.previ4][this.prevj4]=null;
-            
-            this.GridTetris[this.previ1][this.prevj1]=1;
-            this.GridTetris[this.previ2+1][this.prevj2-1]=2;
-            this.GridTetris[this.previ3][this.prevj3-2]=3;
-            this.GridTetris[this.previ4-1][this.prevj4+1]=4;
-        }
-        else if(currentRotation==3)
-        {
-            for(var i=0; i<this.GridTetris.length; i++)
-             {
-                 for(var j=0; j<this.GridTetris[i].length; j++)
-                     {
-                         if(this.GridTetris[i][j]==1 || this.GridTetris[i][j]==2 || this.GridTetris[i][j]==3 || this.GridTetris[i][j]==4)
-                             {
-                                 if(this.GridTetris[i][j]==1)
-                                     {
-                                         this.previ1=i;
-                                         this.prevj1=j;
-                                     }
-                                 if(this.GridTetris[i][j]==2)
-                                     {
-                                         //this.GridTetris[i+1][j+1]=2;
-                                         this.previ2=i;
-                                         this.prevj2=j;
-                                     }
-                                 if(this.GridTetris[i][j]==3)
-                                     {
-                                         //this.GridTetris[i+2][j]=3;
-                                         this.previ3=i;
-                                         this.prevj3=j;
-                                     }
-                                 if(this.GridTetris[i][j]==4)
-                                     {
-                                         //this.GridTetris[i-1][j-1]=4;
-                                         this.previ4=i;
-                                         this.prevj4=j;
-                                     }
-                             }
-                     }
-             }
-            
-            this.GridTetris[this.previ1][this.prevj1]=null;
-            this.GridTetris[this.previ2][this.prevj2]=null;
-            this.GridTetris[this.previ3][this.prevj3]=null;
-            this.GridTetris[this.previ4][this.prevj4]=null;
-            
-            this.GridTetris[this.previ1][this.prevj1]=1;
-            this.GridTetris[this.previ2+1][this.prevj2+1]=2;
-            this.GridTetris[this.previ3+2][this.prevj3]=3;
-            this.GridTetris[this.previ4-1][this.prevj4-1]=4;
-        }
-        else{
-            for(var i=0; i<this.GridTetris.length; i++)
-             {
-                 for(var j=0; j<this.GridTetris[i].length; j++)
-                     {
-                         if(this.GridTetris[i][j]==1 || this.GridTetris[i][j]==2 || this.GridTetris[i][j]==3 || this.GridTetris[i][j]==4)
-                             {
-                                  if(this.GridTetris[i][j]==1)
-                                     {
-                                         this.previ1=i;
-                                         this.prevj1=j;
-                                     }
-                                 if(this.GridTetris[i][j]==2)
-                                     {
-                                         //this.GridTetris[i-1][j+1]=2;
-                                         this.previ2=i;
-                                         this.prevj2=j;
-                                     }
-                                 if(this.GridTetris[i][j]==3)
-                                     {
-                                         //this.GridTetris[i][j+2]=3;
-                                         this.previ3=i;
-                                         this.prevj3=j;
-                                     }
-                                 if(this.GridTetris[i][j]==4)
-                                     {
-                                         //this.GridTetris[i+1][j-1]=4;
-                                         this.previ4=i;
-                                         this.prevj4=j;
-                                     }
-                             }
-                     }
-             }
-            
-            this.GridTetris[this.previ1][this.prevj1]=null;
-            this.GridTetris[this.previ2][this.prevj2]=null;
-            this.GridTetris[this.previ3][this.prevj3]=null;
-            this.GridTetris[this.previ4][this.prevj4]=null;
-            
-            this.GridTetris[this.previ1][this.prevj1]=1;
-            this.GridTetris[this.previ2-1][this.prevj2+1]=2;
-            this.GridTetris[this.previ3][this.prevj3+2]=3;
-            this.GridTetris[this.previ4+1][this.prevj4-1]=4;
-        }
+        
     }
 
 };

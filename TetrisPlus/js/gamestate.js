@@ -308,6 +308,7 @@ tetrisPlus.gameState = {
                     initialRot=0;    
                  }
                  PieceActive.rotate(initialRot);
+                 initialRot=PieceActive.currRot;
 
                  //console.log(initialRot);
                  tapZ=true;
@@ -439,8 +440,8 @@ tetrisPlus.gameState = {
                     }
             }
         
-        currentPiece=Math.floor((Math.random() * 7) + 1);
-        //currentPiece=7;
+        //currentPiece=Math.floor((Math.random() * 7) + 1);
+        currentPiece=4;
         switch(currentPiece)
             {
                 case 1:
