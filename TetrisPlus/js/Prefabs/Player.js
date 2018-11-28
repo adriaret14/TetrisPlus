@@ -1,7 +1,7 @@
 var Phaser = Phaser || {};
 var tetrisPlus = tetrisPlus || {};
 
-tetrisPlus.Player = function(game, x, y, PlayerAnimSubida)
+tetrisPlus.Player = function(game, x, y)
 {
     //NOMBRE DEL PREFAB
     Phaser.Sprite.call(this, game, x, y, 'Player');
@@ -18,6 +18,13 @@ tetrisPlus.Player = function(game, x, y, PlayerAnimSubida)
     this.animations.add('falling', [15, 16, 17], 10, true);
     this.animations.add('collisionLeft', [8, 9], 10, true);
     this.animations.add('collisionRight', [13, 14], 10, true);
+    
+    //ANIMATION(FALL)
+    this.animations.add('fallLeft', [15], true);
+    this.animations.add('collisionfallLeft', [16, 17], true);
+    this.animations.add('fallRight', [20], true);
+    this.animations.add('collisionfallRight', [21, 22], true);
+    
         
     //PRINCIPIO DE MOVIMIENTO
     this.ColRight = true;
@@ -31,19 +38,19 @@ tetrisPlus.Player = function(game, x, y, PlayerAnimSubida)
     this.CountCollLeft = 0;
     this.CountCollRight = 0;
     
+    //GOLPE CON EL SUELo
+    this.CountCollFallLeft = 0;
+    this.CountCollFallRight = 0;
+    
     //FISICAS
     this.game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    //this.body.immovable = true;
     this.body.gravity.y = 100;
     this.body.setSize(16, 16);
     
     //ANIMACIONES SEGUN EL CASO
     this.ColAnimationRight = false;
     this.ColAnimationLeft = false;
-    
-    //FLAG ANIMACIONS DE CHOQUE
-    this.flagAnimationCollide = false;
     
     //MOVIMIENTO ACTIVADO
     this.DontMove = false;
@@ -56,7 +63,7 @@ tetrisPlus.Player.prototype.update = function(){
     //MOVIMIENTO (FRAMES REDUCIDOS)
     this.positionX = this.x - this.game.world.centerX;         
     
-        //COLLISION IZQUIERDA
+    //MOVIMIENTO
     if(!this.DontMove)
     {
         if(this.ColRight == true )
@@ -96,13 +103,22 @@ tetrisPlus.Player.prototype.update = function(){
             }
         } 
     }
+    else
+    {
+        //IZQUIERDA
+        if(this.ColRight == true)
+        {
+            this.animations.play('fallLeft', 5, true);
+            this.collisionFallLeft = true;
+        }
         
+        if(this.ColLeft == true)
+        {
+            this.animations.play('fallRight', 5, true);
+            this.collisionFallRight = true;
+        }
+    }
 };
-
-tetrisPlus.Player.prototype.UpPiece=function()
-{
-    this.y = this.y - 8;
-},
 tetrisPlus.Player.prototype.Die=function()
 {
     //Hacer Animacion
