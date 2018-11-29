@@ -197,10 +197,10 @@ tetrisPlus.gameState = {
         GridTetris[20][9]=5;
         GridTetris[20][10]=5;*/
         
-        /*GridTetris[21][1]=5;
+        GridTetris[21][1]=5;
         GridTetris[21][2]=5;
         GridTetris[21][3]=5;
-        GridTetris[21][4]=5;*/
+        GridTetris[21][4]=5;
         //GridTetris[21][5]=5;
         GridTetris[21][6]=5;
         GridTetris[21][7]=5;
@@ -208,7 +208,7 @@ tetrisPlus.gameState = {
         GridTetris[21][9]=5;
         GridTetris[21][10]=5;
         
-        /*GridTetris[22][1]=5;
+        GridTetris[22][1]=5;
         GridTetris[22][2]=5;
         GridTetris[22][3]=5;
         GridTetris[22][4]=5;
@@ -217,7 +217,7 @@ tetrisPlus.gameState = {
         GridTetris[22][7]=5;
         GridTetris[22][8]=5;
         GridTetris[22][9]=5;
-        GridTetris[22][10]=5;*/
+        GridTetris[22][10]=5;
         
         for(var i=0; i<GridTetris.length; i++)
             {
@@ -252,6 +252,8 @@ tetrisPlus.gameState = {
         //console.log(destroyables.length);
         counter++;
         counterMace++;
+        
+        //console.log(destroyables.children[0].PieceType);
         if(counter>=realDropSpeed)
         {
             //console.log(PieceActive.cantMoveDown);
@@ -599,6 +601,13 @@ tetrisPlus.gameState = {
     },
     makeSingleFall:function(row, col)
     {
+        for(var cont=0; cont<destroyables.length; cont++)
+            {
+                if(destroyables.children[cont].starti==row)
+                    {
+                        console.log(destroyables.children[cont].PieceType);
+                    }
+            }
         GridTetris[row][col]=null;
         GridTetris[row+1][col]=5;
         
