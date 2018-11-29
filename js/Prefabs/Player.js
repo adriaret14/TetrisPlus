@@ -54,6 +54,9 @@ tetrisPlus.Player = function(game, x, y)
     
     //MOVIMIENTO ACTIVADO
     this.DontMove = false;
+    
+    //FADE
+    this.alpha = 1;
 };
 tetrisPlus.Player.prototype = Object.create(Phaser.Sprite.prototype);
 tetrisPlus.Player.prototype.constructor = tetrisPlus.Player;
