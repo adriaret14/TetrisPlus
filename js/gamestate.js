@@ -455,8 +455,8 @@ tetrisPlus.gameState = {
                     }
             }
         
-        //currentPiece=Math.floor((Math.random() * 7) + 1);
-        currentPiece=7;
+        currentPiece=Math.floor((Math.random() * 7) + 1);
+        //currentPiece=7;
         switch(currentPiece)
             {
                 case 1:
