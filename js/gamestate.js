@@ -56,6 +56,8 @@ tetrisPlus.gameState = {
         
         //VARIABLES FISICAS
         this.game.physics.arcade.gravity.y = 0;
+        this.scale.pageAlignHorizontally = true;
+        this.scale.pageAlignVertically = true;
     },
     
     preload:function(){
