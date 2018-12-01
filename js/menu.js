@@ -3,9 +3,7 @@ var tetrisPlus = tetrisPlus || {};
 
 //Button variables
 var buttonPlay;
-var buttonPlayPuzzle1;
-var buttonPlayPuzzle2;
-var buttonPlayPuzzle3;
+var buttonPlayPuzzle;
 var buttonPlayClassic;
 var buttonExit;
 
@@ -21,20 +19,28 @@ tetrisPlus.menuState = {
     
     preload:function(){
         this.game.load.image('backgroundMenu', 'assets/img/backgroundMm.png');   
-        this.game.load.image('buttonClassicImg','assets/img/buttonClassic.png',200,180);
+        this.game.load.spritesheet('buttonClassicImg','assets/img/buttonClassic.png',300,200);
+        this.game.load.spritesheet('buttonPuzzleImg','assets/img/PuzzleMode.png',300,200);
     },
     
     create:function(){   
         this.background = this.game.add.image(0,0,'backgroundMenu');        
-        buttonPlayClassic = this.game.add.button(0, 0, 'buttonClassicImg', actionOnClick, 0, 2, 1, 0);
+        buttonPlayClassic = this.game.add.button(this.game.world.centerX - 350, 575, 'buttonClassicImg', this.openClassicMode, 0, 2, 1, 0);
+        buttonPlayPuzzle= this.game.add.button(this.game.world.centerX +50, 575, 'buttonPuzzleImg', this.openPuzzleMode, 0, 1, 0, 1);
     },
     
     update:function(){
         
     },
-    actionOnClick:function()
+    openClassicMode:function()
     {
     
+    },
+    openPuzzleMode:function()
+    {
+        this.game.state.add('main',tetrisPlus.gameState);
+        this.game.state.start('main');
+        console.log("yoooo");
     },
 };
 
