@@ -46,9 +46,7 @@ var MaceFall;
 
 var GridTetris;
 
-tetrisPlus.gameState = {
-    
-  
+tetrisPlus.gameState1 = {
     
     init:function(){
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -88,7 +86,8 @@ tetrisPlus.gameState = {
         
         //PERSONAJE ANIMS
         this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
-        this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);    
+        this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);
+    
     },
     create:function(){        
         
@@ -106,7 +105,7 @@ tetrisPlus.gameState = {
                 
         //PREFAB PLAYER
         //92
-        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40);
+        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY);
         tetrisPlus.game.add.existing(Player);
         
         //COUNTER PLAYER
@@ -194,14 +193,14 @@ tetrisPlus.gameState = {
         GridTetris[28][11]=5;
         GridTetris[29][11]=5;
         
-        GridTetris[20][1]=5;
-        GridTetris[20][2]=5;
-        GridTetris[20][4]=5;
-        GridTetris[20][5]=5;
-        GridTetris[20][6]=5;
-        GridTetris[20][8]=5;
-        GridTetris[20][9]=5;
-        GridTetris[20][10]=5;
+        GridTetris[15][1]=5;
+        GridTetris[15][2]=5;
+        GridTetris[15][4]=5;
+        GridTetris[15][5]=5;
+        GridTetris[15][6]=5;
+        GridTetris[15][8]=5;
+        GridTetris[15][9]=5;
+        GridTetris[15][10]=5;
     
         GridTetris[21][1]=5;
         GridTetris[21][2]=5;
@@ -353,7 +352,7 @@ tetrisPlus.gameState = {
                 tetrisPlus.game.add.existing(PlayerVictory);
                 
                 //AFTER CERT TIME
-                this.flagWinFinally = true;
+                this.flagWinFinally = true;                
             }
         }
         
@@ -361,7 +360,6 @@ tetrisPlus.gameState = {
         if(this.flagWinFinally == true)
         {
             this.counterWin++;
-            
             if(this.counterWin == 36)
             {
                 this.counterWin = 0;
@@ -380,6 +378,10 @@ tetrisPlus.gameState = {
                 
                 //PARAMOS SIERRA
                 this.MazeFall = true;
+                
+                //CAMBIAMOS DE NIVEL
+                /*this.game.state.add('main',tetrisPlus.gameState1);
+                this.game.state.start('main');*/
             }
         }
         
@@ -398,10 +400,6 @@ tetrisPlus.gameState = {
                     this.PuertaLlegada = true;
                 }            
             }
-            
-            //CAMBIAMOS DE NIVEL
-            this.game.state.add('main',tetrisPlus.gameState1);
-            this.game.state.start('main');
         }
     
         //COLLISION ARRIBA (SEGUN SI A ACABO EL NIVEL O NO)

@@ -34,9 +34,15 @@ var destroyables;
 //PLAYER
 var Player;
 var PlayerVictory;
+var PuertaLlegada;
+var seACABO;
+
+//WIN
+var counterWin;
 
 //MAZA
 var Mace;
+var MaceFall;
 
 var GridTetris;
 
@@ -50,6 +56,8 @@ tetrisPlus.gameState = {
         
         //VARIABLES FISICAS
         this.game.physics.arcade.gravity.y = 0;
+        this.scale.pageAlignHorizontally = true;
+        this.scale.pageAlignVertically = true;
     },
     
     preload:function(){
@@ -80,8 +88,7 @@ tetrisPlus.gameState = {
         
         //PERSONAJE ANIMS
         this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
-        this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);
-    
+        this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);    
     },
     create:function(){        
         
@@ -95,6 +102,7 @@ tetrisPlus.gameState = {
         //MAZA 
         Mace = new tetrisPlus.Mace(tetrisPlus.game, (this.game.world.centerX-81.5), (this.game.world.centerY - 245), 25, 25);
         tetrisPlus.game.add.existing(Mace);
+        this.MazeFall = false;
                 
         //PREFAB PLAYER
         //92
@@ -103,6 +111,12 @@ tetrisPlus.gameState = {
         
         //COUNTER PLAYER
         this.LastCollision = 0;
+        
+        //WIN
+        this.counterWin = 0;
+        this.finallyCollision = false;
+        this.PuertaLlegada = false;
+        this.SeACABO = false;
         
         /************************ FRET ********************************/
         //CREAMOS EL GRUPO DE PIEZAS ESTATICAS
@@ -188,7 +202,7 @@ tetrisPlus.gameState = {
         GridTetris[20][8]=5;
         GridTetris[20][9]=5;
         GridTetris[20][10]=5;
-        
+    
         GridTetris[21][1]=5;
         GridTetris[21][2]=5;
         GridTetris[21][3]=5;
@@ -244,6 +258,8 @@ tetrisPlus.gameState = {
         //console.log(destroyables.length);
         counter++;
         counterMace++;
+        
+        //console.log(destroyables.children[0].PieceType);
         if(counter>=realDropSpeed)
         {
             //console.log(PieceActive.cantMoveDown);
@@ -251,10 +267,14 @@ tetrisPlus.gameState = {
             PieceActive.move(3, distY);
             counter=0;
         }
-         if(counterMace>=dropMaceSpeed)
+        
+        if(this.MazeFall == false)
         {
-           Mace.fall(distY);
-            counterMace=0;
+            if(counterMace>=dropMaceSpeed)
+            {
+                Mace.fall(distY);
+                counterMace=0;
+            }
         }
         
         //MOVER HACIA LA IZQUIERDA
@@ -322,20 +342,77 @@ tetrisPlus.gameState = {
         if(PlayerVictory == null)
         {
             //GANAR
-            if(Player.y >= (this.game.world.centerY + 124))
+            if((Player.y > (this.game.world.centerY + 124)) && (Player.y < (this.game.world.centerY + 125)))
             {
                 Player.y = this.game.world.centerY + 124;
                 Player.body.gravity.y = 0;
 
                 //CHANGE PREFAB
-                PlayerVictory = new tetrisPlus.PlayerWin(tetrisPlus.game, (Player.x - 8), (Player.y - 12));
+                PlayerVictory = new tetrisPlus.PlayerWin(tetrisPlus.game, (Player.x - 16), (Player.y - 14));
                 Player.destroy();
                 tetrisPlus.game.add.existing(PlayerVictory);
+                
+                //AFTER CERT TIME
+                this.flagWinFinally = true;
             }
         }
+        
+        //CAER DESPUES DE GANAR
+        if(this.flagWinFinally == true)
+        {
+            this.counterWin++;
+            
+            if(this.counterWin == 36)
+            {
+                this.counterWin = 0;
+                this.flagWinFinally = false;
+                
+                //CHANGE PREFAB
+                Player = new tetrisPlus.Player(tetrisPlus.game, (PlayerVictory.x + 16), (PlayerVictory.y + 14));
+                PlayerVictory.destroy();
+                tetrisPlus.game.add.existing(Player);
+                
+                //YA HA GANADO
+                this.flagWinFinally = false;
+                
+                //NO HAY MAS PIEZAS
+                PieceActive.destroy();
+                
+                //PARAMOS SIERRA
+                this.MazeFall = true;
+            }
+        }
+        
+        //COLLISION CON FINAL DE MAPA
+        if(Player.y >= this.game.world.centerY + 234)
+        {
+            Player.y = this.game.world.centerY + 234;
+            Player.body.gravity.y = 0;
+            this.finallyCollision = true;
+            
+            //HACIA LA PUERTA
+            if(this.PuertaLlegada == false)
+            {
+                if(Player.x < this.game.world.centerX - 8)
+                {
+                    this.PuertaLlegada = true;
+                }            
+            }
+            
+            //CAMBIAMOS DE NIVEL
+            this.game.state.add('main',tetrisPlus.gameState1);
+            this.game.state.start('main');
+        }
     
-        //COLLISION ARRIBA
-        this.collisionUp = this.game.physics.arcade.collide(Player, destroyables, this.collideHandler, null, this);
+        //COLLISION ARRIBA (SEGUN SI A ACABO EL NIVEL O NO)
+        if(this.finallyCollision == false)
+        {
+           this.collisionUp = this.game.physics.arcade.collide(Player, destroyables, this.collideHandler, null, this);
+        }
+        else
+        {
+            this.collisionUp = true;
+        }
         
         if(this.collisionUp == true)
         {
@@ -343,22 +420,19 @@ tetrisPlus.gameState = {
             if(Player.ColLeft == true)
             {
                 this.game.physics.arcade.collide(Player, destroyables, this.collideLeft, null, this);
-                this.collisionLateral = true;
+                //this.collisionLateral = true;
             }
             else if(Player.ColRight == true)
             {
                 this.game.physics.arcade.collide(Player, destroyables, this.collideRight, null, this);
-                this.collisionLateral = true;
+                //this.collisionLateral = true;
             }
             Player.DontMove = false;
         }
         else
         {
             Player.DontMove = true; 
-        }
-        
-        //WIN 
-        
+        }        
         
         //OVERLAP
         this.game.physics.arcade.overlap(Player, destroyables, this.overlapScale, null, this);
@@ -408,6 +482,13 @@ tetrisPlus.gameState = {
             }
         
         this.seconds = Math.floor(this.time.totalElapsedSeconds());
+        //PARAMOS ANIMACION
+        if(this.PuertaLlegada == true)
+        {
+            Player.ColLeft = false;
+            Player.ColRight = false;
+            Player.DontMove = true;
+        }
         
         //DIE PLAYER
         this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
@@ -548,6 +629,13 @@ tetrisPlus.gameState = {
     },
     makeSingleFall:function(row, col)
     {
+        for(var cont=0; cont<destroyables.length; cont++)
+            {
+                if(destroyables.children[cont].starti==row)
+                    {
+                        console.log(destroyables.children[cont].PieceType);
+                    }
+            }
         GridTetris[row][col]=null;
         GridTetris[row+1][col]=5;
         
