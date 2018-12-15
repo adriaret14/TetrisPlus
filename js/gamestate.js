@@ -61,7 +61,7 @@ tetrisPlus.gameState = {
     },
     
     preload:function(){
-        this.stage.backgroundColor="00000";
+        this.stage.backgroundColor="E7D69C";
         //Añadimos las imagenes simples
         tetrisPlus.game.load.image('R','assets/img/Box_Single.png');
         tetrisPlus.game.load.image('I','assets/img/Bar_Single.png');
@@ -82,6 +82,9 @@ tetrisPlus.gameState = {
         
         //Añadimos extras
         tetrisPlus.game.load.image('MaceCompleted','assets/img/Sierra.png');
+        
+        //HUD
+         tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
         
         //FONDO
         this.game.load.image('bg1', 'assets/img/Fondo1.png');
@@ -104,6 +107,11 @@ tetrisPlus.gameState = {
         tetrisPlus.game.add.existing(Mace);
         this.MazeFall = false;
                 
+        //HUD
+        HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
+        tetrisPlus.game.add.existing(HUD);
+        
+        
         //PREFAB PLAYER
         //92
         Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40);
@@ -522,6 +530,7 @@ tetrisPlus.gameState = {
     {
         //Flip/Flop diretion player
         Player.Die();
+        this.MazeFall=true;
     },
     createNewPiece:function()
     {
