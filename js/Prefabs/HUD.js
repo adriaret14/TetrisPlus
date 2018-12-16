@@ -17,6 +17,8 @@ tetrisPlus.HUD = function(game, x1, y1)
     this.currentTime;
     this.bestTime;
     
+    this.newPiece;
+    
     this.textScore = game.add.text(game.world.centerX-300, game.world.centerY, "Score", {
         font: "35px Arial",
         fill: "#000000",
@@ -45,29 +47,34 @@ tetrisPlus.HUD.prototype.updateTime=function(minute,seconds)
 };
 tetrisPlus.HUD.prototype.updateNextPiece=function(nextPiece)
 {
+   //this.newPiece.destroy();
     if(nextPiece=="R")
        {
-            tetrisPlus.game.add.image(10,10,'I_Complete');
+            this.newPiece=tetrisPlus.game.add.image(10,10,'R_Complete');
        }
-    else if(nextPiece=="R")
+    else if(nextPiece=="I")
         {
-            tetrisPlus.game.add.image(10,10,'I_Complete');
+            this.newPiece=tetrisPlus.game.add.image(10,10,'I_Complete');
         }
-    else if(nextPiece=="R")
+    else if(nextPiece=="L")
         {
-            tetrisPlus.game.add.image(10,10,'I_Complete');
+            this.newPiece=tetrisPlus.game.add.image(10,10,'L_Complete');
         }
-    else if(nextPiece=="R")
+    else if(nextPiece=="J")
         {
-            tetrisPlus.game.add.image(10,10,'I_Complete');
+            this.newPiece=tetrisPlus.game.add.image(10,10,'J_Complete');
         }
-    else if(nextPiece=="R")
+    else if(nextPiece=="S")
         {
-            tetrisPlus.game.add.image(10,10,'I_Complete');
+            this.newPiece=tetrisPlus.game.add.image(10,10,'S_Complete');
         }
-    else if(nextPiece=="R")
+    else if(nextPiece=="Z")
         {
-            tetrisPlus.game.add.image(10,10,'I_Complete');
+            this.newPiece=tetrisPlus.game.add.image(10,10,'Z_Complete');
+        }
+    else if(nextPiece=="T")
+        {
+            this.newPiece=tetrisPlus.game.add.image(10,10,'T_Complete');
         }
    
 }
