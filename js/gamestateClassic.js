@@ -8,6 +8,7 @@ var distX;
 var distY;
 var currentPiece;
 var nextPiece;
+var PrevNext;
 var PieceActive;
 var piece=new Array(4);
 var blocks=new Array();
@@ -40,7 +41,7 @@ var contLinesToScore;
 //GRID FOR THE PIECES
 var GridTetris;
 
-tetrisPlus.gameState = {
+tetrisPlus.gameStateClassic = {
     
   
     
@@ -215,7 +216,9 @@ tetrisPlus.gameState = {
             }
 
         //ASIGNAMOS LA PIEZA MEDIANTE UN TRUE RANDOM
-        this.createNewPiece();        
+        PrevNext=null;
+        this.createNewPiece("Current");
+        this.createNewPiece("Next");
         
         
         //ASIGNAMOS LOS INPUTS
@@ -229,6 +232,10 @@ tetrisPlus.gameState = {
     },
     update:function(){
         console.log(Score);
+        /*if(PrevNext!=null)
+            {
+                console.log("Previous: "+PrevNext.type+", Piece: "+PieceActive.type+", Next: "+nextPiece.type);
+            }*/
         //Drop the piece
         counter++;
         
@@ -336,15 +343,20 @@ tetrisPlus.gameState = {
                 
                 this.checkGameLost();
                 PieceActive.destroy();
-                this.createNewPiece();
+                this.createNewPiece("Next");
                 this.makeLines();
             }
         
         this.seconds = Math.floor(this.time.totalElapsedSeconds());
         
     },
-    createNewPiece:function()
+    createNewPiece:function(tipo)
     {
+        
+        if(tipo=="Next")
+            {
+                    PrevNext=nextPiece;
+            }
         for(var i=0; i<GridTetris.length; i++)
             {
                 for(var j=0; j<GridTetris[i].length; j++)
@@ -361,32 +373,94 @@ tetrisPlus.gameState = {
         switch(currentPiece)
             {
                 case 1:
-                    PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                             PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 2:
-                    PieceActive = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 3:
-                    PieceActive = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 4:
-                    PieceActive = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 5:
-                    PieceActive = new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece= new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 6:
-                    PieceActive = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                             PieceActive = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 7:
-                    PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
             }
         
+        if(tipo=="Current")
+            {
+                tetrisPlus.game.add.existing(PieceActive);
+                PieceActive.startGrid(GridTetris);
+                initialRot=0;
+            }
+        else if(tipo=="Next")
+            {
+                if(PrevNext!=null)
+                    {
+                        PieceActive=PrevNext;
+                        tetrisPlus.game.add.existing(PieceActive);
+                        PieceActive.startGrid(GridTetris);
+                        initialRot=0;
+                    }
+            }
         
-        tetrisPlus.game.add.existing(PieceActive);
-        PieceActive.startGrid(GridTetris);
-        initialRot=0;
     },
     makeLines:function()
     {        
@@ -426,7 +500,7 @@ tetrisPlus.gameState = {
                             
                             this.makeStaticsFall(i);
                             currentLevelLinesCleared++;
-                            console.log(currentLevelLinesCleared);
+                            //console.log(currentLevelLinesCleared);
                             totalLinesCleared++;
                             this.changeLevel();
                         } 
@@ -460,7 +534,7 @@ tetrisPlus.gameState = {
             {
                 if(destroyables.children[cont].starti==row)
                     {
-                        console.log(destroyables.children[cont].PieceType);
+                        //console.log(destroyables.children[cont].PieceType);
                     }
             }
         GridTetris[row][col]=null;

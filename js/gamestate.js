@@ -7,6 +7,7 @@ var startX=4;
 var startY=1;
 var distX;
 var distY;
+var PrevNext;
 var currentPiece;
 var nextPiece;
 var PieceActive;
@@ -45,6 +46,9 @@ var Mace;
 var MaceFall;
 
 var GridTetris;
+var currentLevel;
+var Score;
+var contLinesToScore;
 
 tetrisPlus.gameState = {
     
@@ -93,7 +97,10 @@ tetrisPlus.gameState = {
         this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
         this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);    
     },
-    create:function(){        
+    create:function(){
+        currentLevel=0;
+        Score=0;
+        contLinesToScore=0;
         
         //BACKGROUND
         this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');
@@ -249,7 +256,9 @@ tetrisPlus.gameState = {
             }
 
         //ASIGNAMOS LA PIEZA MEDIANTE UN TRUE RANDOM
-        this.createNewPiece();        
+        PrevNext=null;
+        this.createNewPiece("Current");
+        this.createNewPiece("Next");       
         
         
         //ASIGNAMOS LOS INPUTS
@@ -261,7 +270,8 @@ tetrisPlus.gameState = {
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
 
     },
-    update:function(){        
+    update:function(){   
+        console.log(Score);
         //Drop the piece
         //console.log(destroyables.length);
         counter++;
@@ -485,7 +495,7 @@ tetrisPlus.gameState = {
                 
                 //console.log(Piecei1);
                 PieceActive.destroy();
-                this.createNewPiece();
+                this.createNewPiece("Next");
                 this.makeLines();
             }
         
@@ -532,8 +542,13 @@ tetrisPlus.gameState = {
         Player.Die();
         this.MazeFall=true;
     },
-    createNewPiece:function()
+    createNewPiece:function(tipo)
     {
+        
+        if(tipo=="Next")
+            {
+                    PrevNext=nextPiece;
+            }
         for(var i=0; i<GridTetris.length; i++)
             {
                 for(var j=0; j<GridTetris[i].length; j++)
@@ -550,32 +565,94 @@ tetrisPlus.gameState = {
         switch(currentPiece)
             {
                 case 1:
-                    PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                             PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 2:
-                    PieceActive = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 3:
-                    PieceActive = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 4:
-                    PieceActive = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 5:
-                    PieceActive = new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece= new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 6:
-                    PieceActive = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                             PieceActive = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
                 case 7:
-                    PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
                     break;
             }
         
+        if(tipo=="Current")
+            {
+                tetrisPlus.game.add.existing(PieceActive);
+                PieceActive.startGrid(GridTetris);
+                initialRot=0;
+            }
+        else if(tipo=="Next")
+            {
+                if(PrevNext!=null)
+                    {
+                        PieceActive=PrevNext;
+                        tetrisPlus.game.add.existing(PieceActive);
+                        PieceActive.startGrid(GridTetris);
+                        initialRot=0;
+                    }
+            }
         
-        tetrisPlus.game.add.existing(PieceActive);
-        PieceActive.startGrid(GridTetris);
-        initialRot=0;
     },
     makeLines:function()
     {        
@@ -585,6 +662,7 @@ tetrisPlus.gameState = {
                     {
                        if(GridTetris[i][1]==5 && GridTetris[i][2]==5 && GridTetris[i][3]==5 && GridTetris[i][4]==5 && GridTetris[i][5]==5 && GridTetris[i][6]==5 && GridTetris[i][7]==5 && GridTetris[i][8]==5 && GridTetris[i][9]==5 && GridTetris[i][10]==5)
                         {
+                            contLinesToScore++;
                             //console.log("BORRAR LINEA: "+i);
                             //Borrar la linea y dropear todos los 5's de encima hacia abajo
                             GridTetris[i][1]=null;
@@ -616,6 +694,7 @@ tetrisPlus.gameState = {
                         } 
                     }  
             }
+        this.computeScore(contLinesToScore);
         this.clearGrid();
         
     },
@@ -681,6 +760,26 @@ tetrisPlus.gameState = {
                 }
             }
         }
+    },
+    computeScore:function(cont)
+    {
+        console.log("Entra  "+cont);
+        switch (cont)
+            {
+                case 1:
+                    Score+=40*(currentLevel+1);
+                    break;
+                case 2:
+                    Score+=100*(currentLevel+1);
+                    break;
+                case 3:
+                    Score+=300*(currentLevel+1);
+                    break;
+                case 4:
+                    //TETRIS!!!!
+                    Score+=1200*(currentLevel+1);
+                    break;
+            }
     }
 };
 
