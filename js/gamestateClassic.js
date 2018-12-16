@@ -80,6 +80,7 @@ tetrisPlus.gameStateClassic = {
         
         //HUD
          tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
+        tetrisPlus.game.load.image('HUDCla','assets/img/HUDClasic.png');
         
         //FONDO
         this.game.load.image('bg1', 'assets/img/Fondo1.png');
@@ -103,7 +104,7 @@ tetrisPlus.gameStateClassic = {
         this.bg1.scale.setTo(2);
         
         //HUD
-        HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
+        HUD = new tetrisPlus.HUDC(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
         tetrisPlus.game.add.existing(HUD);
         
         
@@ -231,7 +232,7 @@ tetrisPlus.gameStateClassic = {
         key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
         
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
-
+        HUD.updateNextPiece(nextPiece.type);
     },
     update:function(){
         console.log(Score);
@@ -241,9 +242,6 @@ tetrisPlus.gameStateClassic = {
             }*/
         //Drop the piece
         counter++;
-        HUD.updateScore(2);
-        HUD.updateTime(3,4);
-        HUD.updateNextPiece(nextPiece.type);
         if(counter>=realDropSpeed)
         {
             PieceActive.move(3, distY);
@@ -350,6 +348,7 @@ tetrisPlus.gameStateClassic = {
                 PieceActive.destroy();
                 this.createNewPiece("Next");
                 this.makeLines();
+                HUD.updateNextPiece(nextPiece.type);
             }
         
         this.seconds = Math.floor(this.time.totalElapsedSeconds());

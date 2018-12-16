@@ -3,7 +3,7 @@ var tetrisPlus = tetrisPlus || {};
 
 tetrisPlus.HUD = function(game, x1, y1)
 {
-    Phaser.Sprite.call(this, game, x1, y1, 'HUD');
+    Phaser.Sprite.call(this, game, x1, y1, 'HUDCla');
     this.scale.setTo(1);
     this.x1=x1;
     this.y1=y1;
@@ -19,12 +19,12 @@ tetrisPlus.HUD = function(game, x1, y1)
     
     this.newPiece;
     
-    this.textScore = game.add.text(game.world.centerX-300, game.world.centerY, "Score", {
+    this.textScore = game.add.text(x1+140,y1+75, "Score", {
         font: "35px Arial",
         fill: "#000000",
         align: "center"
     });
-    this.textTime = game.add.text(game.world.centerX-300, game.world.centerY+100, "Time", {
+    this.textTime = game.add.text(x1+120, y1+390, "Time", {
         font: "35px Arial",
         fill: "#000000",
         align: "center"
