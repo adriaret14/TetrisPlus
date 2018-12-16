@@ -41,6 +41,9 @@ var contLinesToScore;
 //GRID FOR THE PIECES
 var GridTetris;
 
+//HUD
+var HUD
+
 tetrisPlus.gameStateClassic = {
     
   
@@ -238,7 +241,9 @@ tetrisPlus.gameStateClassic = {
             }*/
         //Drop the piece
         counter++;
-        
+        HUD.updateScore(2);
+        HUD.updateTime(3,4);
+        HUD.updateNextPiece(nextPiece.type);
         if(counter>=realDropSpeed)
         {
             PieceActive.move(3, distY);
