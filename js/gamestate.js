@@ -50,6 +50,8 @@ var currentLevel;
 var Score;
 var contLinesToScore;
 
+var tetrisAchieved;
+
 tetrisPlus.gameState = {
     
   
@@ -95,7 +97,10 @@ tetrisPlus.gameState = {
         
         //PERSONAJE ANIMS
         this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
-        this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);    
+        this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);
+        
+        //BOMBA
+        this.load.image('bomba', 'assets/img/bomba.png');
     },
     create:function(){
         currentLevel=0;
@@ -123,6 +128,9 @@ tetrisPlus.gameState = {
         //92
         Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40);
         tetrisPlus.game.add.existing(Player);
+        
+        //BOMBA
+        tetrisAchieved = false;
         
         //COUNTER PLAYER
         this.LastCollision = 0;
@@ -262,6 +270,7 @@ tetrisPlus.gameState = {
         
         
         //ASIGNAMOS LOS INPUTS
+        space=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         key_right=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
         key_left=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         key_down=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
@@ -354,6 +363,20 @@ tetrisPlus.gameState = {
         else
         {
             tapZ=false;
+        }
+        
+        //PULSAR SPACE
+        tetrisAchieved = true;
+        if(space.isDown)
+        {
+            if(tetrisAchieved)
+            {
+                //nextPiece = new tetrisPlus.bomba(tetrisPlus.game, ((1024 / 2) - (87) + (distX*5)), (800/4) -4 + distY*(3) , 5, 3, GridTetris);
+                nextPiece = new tetrisPlus.bomba(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                console.log("NextPiece: " + 5);
+                console.log("NextPiece: " + 2);
+                tetrisAchieved = false;
+            }
         }
         
         //SI NO HA GANADO
@@ -458,45 +481,56 @@ tetrisPlus.gameState = {
         //SPAWNEAR NUEVA PIEZA
         if(PieceActive.cantMoveDown)
             {
-                Piecei1=PieceActive.previ1;
-                Piecej1=PieceActive.prevj1;
-                Piecei2=PieceActive.previ2;
-                Piecej2=PieceActive.prevj2;
-                Piecei3=PieceActive.previ3;
-                Piecej3=PieceActive.prevj3;
-                Piecei4=PieceActive.previ4;
-                Piecej4=PieceActive.prevj4;
-                
-                var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej1)), (800/4) -4 + distY*(Piecei1+1) , Piecej1, Piecei1, GridTetris);
-                destroyables.add(Static);
-                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej2)), (800/4) -4 + distY*(Piecei2+1) , Piecej2, Piecei2, GridTetris);
-                destroyables.add(Static);
-                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej3)), (800/4) -4 + distY*(Piecei3+1) , Piecej3, Piecei3, GridTetris);
-                destroyables.add(Static);
-                 var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej4)), (800/4) -4 + distY*(Piecei4+1) , Piecej4, Piecei4, GridTetris);
-                destroyables.add(Static);
-                
-                this.GridTetris=PieceActive.GridTetris;
-                
-                for(var i=0; i<GridTetris.length; i++)
+                if(PieceActive.type == "B")
                 {
-                    for(var j=0; j<GridTetris[i].length; j++)
-                        {
-                            if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
-                                {
-                                    GridTetris[i][j]=5;
-                                }
-                        }
+                    this.explosionBomba(PieceActive.prevj1, PieceActive.previ1);
+                    
+                    PieceActive.destroy();
+                    this.createNewPiece("Next");
+                    //this.makeLines();   
                 }
-        
-                
-                //console.log(Piecei1+1+","+Piecej1);
-                //console.log(GridTetris[21][5]);
-                
-                //console.log(Piecei1);
-                PieceActive.destroy();
-                this.createNewPiece("Next");
-                this.makeLines();
+                else
+                {
+                    Piecei1=PieceActive.previ1;
+                    Piecej1=PieceActive.prevj1;
+                    Piecei2=PieceActive.previ2;
+                    Piecej2=PieceActive.prevj2;
+                    Piecei3=PieceActive.previ3;
+                    Piecej3=PieceActive.prevj3;
+                    Piecei4=PieceActive.previ4;
+                    Piecej4=PieceActive.prevj4;
+
+                    var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej1)), (800/4) -4 + distY*(Piecei1+1) , Piecej1, Piecei1, GridTetris);
+                    destroyables.add(Static);
+                     var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej2)), (800/4) -4 + distY*(Piecei2+1) , Piecej2, Piecei2, GridTetris);
+                    destroyables.add(Static);
+                     var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej3)), (800/4) -4 + distY*(Piecei3+1) , Piecej3, Piecei3, GridTetris);
+                    destroyables.add(Static);
+                     var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej4)), (800/4) -4 + distY*(Piecei4+1) , Piecej4, Piecei4, GridTetris);
+                    destroyables.add(Static);
+
+                    this.GridTetris=PieceActive.GridTetris;
+
+                    for(var i=0; i<GridTetris.length; i++)
+                    {
+                        for(var j=0; j<GridTetris[i].length; j++)
+                            {
+                                if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
+                                    {
+                                        GridTetris[i][j]=5;
+                                    }
+                            }
+                    }
+
+
+                    //console.log(Piecei1+1+","+Piecej1);
+                    //console.log(GridTetris[21][5]);
+
+                    //console.log(Piecei1);
+                    PieceActive.destroy();
+                    this.createNewPiece("Next");
+                    this.makeLines();     
+                }
             }
         
         this.seconds = Math.floor(this.time.totalElapsedSeconds());
@@ -778,8 +812,177 @@ tetrisPlus.gameState = {
                 case 4:
                     //TETRIS!!!!
                     Score+=1200*(currentLevel+1);
+                    tetrisAchieved = true;
                     break;
             }
+    },
+    explosionBomba:function(x, y)
+    {
+        console.log(x);
+        console.log(y);
+        
+        if(GridTetris[y-1][x] == 5)
+        {
+            if((y-1 > 0) && (y-1 < 22))
+            {
+                if((x > 0) && (x < 11))
+                {
+                    GridTetris[y-1][x] = null;
+            
+                    for(var j=0; j<destroyables.children.length; j++)
+                    {
+                        //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                        if(destroyables.children[j].starti==y-1 && destroyables.children[j].startj==x)
+                        {
+                            var aux=destroyables.children[j];
+                            aux.kill();
+                        }
+                    }
+                }
+            }
+        }
+        else if(GridTetris[y-1][x-1] == 5)
+        {
+            if((y-1 > 0) && (y-1 < 22))
+            {
+                if((x-1 > 0) && (x-1 < 11))
+                {
+                    GridTetris[y-1][x-1] = null;
+            
+                    for(var j=0; j<destroyables.children.length; j++)
+                    {
+                        //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                        if(destroyables.children[j].starti==y-1 && destroyables.children[j].startj==x-1)
+                        {
+                            var aux=destroyables.children[j];
+                            aux.kill();
+                        }
+                    }
+                }
+            }
+        }
+        else if(GridTetris[y][x-1] == 5)
+        {
+            if((y > 0) && (y < 22))
+            {
+                if((x-1 > 0) && (x-1 < 11))
+                {
+                    GridTetris[y][x-1] = null;
+            
+                    for(var j=0; j<destroyables.children.length; j++)
+                    {
+                        //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                        if(destroyables.children[j].starti==y && destroyables.children[j].startj==x-1)
+                        {
+                            var aux=destroyables.children[j];
+                            aux.kill();
+                        }
+                    }
+                }
+            }
+        }
+        else if(GridTetris[y+1][x-1] == 5)
+        {
+            if((y+1 > 0) && (y+1 < 22))
+            {
+                if((x-1 > 0) && (x-1 < 11))
+                {
+                    GridTetris[y+1][x-1] = null;
+            
+                    for(var j=0; j<destroyables.children.length; j++)
+                    {
+                        //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                        if(destroyables.children[j].starti==y+1 && destroyables.children[j].startj==x-1)
+                        {
+                            var aux=destroyables.children[j];
+                            aux.kill();
+                        }
+                    }
+                }
+            }
+        }
+        else if(GridTetris[y+1][x] == 5)
+        {
+            if((y+1 > 0) && (y+1 < 22))
+            {
+                if((x > 0) && (x < 11))
+                {
+                    GridTetris[y+1][x] = null;
+            
+                    for(var j=0; j<destroyables.children.length; j++)
+                    {
+                        //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                        if(destroyables.children[j].starti==y+1 && destroyables.children[j].startj==x)
+                        {
+                            var aux=destroyables.children[j];
+                            aux.kill();
+                        }
+                    }
+                }
+            }
+        }
+        else if(GridTetris[y+1][x+1] == 5)
+        {
+            if((y+1 > 0) && (y+1 < 22))
+            {
+                if((x+1 > 0) && (x+1 < 11))
+                {
+                    GridTetris[y+1][x+1] = null;
+            
+                    for(var j=0; j<destroyables.children.length; j++)
+                    {
+                        //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                        if(destroyables.children[j].starti==y+1 && destroyables.children[j].startj==x+1)
+                        {
+                            var aux=destroyables.children[j];
+                            aux.kill();
+                        }
+                    }
+                }
+            }
+        }
+        else if(GridTetris[y][x+1] == 5)
+        {
+            if((y > 0) && (y < 22))
+            {
+                if((x+1 > 0) && (x+1 < 11))
+                {
+                    GridTetris[y][x+1] = null;
+            
+                    for(var j=0; j<destroyables.children.length; j++)
+                    {
+                        //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                        if(destroyables.children[j].starti==y && destroyables.children[j].startj==x+1)
+                        {
+                            var aux=destroyables.children[j];
+                            aux.kill();
+                        }
+                    }
+                }
+            }
+        }
+        else if(GridTetris[y-1][x+1] == 5)
+        {
+            if((y-1 > 0) && (y-1 < 22))
+            {
+                if((x+1 > 0) && (x+1 < 11))
+                {
+                    GridTetris[y-1][x+1] = null;
+            
+                    for(var j=0; j<destroyables.children.length; j++)
+                    {
+                        //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                        if(destroyables.children[j].starti==y-1 && destroyables.children[j].startj==x+1)
+                        {
+                            var aux=destroyables.children[j];
+                            aux.kill();
+                        }
+                    }
+                }
+            }
+        }
+        
+        console.log(GridTetris[y][x+1]);
     }
 };
 
