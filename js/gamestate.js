@@ -103,6 +103,13 @@ tetrisPlus.gameState = {
         this.load.image('bomba', 'assets/img/bomba.png');
     },
     create:function(){
+        
+        //VARIABLES PARA DEFINIR EL CENTRO DE CADA CELDA DEL GRID(BASADAS EN LAS PIEZAS DEL TETRIS QUE SON DE 8X8 PX)
+        
+        distX=16;
+        distY=distX;
+        
+        
         currentLevel=0;
         Score=0;
         contLinesToScore=0;
@@ -115,9 +122,11 @@ tetrisPlus.gameState = {
         this.bg1.scale.setTo(2);
         
         //MAZA 
-        Mace = new tetrisPlus.Mace(tetrisPlus.game, (this.game.world.centerX-81.5), (this.game.world.centerY - 245), 25, 25);
+        //new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
+        Mace = new tetrisPlus.Mace(tetrisPlus.game, ((1024 / 2) - (87) + (distX*0.5)), (800/4) -4 + distY*(3) , 0.5, 2, GridTetris);
         tetrisPlus.game.add.existing(Mace);
         this.MazeFall = false;
+        //Mace.startGrid(GridTetris);
                 
         //HUD
         HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
@@ -150,10 +159,7 @@ tetrisPlus.gameState = {
         //FISICAS JUEGO
         this.game.physics.arcade.enable(destroyables);
         
-        //VARIABLES PARA DEFINIR EL CENTRO DE CADA CELDA DEL GRID(BASADAS EN LAS PIEZAS DEL TETRIS QUE SON DE 8X8 PX)
-        
-        distX=16;
-        distY=distX;
+
         
         //CREACIÓN DEL GRID DE JUEGO
          
@@ -282,7 +288,7 @@ tetrisPlus.gameState = {
 
     },
     update:function(){
-        console.log(Score);
+        //console.log(Score);
         //Drop the piece
         //console.log(destroyables.length);
         counter++;
@@ -303,6 +309,7 @@ tetrisPlus.gameState = {
             {
                 Mace.fall(distY);
                 counterMace=0;
+                //this.destroyWithMace();
             }
         }
         
@@ -375,8 +382,8 @@ tetrisPlus.gameState = {
             {
                 //nextPiece = new tetrisPlus.bomba(tetrisPlus.game, ((1024 / 2) - (87) + (distX*5)), (800/4) -4 + distY*(3) , 5, 3, GridTetris);
                 nextPiece = new tetrisPlus.bomba(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
-                console.log("NextPiece: " + 5);
-                console.log("NextPiece: " + 2);
+                //console.log("NextPiece: " + 5);
+                //console.log("NextPiece: " + 2);
                 tetrisAchieved = false;
             }
         }
@@ -757,7 +764,7 @@ tetrisPlus.gameState = {
             {
                 if(destroyables.children[cont].starti==row)
                     {
-                        console.log(destroyables.children[cont].PieceType);
+                        //console.log(destroyables.children[cont].PieceType);
                     }
             }
         GridTetris[row][col]=null;
@@ -799,7 +806,7 @@ tetrisPlus.gameState = {
     },
     computeScore:function(cont)
     {
-        console.log("Entra  "+cont);
+        //console.log("Entra  "+cont);
         switch (cont)
             {
                 case 1:
@@ -828,7 +835,7 @@ tetrisPlus.gameState = {
         console.log("D: "+GridTetris[y][x+1]);
         console.log("E: "+GridTetris[y+1][x]);
         console.log("F: "+GridTetris[y+2][x]);*/
-        console.log("Originales: "+y+", "+x);
+        //console.log("Originales: "+y+", "+x);
         
         var yB;
         var xB;
@@ -839,27 +846,27 @@ tetrisPlus.gameState = {
                     {
                         if(GridTetris[i][j]==6)
                             {
-                                 console.log("Bomba: "+i+", "+j);
+                                 //console.log("Bomba: "+i+", "+j);
                                  yB=i;
                                  xB=x;
                             }
                     }
             }
-        console.log("BombaB: "+(y+1)+", "+x+" // "+GridTetris[y+1][x]);
+        //console.log("BombaB: "+(y+1)+", "+x+" // "+GridTetris[y+1][x]);
         
         //Debajo
         if(GridTetris[yB+1][xB]==5)
         {
-            console.log("He de borrar el de abajo");
+            //console.log("He de borrar el de abajo");
             GridTetris[yB+1][xB]=null;
             
             
             for(var j=0; j<destroyables.children.length; j++)
             {
-                console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                 if(destroyables.children[j].starti==(yB) && destroyables.children[j].startj==xB)
                 {
-                    console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                     var aux=destroyables.children[j];
                     //aux.destroy;
                     aux.kill();
@@ -869,16 +876,16 @@ tetrisPlus.gameState = {
         //Derecha
         if(GridTetris[yB][xB+1]==5)
         {
-            console.log("He de borrar el de abajo");
+            //console.log("He de borrar el de abajo");
             GridTetris[yB][xB+1]=null;
             
             
             for(var j=0; j<destroyables.children.length; j++)
             {
-                console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                 if(destroyables.children[j].starti==(yB-1) && destroyables.children[j].startj==xB+1)
                 {
-                    console.log("ELIMINA DEBAJO: "+(yB-1)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    //console.log("ELIMINA DEBAJO: "+(yB-1)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                     var aux=destroyables.children[j];
                     //aux.destroy;
                     aux.kill();
@@ -888,16 +895,16 @@ tetrisPlus.gameState = {
         //Izquierda
         if(GridTetris[yB][xB-1]==5)
         {
-            console.log("He de borrar el de abajo");
+            //console.log("He de borrar el de abajo");
             GridTetris[yB][xB-1]=null;
             
             
             for(var j=0; j<destroyables.children.length; j++)
             {
-                console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                 if(destroyables.children[j].starti==(yB-1) && destroyables.children[j].startj==xB-1)
                 {
-                    console.log("ELIMINA DEBAJO: "+(yB-1)+", "+(xB-1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    //console.log("ELIMINA DEBAJO: "+(yB-1)+", "+(xB-1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                     var aux=destroyables.children[j];
                     //aux.destroy;
                     aux.kill();
@@ -907,16 +914,16 @@ tetrisPlus.gameState = {
         //Arriba
         if(GridTetris[yB-1][xB]==5)
         {
-            console.log("He de borrar el de abajo");
+            //console.log("He de borrar el de abajo");
             GridTetris[yB-1][xB]=null;
             
             
             for(var j=0; j<destroyables.children.length; j++)
             {
-                console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                 if(destroyables.children[j].starti==(yB-2) && destroyables.children[j].startj==xB)
                 {
-                    console.log("ELIMINA DEBAJO: "+(yB-2)+", "+(xB)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    //console.log("ELIMINA DEBAJO: "+(yB-2)+", "+(xB)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                     var aux=destroyables.children[j];
                     //aux.destroy;
                     aux.kill();
@@ -926,16 +933,16 @@ tetrisPlus.gameState = {
         //Arriba izquierda
         if(GridTetris[yB-1][xB-1]==5)
         {
-            console.log("He de borrar el de abajo");
+            //console.log("He de borrar el de abajo");
             GridTetris[yB-1][xB-1]=null;
             
             
             for(var j=0; j<destroyables.children.length; j++)
             {
-                console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                 if(destroyables.children[j].starti==(yB-2) && destroyables.children[j].startj==xB-1)
                 {
-                    console.log("ELIMINA DEBAJO: "+(yB-2)+", "+(xB-1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    //console.log("ELIMINA DEBAJO: "+(yB-2)+", "+(xB-1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                     var aux=destroyables.children[j];
                     //aux.destroy;
                     aux.kill();
@@ -945,16 +952,16 @@ tetrisPlus.gameState = {
         //Arriba derecha
         if(GridTetris[yB-1][xB+1]==5)
         {
-            console.log("He de borrar el de abajo");
+            //console.log("He de borrar el de abajo");
             GridTetris[yB-1][xB+1]=null;
             
             
             for(var j=0; j<destroyables.children.length; j++)
             {
-                console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                 if(destroyables.children[j].starti==(yB-2) && destroyables.children[j].startj==xB+1)
                 {
-                    console.log("ELIMINA DEBAJO: "+(yB-2)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    //console.log("ELIMINA DEBAJO: "+(yB-2)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                     var aux=destroyables.children[j];
                     //aux.destroy;
                     aux.kill();
@@ -964,16 +971,16 @@ tetrisPlus.gameState = {
         //Debajo izquierda
         if(GridTetris[yB+1][xB-1]==5)
         {
-            console.log("He de borrar el de abajo");
+            //console.log("He de borrar el de abajo");
             GridTetris[yB+1][xB-1]=null;
             
             
             for(var j=0; j<destroyables.children.length; j++)
             {
-                console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                 if(destroyables.children[j].starti==(yB) && destroyables.children[j].startj==xB-1)
                 {
-                    console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB-1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB-1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                     var aux=destroyables.children[j];
                     //aux.destroy;
                     aux.kill();
@@ -983,22 +990,149 @@ tetrisPlus.gameState = {
         //Debajo derecha
         if(GridTetris[yB+1][xB+1]==5)
         {
-            console.log("He de borrar el de abajo");
+            //console.log("He de borrar el de abajo");
             GridTetris[yB+1][xB+1]=null;
             
             
             for(var j=0; j<destroyables.children.length; j++)
             {
-                console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                 if(destroyables.children[j].starti==(yB) && destroyables.children[j].startj==xB+1)
                 {
-                    console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
                     var aux=destroyables.children[j];
                     //aux.destroy;
                     aux.kill();
                 }
             }
         }
+    },
+    destroyWithMace:function()
+    {
+        console.log(Mace.currentHeightLine);
+        /*for(var i=0; i<GridTetris.length; i++)
+        {
+            for(var j=0; j<GridTetris[i].length; j++)
+            {
+                if(GridTetris[i][j]==5 && i<=Mace.currentHeightLine)
+                {
+                    if((j>0 && j<10) && i<22)
+                    {
+                        GridTetris[i][j]=null;
+                        console.log("ROMPER: "+i+", "+j);
+                        for(var t=0; t<destroyables.children.length; t++)
+                        {
+                            //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                            if(destroyables.children[t].starti==i && destroyables.children[t].startj==j)
+                            {
+                                //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                        }
+                    }
+                }
+            }
+        }*/
+        
+        if(GridTetris[Mace.currentHeightLine+1][1]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][1]=null;
+            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+1);
+            for(var t=0; t<destroyables.children.length; t++)
+                        {
+                            //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                            if(destroyables.children[t].starti==Mace.currentHeightLine+1 && destroyables.children[t].startj==1)
+                            {
+                                //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                        }
+        }
+        if(GridTetris[Mace.currentHeightLine+1][2]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][2]=null;
+            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+2);
+            for(var t=0; t<destroyables.children.length; t++)
+                        {
+                            //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                            if(destroyables.children[t].starti==Mace.currentHeightLine+1 && destroyables.children[t].startj==2)
+                            {
+                                //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                        }
+        }
+        if(GridTetris[Mace.currentHeightLine+1][3]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][3]=null;
+            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+3);
+            for(var t=0; t<destroyables.children.length; t++)
+                        {
+                            //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                            if(destroyables.children[t].starti==Mace.currentHeightLine+1 && destroyables.children[t].startj==3)
+                            {
+                                //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                        }
+        }
+        if(GridTetris[Mace.currentHeightLine+1][4]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][4]=null;
+            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+4);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][5]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][5]=null;
+            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+5);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][6]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][6]=null;
+            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+6);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][7]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][7]=null;
+            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+7);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][8]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][8]=null;
+            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+8);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][9]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][9]=null;
+            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+9);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][10]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][10]=null;
+            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+10);
+        }
+        /*for(var i=0; i<GridTetris.length; i++)
+        {
+            for(var j=0; j<GridTetris[i].length; j++)
+            {
+                if(i=Mace.currentHeightLine+1)
+                {
+                    if(GridTetris[i][j]==5 && (j>0 && j<11) && i<22)
+                     {
+                         //Destruir las piezas estaticas
+                         console.log("MaceHeight: "+Mace.currentHeightLine+" // "+i+", "+j);
+                     }
+                }
+            }
+        }*/
     }
 };
 
