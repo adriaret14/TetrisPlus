@@ -107,6 +107,8 @@ tetrisPlus.gameStateClassic = {
         HUD = new tetrisPlus.HUDC(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
         tetrisPlus.game.add.existing(HUD);
         
+        HUD.updateScore(Score);
+        HUD.updateLevel(currentLevel);
         
         /************************ FRET ********************************/
         //CREAMOS EL GRUPO DE PIEZAS ESTATICAS
@@ -690,6 +692,8 @@ tetrisPlus.gameStateClassic = {
                         this.assignSpeedToLevel();
                     }
             }
+        
+        HUD.updateLevel(currentLevel);
     },
     checkGameLost:function()
     {
@@ -717,6 +721,8 @@ tetrisPlus.gameStateClassic = {
                     Score+=1200*(currentLevel+1);
                     break;
             }
+        
+        HUD.updateScore(Score);
     }
 };
 

@@ -123,6 +123,8 @@ tetrisPlus.gameState = {
         HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
         tetrisPlus.game.add.existing(HUD);
         
+        HUD.updateScore(Score);
+        
         
         //PREFAB PLAYER
         //92
@@ -815,6 +817,8 @@ tetrisPlus.gameState = {
                     tetrisAchieved = true;
                     break;
             }
+        contLinesToScore=0;
+        HUD.updateScore(Score);
     },
     explosionBomba:function(x, y)
     {   
