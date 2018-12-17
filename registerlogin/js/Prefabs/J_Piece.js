@@ -38,6 +38,7 @@ tetrisPlus.J_Piece = function(game, x1, y1, startj, starti, GridTetris)
     this.contDown=0;
     this.currRot=0;
     this.RotFlag=false;
+    this.type="J";
     
    //FISICAS
     this.game.physics.arcade.enable(this);
