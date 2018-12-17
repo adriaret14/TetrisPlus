@@ -37,6 +37,7 @@ tetrisPlus.Box_Piece = function(game, x1, y1, startj, starti, GridTetris)
     this.contDer;
     this.contIzq;
     this.contDown=0;
+    this.type="R";
     
    //FISICAS
     this.game.physics.arcade.enable(this);

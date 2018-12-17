@@ -36,13 +36,14 @@ tetrisPlus.menuState = {
     },
     openClassicMode:function()
     {
-    
+        this.game.state.add('main', tetrisPlus.gameStateClassic);
+        this.game.state.start('main');
     },
     openPuzzleMode:function()
     {
         this.game.state.add('main',tetrisPlus.gameState);
         this.game.state.start('main');
-        console.log("yoooo");
+        //console.log("yoooo");
     },
 };
 

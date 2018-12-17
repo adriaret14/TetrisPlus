@@ -32,10 +32,23 @@ $MySQLi_CON->close();
 <script src="js/Prefabs/Box_Piece.js"></script>
 <script src="js/Prefabs/Bar_Piece.js"></script>
 <script src="js/Prefabs/R_Single.js"></script>
+<script src="js/Prefabs/Bar_Single.js"></script>
+<script src="js/Prefabs/T_Single.js"></script>
+<script src="js/Prefabs/S_Single.js"></script>
+<script src="js/Prefabs/Z_Single.js"></script>
+<script src="js/Prefabs/J_Single.js"></script>
+<script src="js/Prefabs/L_Single.js"></script>
 <script src="js/Prefabs/Player.js"></script>
 <script src="js/Prefabs/PlayerWin.js"></script>
 <script src="js/Prefabs/Mace.js"></script>
+<script src="js/Prefabs/HUDClassic.js"></script>        
+<script src="js/Prefabs/HUD.js"></script>
+<script src="js/Prefabs/bomba.js"></script>
 <script src="js/gamestate.js"></script>
+<script src="js/gamestate1.js"></script>
+<script src="js/gamestate2.js"></script>
+<script src="js/gamestateClassic.js"></script>
+<script src="js/menu.js"></script>
 <script src="js/main.js"></script>
 </head>
 <body>

@@ -442,7 +442,7 @@ tetrisPlus.gameState = {
             
             //CAMBIAMOS DE NIVEL
             this.game.state.add('main',tetrisPlus.gameState1);
-            this.game.state.start('main');
+            this.game.state.start('main', Score);
         }
     
         //COLLISION ARRIBA (SEGUN SI A ACABO EL NIVEL O NO)

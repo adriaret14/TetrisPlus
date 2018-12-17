@@ -46,6 +46,8 @@ var MaceFall;
 
 var GridTetris;
 
+var Score;
+
 tetrisPlus.gameState1 = {
     
     init:function(){
@@ -87,6 +89,10 @@ tetrisPlus.gameState1 = {
         //PERSONAJE ANIMS
         this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
         this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);
+        
+        //SCORE
+        //this.Score = Score;
+        console.log('HEYYY' + Score);
     
     },
     create:function(){        
@@ -378,10 +384,6 @@ tetrisPlus.gameState1 = {
                 
                 //PARAMOS SIERRA
                 this.MazeFall = true;
-                
-                //CAMBIAMOS DE NIVEL
-                /*this.game.state.add('main',tetrisPlus.gameState1);
-                this.game.state.start('main');*/
             }
         }
         
@@ -400,6 +402,10 @@ tetrisPlus.gameState1 = {
                     this.PuertaLlegada = true;
                 }            
             }
+                      
+            //CAMBIAMOS DE NIVEL
+            this.game.state.add('main', tetrisPlus.gameState2);
+            this.game.state.start('main');
         }
     
         //COLLISION ARRIBA (SEGUN SI A ACABO EL NIVEL O NO)
