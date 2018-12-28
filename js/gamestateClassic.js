@@ -41,6 +41,9 @@ var contLinesToScore;
 //GRID FOR THE PIECES
 var GridTetris;
 
+//SOUNDS
+var bgSound;
+
 //HUD
 var HUD
 
@@ -79,13 +82,20 @@ tetrisPlus.gameStateClassic = {
         tetrisPlus.game.load.image('T_Complete','assets/img/T.png');
         
         //HUD
-         tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
+        tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
         tetrisPlus.game.load.image('HUDCla','assets/img/HUDClasic.png');
+        
+        //SOUNDS
+        tetrisPlus.game.load.audio('backgroundMusic', 'assets/sounds/ClassicMode_Background_Music_V2.mp3')
         
         //FONDO
         this.game.load.image('bg1', 'assets/img/Fondo1.png');
     },
     create:function(){     
+        
+        //SOUNDS
+        bgSound=tetrisPlus.game.add.audio('backgroundMusic');
+        bgSound.loopFull(0.6);
         
         //CLASSIC GAME MODE VARIABLES
         currentLevel=0;
