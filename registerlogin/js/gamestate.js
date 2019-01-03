@@ -102,6 +102,9 @@ tetrisPlus.gameState = {
         
         //BOMBA
         this.load.image('bomba', 'assets/img/bomba.png');
+        
+        //VFX BOMBA
+        this.load.spritesheet('VFXExplosion', 'assets/img/SpriteSheetExplosion.png', 24, 32);
     },
     create:function(){
         
@@ -142,6 +145,11 @@ tetrisPlus.gameState = {
         //92
         Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40);
         tetrisPlus.game.add.existing(Player);
+        
+        //VFX EXPLOSION
+        VFXExplosion = new tetrisPlus.VFXExplosion(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40);
+        tetrisPlus.game.add.existing(VFXExplosion);
+        
         
         //BOMBA
         tetrisAchieved = false;
@@ -498,7 +506,12 @@ tetrisPlus.gameState = {
                 {
                     this.explosionBomba(PieceActive.prevj1, PieceActive.previ1);
                     
+                    //SPRITESHEET DE EXPLOSION
+                    /*ExplosionBomba = new tetrisPlus.bombaExplosion(tetrisPlus.game, ExplosionBomba.x, ExplosionBomba.y);
+                    tetrisPlus.game.add.existing(ExplosionBomba);*/
+                    
                     PieceActive.destroy();
+                    
                     this.createNewPiece("Next");
                     //this.makeLines();   
                 }
@@ -1016,6 +1029,10 @@ tetrisPlus.gameState = {
                 }
             }
         }
+        
+        //SPRITESHEET DE EXPLOSION
+        
+        
     },
     destroyWithMace:function()
     {

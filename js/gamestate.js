@@ -52,6 +52,9 @@ var contLinesToScore;
 
 var tetrisAchieved;
 
+//VFXBOMBA
+var VFXBomba;
+
 tetrisPlus.gameState = {
     
   
@@ -101,6 +104,9 @@ tetrisPlus.gameState = {
         
         //BOMBA
         this.load.image('bomba', 'assets/img/bomba.png');
+        
+        //VFX EXPLOSION BOMBA
+        this.load.spritesheet('explosion', 'assets/img/SpriteSheetExplosion.png', 24, 24);
     },
     create:function(){
         
@@ -139,6 +145,10 @@ tetrisPlus.gameState = {
         //92
         Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40);
         tetrisPlus.game.add.existing(Player);
+        
+        //VFX BOMBA
+        /*VFXBomba = new tetrisPlus.VFXBomba(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY);
+        tetrisPlus.game.add.existing(VFXBomba);*/
         
         //BOMBA
         tetrisAchieved = false;
@@ -494,6 +504,11 @@ tetrisPlus.gameState = {
                 {
                     this.explosionBomba(PieceActive.prevj1, PieceActive.previ1);
                     
+                    //VFX BOMBA
+                    VFXBomba = new tetrisPlus.VFXBomba(tetrisPlus.game, (PieceActive.x), (PieceActive.y));
+                    tetrisPlus.game.add.existing(VFXBomba);
+                    this.VFXBombaActivada = true;
+                    
                     PieceActive.destroy();
                     this.createNewPiece("Next");
                     //this.makeLines();   
@@ -553,6 +568,17 @@ tetrisPlus.gameState = {
         
         //DIE PLAYER
         this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
+        
+        //VFX (EFECTOS VISUALES)
+        if(this.VFXBombaActivada == true)
+        {
+            if(VFXBomba.flag == true)
+            {
+                VFXBomba.destroy();
+                this.VFXBombaActivada = false;
+            }
+        }
+        
     },
     
     
