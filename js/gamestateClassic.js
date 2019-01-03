@@ -84,6 +84,7 @@ tetrisPlus.gameStateClassic = {
         //HUD
         tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
         tetrisPlus.game.load.image('HUDCla','assets/img/HUDClasic.png');
+         tetrisPlus.game.load.image('ImgAux','assets/img/auxPiece.png');
         
         //SOUNDS
         tetrisPlus.game.load.audio('backgroundMusic', 'assets/sounds/ClassicMode_Background_Music_V2.mp3')

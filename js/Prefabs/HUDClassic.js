@@ -18,15 +18,16 @@ tetrisPlus.HUDC = function(game, x1, y1)
     this.bestTime;
     
     this.newPiece;
+    this.auxPiece;
     //this.newPiece.anchor.setTo(0.5,0.5);
     
     this.textScore = game.add.text(x1+140,y1+275, "Score", {
-        font: "35px Arial",
+        font: "35px Revalia",
         fill: "#000000",
         align: "center"
     });
     this.textLevel = game.add.text(x1+140, y1+400, "Level", {
-        font: "35px Arial",
+        font: "35px Revalia",
         fill: "#000000",
         align: "center"
     });
@@ -50,10 +51,10 @@ tetrisPlus.HUDC.prototype.updateNextPiece=function(nextPiece)
 {
    //this.newPiece.setSize(2);
     //this.newPiece.scale.setTo(2);
+    this.auxPiece=tetrisPlus.game.add.image(this.x1+100,this.y1+70,'ImgAux');
     if(nextPiece=="R")
-       {
-            this.newPiece=tetrisPlus.game.add.image(this.x1+100,this.y1+70,'R_Complete');
-           
+       {            
+            this.newPiece=tetrisPlus.game.add.image(this.x1+100,this.y1+70,'R_Complete');           
        }
     else if(nextPiece=="I")
         {
@@ -79,6 +80,7 @@ tetrisPlus.HUDC.prototype.updateNextPiece=function(nextPiece)
         {
             this.newPiece=tetrisPlus.game.add.image(this.x1+100,this.y1+70,'T_Complete');
         }
+   this.auxPiece.scale.setTo(3.5);
    this.newPiece.scale.setTo(3.5);
 }
 
