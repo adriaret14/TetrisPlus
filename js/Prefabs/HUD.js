@@ -19,19 +19,20 @@ tetrisPlus.HUD = function(game, x1, y1)
     this.bestTime;
     
     this.newPiece;
+    this.aux=tetrisPlus.game.add.image(this.x1+20,this.y1+70,'auxx');
     
     this.textScore = game.add.text(x1+120,y1+75, "Score", {
-        font: "35px Arial",
+        font: "35px Revalia",
         fill: "#000000",
         align: "center"
     });
     this.textTime = game.add.text(x1+120, y1+390, "Time", {
-        font: "35px Arial",
+        font: "35px Revalia",
         fill: "#000000",
         align: "center"
     });
     this.textBestTime = game.add.text(x1+120, y1+270, "BTime", {
-        font: "35px Arial",
+        font: "35px Revalia",
         fill: "#000000",
         align: "center"
     });

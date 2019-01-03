@@ -62,7 +62,7 @@ tetrisPlus.gameStateClassic = {
     },
     
     preload:function(){
-        this.stage.backgroundColor="E7D69C";
+        this.stage.backgroundColor="000000";
         //Añadimos las imagenes simples
         tetrisPlus.game.load.image('R','assets/img/Box_Single.png');
         tetrisPlus.game.load.image('I','assets/img/Bar_Single.png');
@@ -83,14 +83,16 @@ tetrisPlus.gameStateClassic = {
         
         //HUD
         tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
-        tetrisPlus.game.load.image('HUDCla','assets/img/HUDClasic.png');
-         tetrisPlus.game.load.image('ImgAux','assets/img/auxPiece.png');
+        tetrisPlus.game.load.image('HUDCla','assets/img/HUDClasicP.png');
+        tetrisPlus.game.load.image('auxPieceB','assets/img/Auxiliar.png');
+        tetrisPlus.game.load.image('ScoreAux','assets/img/ScoreAux.png');
         
         //SOUNDS
         tetrisPlus.game.load.audio('backgroundMusic', 'assets/sounds/ClassicMode_Background_Music_V2.mp3')
         
         //FONDO
-        this.game.load.image('bg1', 'assets/img/Fondo1.png');
+        this.game.load.image('bg1', 'assets/img/FondoClassico.png');
+        this.game.load.image('Classicbg', 'assets/img/Classicbg.png');
     },
     create:function(){     
         
@@ -108,11 +110,15 @@ tetrisPlus.gameStateClassic = {
         
         
         //BACKGROUND
+        this.Classicbg = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,1024,800,'Classicbg');
         this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');
+       
         
         //TRANSFORMACIONES
         this.bg1.anchor.setTo(.5);
         this.bg1.scale.setTo(2);
+        this.Classicbg.anchor.setTo(.5);
+        this.Classicbg.scale.setTo(1);
         
         //HUD
         HUD = new tetrisPlus.HUDC(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));

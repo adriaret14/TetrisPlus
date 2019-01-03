@@ -19,16 +19,18 @@ tetrisPlus.HUDC = function(game, x1, y1)
     
     this.newPiece;
     this.auxPiece;
+    this.ScoreAux;
     //this.newPiece.anchor.setTo(0.5,0.5);
     
+    this.ScoreAux=tetrisPlus.game.add.image(this.x1+35,this.y1+200,'ScoreAux');
     this.textScore = game.add.text(x1+140,y1+275, "Score", {
         font: "35px Revalia",
-        fill: "#000000",
+        fill: "#FFFFFF",
         align: "center"
     });
     this.textLevel = game.add.text(x1+140, y1+400, "Level", {
         font: "35px Revalia",
-        fill: "#000000",
+        fill: "#FFFFFF",
         align: "center"
     });
 };
@@ -41,6 +43,7 @@ tetrisPlus.HUDC.prototype.startHUD=function()
 };
 tetrisPlus.HUDC.prototype.updateScore=function(score)
 { 
+    
     this.textScore.setText(score);
 };
 tetrisPlus.HUDC.prototype.updateLevel=function(level)
@@ -50,8 +53,9 @@ tetrisPlus.HUDC.prototype.updateLevel=function(level)
 tetrisPlus.HUDC.prototype.updateNextPiece=function(nextPiece)
 {
    //this.newPiece.setSize(2);
-    //this.newPiece.scale.setTo(2);
-    this.auxPiece=tetrisPlus.game.add.image(this.x1+100,this.y1+70,'ImgAux');
+    //this.newPiece.scale.setTo(2);    
+    this.auxPiece=tetrisPlus.game.add.image(this.x1+65,this.y1+50,'auxPieceB');
+    
     if(nextPiece=="R")
        {            
             this.newPiece=tetrisPlus.game.add.image(this.x1+100,this.y1+70,'R_Complete');           
@@ -80,7 +84,6 @@ tetrisPlus.HUDC.prototype.updateNextPiece=function(nextPiece)
         {
             this.newPiece=tetrisPlus.game.add.image(this.x1+100,this.y1+70,'T_Complete');
         }
-   this.auxPiece.scale.setTo(3.5);
    this.newPiece.scale.setTo(3.5);
 }
 

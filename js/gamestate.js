@@ -70,7 +70,7 @@ tetrisPlus.gameState = {
     },
     
     preload:function(){
-        this.stage.backgroundColor="E7D69C";
+        //this.stage.backgroundColor="E7D69C";
         //Añadimos las imagenes simples
         tetrisPlus.game.load.image('R','assets/img/Box_Single.png');
         tetrisPlus.game.load.image('I','assets/img/Bar_Single.png');
@@ -94,9 +94,11 @@ tetrisPlus.gameState = {
         
         //HUD
          tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
+         tetrisPlus.game.load.image('auxx','assets/img/puzzleAux.png');
         
         //FONDO
         this.game.load.image('bg1', 'assets/img/Fondo1.png');
+        this.game.load.image('Puzzlebg', 'assets/img/Puzzlebg.png');
         
         //PERSONAJE ANIMS
         this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
@@ -121,11 +123,13 @@ tetrisPlus.gameState = {
         contLinesToScore=0;
         
         //BACKGROUND
-        this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');
+        this.Puzzlebg = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,1024,800,'Puzzlebg');
+        this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');      
         
         //TRANSFORMACIONES
         this.bg1.anchor.setTo(.5);
         this.bg1.scale.setTo(2);
+        this.Puzzlebg.anchor.setTo(.5);
         
         //MAZA 
         //new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
