@@ -55,6 +55,14 @@ var currentLevel;
 var Score;
 var contLinesToScore;
 
+//SOUNDS
+var bgSound;
+var singleSound;
+var doubleSound;
+var tripleSound;
+var tetrisSound;
+var gameOverSound;
+
 var tetrisAchieved;
 var Modo;
 
@@ -102,6 +110,14 @@ tetrisPlus.gameState = {
         //HUD
          tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
          tetrisPlus.game.load.image('auxx','assets/img/puzzleAux.png');
+        
+        tetrisPlus.game.load.audio('backgroundMusic', 'assets/sounds/Level1.mp3')
+        tetrisPlus.game.load.audio('single', 'assets/sounds/TetrisPlusSingle.mp3')
+        tetrisPlus.game.load.audio('double', 'assets/sounds/TetrisPlusDouble.mp3')
+        tetrisPlus.game.load.audio('triple', 'assets/sounds/TetrisPlusTriple.mp3')
+        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TetrisPlusTetris.mp3')
+        tetrisPlus.game.load.audio('gameOver', 'assets/sounds/TetrisPlusGameOver.mp3')
+        
         //pause
         tetrisPlus.game.load.image('pauseI','assets/img/pause.png');
         
@@ -123,9 +139,17 @@ tetrisPlus.gameState = {
         this.load.spritesheet('bloque', 'assets/img/squareBreaking.png', 32, 32);
     },
     create:function(){
+        //SOUNDS
+        bgSound=tetrisPlus.game.add.audio('backgroundMusic');
+        singleSound=tetrisPlus.game.add.audio('single');
+        doubleSound=tetrisPlus.game.add.audio('double');
+        tripleSound=tetrisPlus.game.add.audio('triple');
+        tetrisSound=tetrisPlus.game.add.audio('tetris');
+        gameOverSound=tetrisPlus.game.add.audio('gameOver');
+        
+        bgSound.loopFull(0.6);
         
         //VARIABLES PARA DEFINIR EL CENTRO DE CADA CELDA DEL GRID(BASADAS EN LAS PIEZAS DEL TETRIS QUE SON DE 8X8 PX)
-        
         distX=16;
         distY=distX;
         
@@ -815,6 +839,21 @@ tetrisPlus.gameState = {
                             this.makeStaticsFall(i);
                         } 
                     }  
+            }
+         switch(contLinesToScore)
+            {
+                case 1:
+                    singleSound.play();
+                    break;
+                case 2:
+                    doubleSound.play();
+                    break;
+                case 3:
+                    tripleSound.play();
+                    break;
+                case 4:
+                    tetrisSound.play();
+                    break;    
             }
         this.computeScore(contLinesToScore);
         this.clearGrid();
