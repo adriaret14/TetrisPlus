@@ -10,6 +10,9 @@ var buttonExit;
 //Background
 var background;
 
+//Sound
+var bgSound;
+
 
 tetrisPlus.menuState = {
     
@@ -23,12 +26,18 @@ tetrisPlus.menuState = {
         this.game.load.image('backgroundMenu', 'assets/img/backgroundMm.png');   
         this.game.load.spritesheet('buttonClassicImg','assets/img/buttonClassic.png',300,200);
         this.game.load.spritesheet('buttonPuzzleImg','assets/img/PuzzleMode.png',300,200);
+        
+        //SOUNDS
+        this.game.load.audio('menuMusic', 'assets/sounds/Menu3.mp3')
     },
     
     create:function(){   
         this.background = this.game.add.image(0,0,'backgroundMenu');        
         buttonPlayClassic = this.game.add.button(this.game.world.centerX - 350, 575, 'buttonClassicImg', this.openClassicMode, 0, 2, 1, 0);
         buttonPlayPuzzle= this.game.add.button(this.game.world.centerX +50, 575, 'buttonPuzzleImg', this.openPuzzleMode, 0, 1, 0, 1);
+        
+        bgSound=this.game.add.audio('menuMusic');
+        bgSound.loopFull(0.6);
     },
     
     update:function(){

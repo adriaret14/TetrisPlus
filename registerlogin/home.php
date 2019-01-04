@@ -44,6 +44,8 @@ $MySQLi_CON->close();
 <script src="js/Prefabs/HUDClassic.js"></script>        
 <script src="js/Prefabs/HUD.js"></script>
 <script src="js/Prefabs/bomba.js"></script>
+<script src="js/Prefabs/VFXBomba.js"></script>
+<script src="js/Prefabs/VFXBloque.js"></script>
 <script src="js/gamestate.js"></script>
 <script src="js/gamestate1.js"></script>
 <script src="js/gamestate2.js"></script>
