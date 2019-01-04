@@ -1,6 +1,11 @@
 var Phaser = Phaser || {};
 var tetrisPlus = tetrisPlus || {};
 
+//pause
+var pause;
+var pauseBool;
+var imgPause;
+
 var counter=0;
 var startX=4;
 var startY=1;
@@ -100,13 +105,16 @@ tetrisPlus.gameStateClassic = {
         tetrisPlus.game.load.audio('tetris', 'assets/sounds/TetrisPlusTetris.mp3')
         tetrisPlus.game.load.audio('gameOver', 'assets/sounds/TetrisPlusGameOver.mp3')
         
+        //pause
+        tetrisPlus.game.load.image('pauseI','assets/img/pause.png');
         
         //FONDO
         this.game.load.image('bg1', 'assets/img/FondoClassico.png');
         this.game.load.image('Classicbg', 'assets/img/Classicbg.png');
     },
     create:function(){     
-        
+        //pause
+        pause=false;
         //SOUNDS
         bgSound=tetrisPlus.game.add.audio('backgroundMusic');
         singleSound=tetrisPlus.game.add.audio('single');
@@ -266,12 +274,26 @@ tetrisPlus.gameStateClassic = {
         key_left=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         key_down=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
-        
+        esc=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.P);
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
         HUD.updateNextPiece(nextPiece.type);
     },
     update:function(){
         console.log(Score);
+         if(esc.isDown)
+            {
+                if( pause==false)
+                    {
+                        tetrisPlus.game.input.onDown.add(this.unpause, self);      
+                        imgPause=tetrisPlus.game.add.image(0, 0, 'pauseI');                         
+                        tetrisPlus.game.paused=true;
+                    }
+                else
+                    {
+                     tetrisPlus.game.paused=false;
+                    }
+              
+            }
         /*if(PrevNext!=null)
             {
                 console.log("Previous: "+PrevNext.type+", Piece: "+PieceActive.type+", Next: "+nextPiece.type);
@@ -774,6 +796,11 @@ tetrisPlus.gameStateClassic = {
             }
         
         HUD.updateScore(Score);
+    },
+    unpause:function(event)
+    {
+        imgPause.destroy();
+        tetrisPlus.game.paused=false;        
     }
 };
 

@@ -35,7 +35,7 @@ var destroyables;
 //pause
 var pause;
 var pauseBool;
-
+var imgPause;
 
 //PLAYER
 var Player;
@@ -102,6 +102,8 @@ tetrisPlus.gameState = {
         //HUD
          tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
          tetrisPlus.game.load.image('auxx','assets/img/puzzleAux.png');
+        //pause
+        tetrisPlus.game.load.image('pauseI','assets/img/pause.png');
         
         //FONDO
         this.game.load.image('bg1', 'assets/img/Fondo1.png');
@@ -329,7 +331,8 @@ tetrisPlus.gameState = {
             {
                 if( pause==false)
                     {
-                        tetrisPlus.game.input.onDown.add(this.unpause, self);                        
+                        tetrisPlus.game.input.onDown.add(this.unpause, self);      
+                        imgPause=tetrisPlus.game.add.image(0, 0, 'pauseI');                         
                         tetrisPlus.game.paused=true;
                     }
                 else
@@ -1221,7 +1224,8 @@ tetrisPlus.gameState = {
     },
     unpause:function(event)
     {
-        tetrisPlus.game.paused=false;
+        imgPause.destroy();
+        tetrisPlus.game.paused=false;        
     }
 };
 
