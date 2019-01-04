@@ -17,7 +17,7 @@ var tapL=false;
 var tapR=false;
 var tapZ=false;
 var dropSpeed=80;
-var dropMaceSpeed=260;
+var dropMaceSpeed=360;
 var realDropSpeed=dropSpeed;
 var initialRot=0;
 
@@ -1164,7 +1164,7 @@ tetrisPlus.gameState = {
     },
     destroyWithMace:function()
     {
-        console.log(Mace.currentHeightLine);
+        //console.log(Mace.currentHeightLine);
         /*for(var i=0; i<GridTetris.length; i++)
         {
             for(var j=0; j<GridTetris[i].length; j++)
@@ -1194,7 +1194,7 @@ tetrisPlus.gameState = {
         if(GridTetris[Mace.currentHeightLine+1][1]==5)
         {
             GridTetris[Mace.currentHeightLine+1][1]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+1);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+1);
             for(var t=0; t<destroyables.children.length; t++)
                         {
                             //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
@@ -1210,7 +1210,7 @@ tetrisPlus.gameState = {
         if(GridTetris[Mace.currentHeightLine+1][2]==5)
         {
             GridTetris[Mace.currentHeightLine+1][2]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+2);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+2);
             for(var t=0; t<destroyables.children.length; t++)
                         {
                             //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
@@ -1226,7 +1226,7 @@ tetrisPlus.gameState = {
         if(GridTetris[Mace.currentHeightLine+1][3]==5)
         {
             GridTetris[Mace.currentHeightLine+1][3]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+3);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+3);
             for(var t=0; t<destroyables.children.length; t++)
                         {
                             //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
@@ -1242,37 +1242,37 @@ tetrisPlus.gameState = {
         if(GridTetris[Mace.currentHeightLine+1][4]==5)
         {
             GridTetris[Mace.currentHeightLine+1][4]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+4);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+4);
         }
         if(GridTetris[Mace.currentHeightLine+1][5]==5)
         {
             GridTetris[Mace.currentHeightLine+1][5]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+5);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+5);
         }
         if(GridTetris[Mace.currentHeightLine+1][6]==5)
         {
             GridTetris[Mace.currentHeightLine+1][6]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+6);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+6);
         }
         if(GridTetris[Mace.currentHeightLine+1][7]==5)
         {
             GridTetris[Mace.currentHeightLine+1][7]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+7);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+7);
         }
         if(GridTetris[Mace.currentHeightLine+1][8]==5)
         {
             GridTetris[Mace.currentHeightLine+1][8]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+8);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+8);
         }
         if(GridTetris[Mace.currentHeightLine+1][9]==5)
         {
             GridTetris[Mace.currentHeightLine+1][9]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+9);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+9);
         }
         if(GridTetris[Mace.currentHeightLine+1][10]==5)
         {
             GridTetris[Mace.currentHeightLine+1][10]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+10);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+10);
         }
         /*for(var i=0; i<GridTetris.length; i++)
         {
@@ -1291,6 +1291,11 @@ tetrisPlus.gameState = {
     },
     CollMaceDestroyables:function()
     {
+        //1-Mirar si por encima de la linea de la sierra hay algun static y romperlo
+        //2- Mirar en la linea de la sierra
+        
+        
+        
         //destruir
         //activar animacion
     },
