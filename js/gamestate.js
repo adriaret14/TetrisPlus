@@ -199,7 +199,7 @@ tetrisPlus.gameState = {
         
         //MAZA 
         //new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
-        Mace = new tetrisPlus.Mace(tetrisPlus.game, ((1024 / 2) - (87) + (distX*0.5)), (800/4) -4 + distY*(3) , 0.5, 2, GridTetris);
+        Mace = new tetrisPlus.Mace(tetrisPlus.game, ((1024 / 2) - (87) + (distX*0.5)), (800/4) -4 + distY*(2) , 0.5, 2, GridTetris);
         tetrisPlus.game.add.existing(Mace);
         this.MazeFall = false;
         //Mace.startGrid(GridTetris);
@@ -1292,10 +1292,28 @@ tetrisPlus.gameState = {
     CollMaceDestroyables:function()
     {
         //1-Mirar si por encima de la linea de la sierra hay algun static y romperlo
-        //2- Mirar en la linea de la sierra
-        
-        
-        
+        for(var i=0; i<GridTetris.length; i++)
+        {
+            for(var j=0;j<GridTetris[i].length; j++)
+            {
+                if(GridTetris[i][j]==5 && i<=Mace.currentHeightLine && j!=0 && j!==11)
+                {
+                    GridTetris[i][j]=null;
+                    console.log("["+i+", "+j+"], CURRENTHEIGHTLINE: "+Mace.currentHeightLine);
+                    for(var t=0; t<destroyables.children.length; t++)
+                    {
+                        if(destroyables.children[t].starti==i && destroyables.children[t].startj==j)
+                            {
+                                console.log("ASDSDASDADS");
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                    }
+                }
+            }
+        }     
+  
         //destruir
         //activar animacion
     },
