@@ -43,6 +43,11 @@ var GridTetris;
 
 //SOUNDS
 var bgSound;
+var singleSound;
+var doubleSound;
+var tripleSound;
+var tetrisSound;
+var gameOverSound;
 
 //HUD
 var HUD
@@ -89,6 +94,12 @@ tetrisPlus.gameStateClassic = {
         
         //SOUNDS
         tetrisPlus.game.load.audio('backgroundMusic', 'assets/sounds/ClassicMode_Background_Music_V2.mp3')
+        tetrisPlus.game.load.audio('single', 'assets/sounds/TetrisPlusSingle.mp3')
+        tetrisPlus.game.load.audio('double', 'assets/sounds/TetrisPlusDouble.mp3')
+        tetrisPlus.game.load.audio('triple', 'assets/sounds/TetrisPlusTriple.mp3')
+        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TetrisPlusTetris.mp3')
+        tetrisPlus.game.load.audio('gameOver', 'assets/sounds/TetrisPlusGameOver.mp3')
+        
         
         //FONDO
         this.game.load.image('bg1', 'assets/img/FondoClassico.png');
@@ -98,6 +109,12 @@ tetrisPlus.gameStateClassic = {
         
         //SOUNDS
         bgSound=tetrisPlus.game.add.audio('backgroundMusic');
+        singleSound=tetrisPlus.game.add.audio('single');
+        doubleSound=tetrisPlus.game.add.audio('double');
+        tripleSound=tetrisPlus.game.add.audio('triple');
+        tetrisSound=tetrisPlus.game.add.audio('tetris');
+        gameOverSound=tetrisPlus.game.add.audio('gameOver');
+        
         bgSound.loopFull(0.6);
         
         //CLASSIC GAME MODE VARIABLES
@@ -528,6 +545,23 @@ tetrisPlus.gameStateClassic = {
                             this.changeLevel();
                         } 
                     }  
+            }
+        
+        //Choose sound for lines
+        switch(contLinesToScore)
+            {
+                case 1:
+                    singleSound.play();
+                    break;
+                case 2:
+                    doubleSound.play();
+                    break;
+                case 3:
+                    tripleSound.play();
+                    break;
+                case 4:
+                    tetrisSound.play();
+                    break;    
             }
         this.computeScore(contLinesToScore);
         contLinesToScore=0;
