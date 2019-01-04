@@ -324,6 +324,7 @@ tetrisPlus.gameState = {
                 Mace.fall(distY);
                 counterMace=0;
                 //this.destroyWithMace();
+                
             }
         }
         
@@ -500,6 +501,7 @@ tetrisPlus.gameState = {
         
         //OVERLAP
         this.game.physics.arcade.overlap(Player, destroyables, this.overlapScale, null, this);
+        this.game.physics.arcade.overlap(Mace, destroyables, this.CollMaceDestroyables(), null, this);
         
         //SPAWNEAR NUEVA PIEZA
         if(PieceActive.cantMoveDown)
@@ -1163,6 +1165,11 @@ tetrisPlus.gameState = {
                 }
             }
         }*/
+    },
+    CollMaceDestroyables:function()
+    {
+        //destruir
+        //activar animacion
     }
 };
 
