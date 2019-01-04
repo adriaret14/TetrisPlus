@@ -115,7 +115,7 @@ tetrisPlus.gameState = {
         tetrisPlus.game.load.audio('single', 'assets/sounds/TetrisPlusSingle.mp3')
         tetrisPlus.game.load.audio('double', 'assets/sounds/TetrisPlusDouble.mp3')
         tetrisPlus.game.load.audio('triple', 'assets/sounds/TetrisPlusTriple.mp3')
-        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TetrisPlusTetris.mp3')
+        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TerisPlusTetris.mp3')
         tetrisPlus.game.load.audio('gameOver', 'assets/sounds/TetrisPlusGameOver.mp3')
         
         //pause

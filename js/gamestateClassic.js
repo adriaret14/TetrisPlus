@@ -55,6 +55,7 @@ var tetrisSound;
 var gameOverSound;
 var moveRotPieceSound;
 var pieceDroppedSound;
+var changelevelSound;
 
 //HUD
 var HUD
@@ -104,10 +105,11 @@ tetrisPlus.gameStateClassic = {
         tetrisPlus.game.load.audio('single', 'assets/sounds/TetrisPlusSingle.mp3')
         tetrisPlus.game.load.audio('double', 'assets/sounds/TetrisPlusDouble.mp3')
         tetrisPlus.game.load.audio('triple', 'assets/sounds/TetrisPlusTriple.mp3')
-        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TetrisPlusTetris.mp3')
+        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TerisPlusTetris.mp3')
         tetrisPlus.game.load.audio('gameOver', 'assets/sounds/TetrisPlusGameOver.mp3')
-        tetrisPlus.game.load.audio('PieceMoveRotate', 'assets/sounds/Mov_Rot_Sound.wav')
+        tetrisPlus.game.load.audio('PieceMoveRotate', 'assets/sounds/Move_Rot_Sound.wav')
         tetrisPlus.game.load.audio('PieceDrop', 'assets/sounds/Piece_Dropped.wav')
+        tetrisPlus.game.load.audio('NewLevel', 'assets/sounds/ChangeLevel.wav')
         
         //pause
         tetrisPlus.game.load.image('pauseI','assets/img/pause.png');
@@ -126,6 +128,12 @@ tetrisPlus.gameStateClassic = {
         tripleSound=tetrisPlus.game.add.audio('triple');
         tetrisSound=tetrisPlus.game.add.audio('tetris');
         gameOverSound=tetrisPlus.game.add.audio('gameOver');
+        moveRotPieceSound=tetrisPlus.game.add.audio('PieceMoveRotate');
+        pieceDroppedSound=tetrisPlus.game.add.audio('PieceDrop');
+        moveRotPieceSound.volume=0.2;
+        changelevelSound=tetrisPlus.game.add.audio('NewLevel');
+        changelevelSound.volume=0.5;
+        
         
         bgSound.loopFull(0.6);
         
@@ -315,6 +323,7 @@ tetrisPlus.gameStateClassic = {
         {
             if(tapL==false)
             {
+                moveRotPieceSound.play();
                 PieceActive.move(1, distX);                        
                 tapL=true;
             }
@@ -330,6 +339,7 @@ tetrisPlus.gameStateClassic = {
         {
                 if(tapR==false)
                 {
+                    moveRotPieceSound.play();
                     PieceActive.move(2, distX);                        
                     tapR=true;
                 }
@@ -354,6 +364,7 @@ tetrisPlus.gameStateClassic = {
         {
              if(tapZ==false)
              {
+                 moveRotPieceSound.play();
                  initialRot++;
                  if(initialRot>=4)
                  {
@@ -375,6 +386,7 @@ tetrisPlus.gameStateClassic = {
         //SPAWNEAR NUEVA PIEZA
         if(PieceActive.cantMoveDown)
             {
+                pieceDroppedSound.play();
                 Piecei1=PieceActive.previ1;
                 Piecej1=PieceActive.prevj1;
                 Piecei2=PieceActive.previ2;
@@ -760,6 +772,7 @@ tetrisPlus.gameStateClassic = {
         if(currentLevelLinesCleared>=(currentLevel*10)+10)
             {
                 console.log("Cambiando de nivel");
+                changelevelSound.play();
                 if(currentLevel<29)
                     {
                         currentLevel++;
@@ -778,6 +791,8 @@ tetrisPlus.gameStateClassic = {
             {
                 //TODO: Game Lost go to ranking screen
                 console.log("PARTIDA FINALIZADA");
+                bgSound.stop();
+                gameOverSound.play();
             }
     },
     computeScore:function(cont)
