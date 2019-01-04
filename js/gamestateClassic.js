@@ -53,6 +53,8 @@ var doubleSound;
 var tripleSound;
 var tetrisSound;
 var gameOverSound;
+var moveRotPieceSound;
+var pieceDroppedSound;
 
 //HUD
 var HUD
@@ -104,6 +106,8 @@ tetrisPlus.gameStateClassic = {
         tetrisPlus.game.load.audio('triple', 'assets/sounds/TetrisPlusTriple.mp3')
         tetrisPlus.game.load.audio('tetris', 'assets/sounds/TetrisPlusTetris.mp3')
         tetrisPlus.game.load.audio('gameOver', 'assets/sounds/TetrisPlusGameOver.mp3')
+        tetrisPlus.game.load.audio('PieceMoveRotate', 'assets/sounds/Mov_Rot_Sound.wav')
+        tetrisPlus.game.load.audio('PieceDrop', 'assets/sounds/Piece_Dropped.wav')
         
         //pause
         tetrisPlus.game.load.image('pauseI','assets/img/pause.png');

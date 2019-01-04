@@ -45,11 +45,13 @@ tetrisPlus.menuState = {
     },
     openClassicMode:function()
     {
+        bgSound.stop();
         this.game.state.add('main', tetrisPlus.gameStateClassic);
         this.game.state.start('main');
     },
     openPuzzleMode:function()
     {
+        bgSound.stop();
         this.game.state.add('main',tetrisPlus.gameState);
         this.game.state.start('main');
         //console.log("yoooo");
