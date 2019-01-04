@@ -30,7 +30,7 @@ var Piecei4;
 var Piecej1;
 
 var destroyables;
-
+var HUD;
 //PLAYER
 var Player;
 var PlayerVictory;
@@ -47,7 +47,10 @@ var MaceFall;
 var GridTetris;
 
 var Score;
-
+//pause
+var pause;
+var pauseBool;
+var imgPause;
 tetrisPlus.gameState1 = {
     
     init:function(){
@@ -58,6 +61,7 @@ tetrisPlus.gameState1 = {
         this.game.physics.arcade.gravity.y = 0;
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
+         pauseBool=false;
     },
     
     preload:function(){
@@ -79,13 +83,17 @@ tetrisPlus.gameState1 = {
         tetrisPlus.game.load.image('S_Complete','assets/img/S.png');
         tetrisPlus.game.load.image('Z_Complete','assets/img/S_Inverted.png');
         tetrisPlus.game.load.image('T_Complete','assets/img/T.png');
+         //HUD
+         tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
+         tetrisPlus.game.load.image('auxx','assets/img/puzzleAux.png');
         
         //Añadimos extras
         tetrisPlus.game.load.image('MaceCompleted','assets/img/Sierra.png');
-        
+        //pause
+        tetrisPlus.game.load.image('pauseI','assets/img/pause.png');
         //FONDO
         this.game.load.image('bg1', 'assets/img/Fondo1.png');
-        
+        this.game.load.image('Puzzlebg', 'assets/img/Puzzlebg1.png');
         //PERSONAJE ANIMS
         this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
         this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);
@@ -97,13 +105,19 @@ tetrisPlus.gameState1 = {
     },
     create:function(){        
         
-        //BACKGROUND
+         //BACKGROUND
+        this.Puzzlebg = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,1024,800,'Puzzlebg');
         this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');
-        
+        //HUD
+        HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
+        tetrisPlus.game.add.existing(HUD);        
+        HUD.updateScore(Score);       
         //TRANSFORMACIONES
         this.bg1.anchor.setTo(.5);
         this.bg1.scale.setTo(2);
-        
+        this.Puzzlebg.anchor.setTo(.5);
+         //pause
+        pause=false;
         //MAZA 
         Mace = new tetrisPlus.Mace(tetrisPlus.game, (this.game.world.centerX-81.5), (this.game.world.centerY - 245), 25, 25);
         tetrisPlus.game.add.existing(Mace);
@@ -254,11 +268,26 @@ tetrisPlus.gameState1 = {
         key_left=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         key_down=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+        esc=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.P);  
         
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
-
+        this.game.time.events.loop(Phaser.Timer.SECOND, HUD.updateTime, this.HUD);
     },
     update:function(){        
+         if(esc.isDown)
+            {
+                if( pause==false)
+                    {
+                        tetrisPlus.game.input.onDown.add(this.unpause, self);      
+                        imgPause=tetrisPlus.game.add.image(0, 0, 'pauseI');                         
+                        tetrisPlus.game.paused=true;
+                    }
+                else
+                    {
+                     tetrisPlus.game.paused=false;
+                    }
+              
+            }
         //Drop the piece
         //console.log(destroyables.length);
         counter++;
@@ -676,6 +705,11 @@ tetrisPlus.gameState1 = {
                 }
             }
         }
+    },
+    unpause:function(event)
+    {
+        imgPause.destroy();
+        tetrisPlus.game.paused=false;        
     }
 };
 

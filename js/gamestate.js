@@ -179,7 +179,7 @@ tetrisPlus.gameState = {
         //Mace.startGrid(GridTetris);
                 
         //HUD
-        HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
+        HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245),0,0);
         tetrisPlus.game.add.existing(HUD);
         
         HUD.updateScore(Score);
