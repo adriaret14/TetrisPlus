@@ -32,6 +32,11 @@ var Piecej1;
 
 var destroyables;
 
+//pause
+var pause;
+var pauseBool;
+
+
 //PLAYER
 var Player;
 var PlayerVictory;
@@ -67,6 +72,7 @@ tetrisPlus.gameState = {
         this.game.physics.arcade.gravity.y = 0;
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
+        pauseBool=false;
     },
     
     preload:function(){
@@ -117,6 +123,8 @@ tetrisPlus.gameState = {
         distX=16;
         distY=distX;
         
+        //pause
+        pause=false;
         
         currentLevel=0;
         Score=0;
@@ -297,14 +305,30 @@ tetrisPlus.gameState = {
         key_left=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         key_down=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+        esc=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.P);        
         
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
-
+        
+        this.game.time.events.loop(Phaser.Timer.SECOND, HUD.updateTime, this.HUD);
     },
     update:function(){
         //console.log(Score);
         //Drop the piece
         //console.log(destroyables.length);
+       
+        if(esc.isDown)
+            {
+                if( pause==false)
+                    {
+                        tetrisPlus.game.input.onDown.add(this.unpause, self);                        
+                        tetrisPlus.game.paused=true;
+                    }
+                else
+                    {
+                     tetrisPlus.game.paused=false;
+                    }
+              
+            }
         counter++;
         counterMace++;
         
@@ -584,7 +608,7 @@ tetrisPlus.gameState = {
                 this.VFXBombaActivada = false;
             }
         }
-        
+    
     },
     
     
@@ -1170,6 +1194,10 @@ tetrisPlus.gameState = {
     {
         //destruir
         //activar animacion
+    },
+    unpause:function(event)
+    {
+        tetrisPlus.game.paused=false;
     }
 };
 
