@@ -56,6 +56,7 @@ var Score;
 var contLinesToScore;
 
 var tetrisAchieved;
+var Modo;
 
 //VFXBOMBA
 var VFXBomba;
@@ -115,6 +116,9 @@ tetrisPlus.gameState = {
         
         //VFX EXPLOSION BOMBA
         this.load.spritesheet('explosion', 'assets/img/SpriteSheetExplosion.png', 24, 24);
+        
+        //VFX BLOQUE
+        this.load.spritesheet('bloque', 'assets/img/squareBreaking.png', 32, 32);
     },
     create:function(){
         
@@ -123,6 +127,8 @@ tetrisPlus.gameState = {
         distX=16;
         distY=distX;
         
+        //MODO
+        Modo = 2;
         //pause
         pause=false;
         
@@ -162,6 +168,10 @@ tetrisPlus.gameState = {
         /*VFXBomba = new tetrisPlus.VFXBomba(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY);
         tetrisPlus.game.add.existing(VFXBomba);*/
         
+        //VFX BLOQUE
+        /*VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY);
+        tetrisPlus.game.add.existing(VFXBloque);*/
+        
         //BOMBA
         tetrisAchieved = false;
         
@@ -180,8 +190,6 @@ tetrisPlus.gameState = {
         
         //FISICAS JUEGO
         this.game.physics.arcade.enable(destroyables);
-        
-
         
         //CREACIÓN DEL GRID DE JUEGO
          
@@ -306,6 +314,7 @@ tetrisPlus.gameState = {
         key_down=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
         esc=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.P);        
+        key_A=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.A);
         
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
         
@@ -431,7 +440,7 @@ tetrisPlus.gameState = {
         if(PlayerVictory == null)
         {
             //GANAR
-            if((Player.y > (this.game.world.centerY + 124)) && (Player.y < (this.game.world.centerY + 125)))
+            if((Player.y > (this.game.world.centerY + 124)) && (Player.y < (this.game.world.centerY + 130)))
             {
                 Player.y = this.game.world.centerY + 124;
                 Player.body.gravity.y = 0;
@@ -597,7 +606,14 @@ tetrisPlus.gameState = {
         }
         
         //DIE PLAYER
-        this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
+        this.haveDie = this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
+        
+        //PHP
+        if(key_A.isDown)
+        {
+            this.sendDataToPHP();
+        }
+        
         
         //VFX (EFECTOS VISUALES)
         if(this.VFXBombaActivada == true)
@@ -774,7 +790,11 @@ tetrisPlus.gameState = {
                             GridTetris[i][8]=null;
                             GridTetris[i][9]=null;
                             GridTetris[i][10]=null;
-
+                            
+                            //VFX BLOQUE
+                            VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, GridTetris[i], GridTetris[1], GridTetris);
+                            tetrisPlus.game.add.existing(VFXBloque);
+                            
                             for(var j=0; j<destroyables.children.length; j++)
                                 {
                                     //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
@@ -1194,6 +1214,10 @@ tetrisPlus.gameState = {
     {
         //destruir
         //activar animacion
+    },
+    sendDataToPHP:function()
+    {
+        window.location.href = "ranking.php?score=" + Score + "&modo=" + Modo; 
     },
     unpause:function(event)
     {

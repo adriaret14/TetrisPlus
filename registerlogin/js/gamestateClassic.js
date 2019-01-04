@@ -41,6 +41,14 @@ var contLinesToScore;
 //GRID FOR THE PIECES
 var GridTetris;
 
+//SOUNDS
+var bgSound;
+var singleSound;
+var doubleSound;
+var tripleSound;
+var tetrisSound;
+var gameOverSound;
+
 //HUD
 var HUD
 
@@ -59,7 +67,7 @@ tetrisPlus.gameStateClassic = {
     },
     
     preload:function(){
-        this.stage.backgroundColor="E7D69C";
+        this.stage.backgroundColor="000000";
         //Añadimos las imagenes simples
         tetrisPlus.game.load.image('R','assets/img/Box_Single.png');
         tetrisPlus.game.load.image('I','assets/img/Bar_Single.png');
@@ -79,13 +87,35 @@ tetrisPlus.gameStateClassic = {
         tetrisPlus.game.load.image('T_Complete','assets/img/T.png');
         
         //HUD
-         tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
-        tetrisPlus.game.load.image('HUDCla','assets/img/HUDClasic.png');
+        tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
+        tetrisPlus.game.load.image('HUDCla','assets/img/HUDClasicP.png');
+        tetrisPlus.game.load.image('auxPieceB','assets/img/Auxiliar.png');
+        tetrisPlus.game.load.image('ScoreAux','assets/img/ScoreAux.png');
+        
+        //SOUNDS
+        tetrisPlus.game.load.audio('backgroundMusic', 'assets/sounds/ClassicMode_Background_Music_V2.mp3')
+        tetrisPlus.game.load.audio('single', 'assets/sounds/TetrisPlusSingle.mp3')
+        tetrisPlus.game.load.audio('double', 'assets/sounds/TetrisPlusDouble.mp3')
+        tetrisPlus.game.load.audio('triple', 'assets/sounds/TetrisPlusTriple.mp3')
+        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TetrisPlusTetris.mp3')
+        tetrisPlus.game.load.audio('gameOver', 'assets/sounds/TetrisPlusGameOver.mp3')
+        
         
         //FONDO
-        this.game.load.image('bg1', 'assets/img/Fondo1.png');
+        this.game.load.image('bg1', 'assets/img/FondoClassico.png');
+        this.game.load.image('Classicbg', 'assets/img/Classicbg.png');
     },
     create:function(){     
+        
+        //SOUNDS
+        bgSound=tetrisPlus.game.add.audio('backgroundMusic');
+        singleSound=tetrisPlus.game.add.audio('single');
+        doubleSound=tetrisPlus.game.add.audio('double');
+        tripleSound=tetrisPlus.game.add.audio('triple');
+        tetrisSound=tetrisPlus.game.add.audio('tetris');
+        gameOverSound=tetrisPlus.game.add.audio('gameOver');
+        
+        bgSound.loopFull(0.6);
         
         //CLASSIC GAME MODE VARIABLES
         currentLevel=0;
@@ -97,11 +127,15 @@ tetrisPlus.gameStateClassic = {
         
         
         //BACKGROUND
+        this.Classicbg = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,1024,800,'Classicbg');
         this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');
+       
         
         //TRANSFORMACIONES
         this.bg1.anchor.setTo(.5);
         this.bg1.scale.setTo(2);
+        this.Classicbg.anchor.setTo(.5);
+        this.Classicbg.scale.setTo(1);
         
         //HUD
         HUD = new tetrisPlus.HUDC(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
@@ -511,6 +545,23 @@ tetrisPlus.gameStateClassic = {
                             this.changeLevel();
                         } 
                     }  
+            }
+        
+        //Choose sound for lines
+        switch(contLinesToScore)
+            {
+                case 1:
+                    singleSound.play();
+                    break;
+                case 2:
+                    doubleSound.play();
+                    break;
+                case 3:
+                    tripleSound.play();
+                    break;
+                case 4:
+                    tetrisSound.play();
+                    break;    
             }
         this.computeScore(contLinesToScore);
         contLinesToScore=0;

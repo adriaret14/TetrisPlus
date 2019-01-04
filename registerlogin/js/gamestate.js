@@ -53,6 +53,9 @@ var contLinesToScore;
 var tetrisAchieved;
 var Modo;
 
+//VFXBOMBA
+var VFXBomba;
+
 tetrisPlus.gameState = {
     
   
@@ -68,7 +71,7 @@ tetrisPlus.gameState = {
     },
     
     preload:function(){
-        this.stage.backgroundColor="E7D69C";
+        //this.stage.backgroundColor="E7D69C";
         //Añadimos las imagenes simples
         tetrisPlus.game.load.image('R','assets/img/Box_Single.png');
         tetrisPlus.game.load.image('I','assets/img/Bar_Single.png');
@@ -92,9 +95,11 @@ tetrisPlus.gameState = {
         
         //HUD
          tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
+         tetrisPlus.game.load.image('auxx','assets/img/puzzleAux.png');
         
         //FONDO
         this.game.load.image('bg1', 'assets/img/Fondo1.png');
+        this.game.load.image('Puzzlebg', 'assets/img/Puzzlebg.png');
         
         //PERSONAJE ANIMS
         this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
@@ -103,8 +108,11 @@ tetrisPlus.gameState = {
         //BOMBA
         this.load.image('bomba', 'assets/img/bomba.png');
         
-        //VFX BOMBA
-        this.load.spritesheet('VFXExplosion', 'assets/img/SpriteSheetExplosion.png', 24, 32);
+        //VFX EXPLOSION BOMBA
+        this.load.spritesheet('explosion', 'assets/img/SpriteSheetExplosion.png', 24, 24);
+        
+        //VFX BLOQUE
+        this.load.spritesheet('bloque', 'assets/img/squareBreaking.png', 32, 32);
     },
     create:function(){
         
@@ -113,7 +121,7 @@ tetrisPlus.gameState = {
         distX=16;
         distY=distX;
         
-        //MODO DE JUEGO
+        //MODO
         Modo = 2;
         
         currentLevel=0;
@@ -121,11 +129,13 @@ tetrisPlus.gameState = {
         contLinesToScore=0;
         
         //BACKGROUND
-        this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');
+        this.Puzzlebg = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,1024,800,'Puzzlebg');
+        this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');      
         
         //TRANSFORMACIONES
         this.bg1.anchor.setTo(.5);
         this.bg1.scale.setTo(2);
+        this.Puzzlebg.anchor.setTo(.5);
         
         //MAZA 
         //new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
@@ -146,10 +156,13 @@ tetrisPlus.gameState = {
         Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40);
         tetrisPlus.game.add.existing(Player);
         
-        //VFX EXPLOSION
-        VFXExplosion = new tetrisPlus.VFXExplosion(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 40);
-        tetrisPlus.game.add.existing(VFXExplosion);
+        //VFX BOMBA
+        /*VFXBomba = new tetrisPlus.VFXBomba(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY);
+        tetrisPlus.game.add.existing(VFXBomba);*/
         
+        //VFX BLOQUE
+        /*VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY);
+        tetrisPlus.game.add.existing(VFXBloque);*/
         
         //BOMBA
         tetrisAchieved = false;
@@ -169,8 +182,6 @@ tetrisPlus.gameState = {
         
         //FISICAS JUEGO
         this.game.physics.arcade.enable(destroyables);
-        
-
         
         //CREACIÓN DEL GRID DE JUEGO
          
@@ -322,6 +333,7 @@ tetrisPlus.gameState = {
                 Mace.fall(distY);
                 counterMace=0;
                 //this.destroyWithMace();
+                
             }
         }
         
@@ -404,7 +416,7 @@ tetrisPlus.gameState = {
         if(PlayerVictory == null)
         {
             //GANAR
-            if((Player.y > (this.game.world.centerY + 124)) && (Player.y < (this.game.world.centerY + 125)))
+            if((Player.y > (this.game.world.centerY + 124)) && (Player.y < (this.game.world.centerY + 130)))
             {
                 Player.y = this.game.world.centerY + 124;
                 Player.body.gravity.y = 0;
@@ -498,6 +510,7 @@ tetrisPlus.gameState = {
         
         //OVERLAP
         this.game.physics.arcade.overlap(Player, destroyables, this.overlapScale, null, this);
+        this.game.physics.arcade.overlap(Mace, destroyables, this.CollMaceDestroyables(), null, this);
         
         //SPAWNEAR NUEVA PIEZA
         if(PieceActive.cantMoveDown)
@@ -506,12 +519,12 @@ tetrisPlus.gameState = {
                 {
                     this.explosionBomba(PieceActive.prevj1, PieceActive.previ1);
                     
-                    //SPRITESHEET DE EXPLOSION
-                    /*ExplosionBomba = new tetrisPlus.bombaExplosion(tetrisPlus.game, ExplosionBomba.x, ExplosionBomba.y);
-                    tetrisPlus.game.add.existing(ExplosionBomba);*/
+                    //VFX BOMBA
+                    VFXBomba = new tetrisPlus.VFXBomba(tetrisPlus.game, (PieceActive.x), (PieceActive.y));
+                    tetrisPlus.game.add.existing(VFXBomba);
+                    this.VFXBombaActivada = true;
                     
                     PieceActive.destroy();
-                    
                     this.createNewPiece("Next");
                     //this.makeLines();   
                 }
@@ -576,6 +589,18 @@ tetrisPlus.gameState = {
         {
             this.sendDataToPHP();
         }
+        
+        
+        //VFX (EFECTOS VISUALES)
+        if(this.VFXBombaActivada == true)
+        {
+            if(VFXBomba.flag == true)
+            {
+                VFXBomba.destroy();
+                this.VFXBombaActivada = false;
+            }
+        }
+        
     },
     
     
@@ -741,7 +766,11 @@ tetrisPlus.gameState = {
                             GridTetris[i][8]=null;
                             GridTetris[i][9]=null;
                             GridTetris[i][10]=null;
-
+                            
+                            //VFX BLOQUE
+                            VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, GridTetris[i], GridTetris[1], GridTetris);
+                            tetrisPlus.game.add.existing(VFXBloque);
+                            
                             for(var j=0; j<destroyables.children.length; j++)
                                 {
                                     //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
@@ -1029,10 +1058,6 @@ tetrisPlus.gameState = {
                 }
             }
         }
-        
-        //SPRITESHEET DE EXPLOSION
-        
-        
     },
     destroyWithMace:function()
     {
@@ -1160,6 +1185,11 @@ tetrisPlus.gameState = {
                 }
             }
         }*/
+    },
+    CollMaceDestroyables:function()
+    {
+        //destruir
+        //activar animacion
     },
     sendDataToPHP:function()
     {

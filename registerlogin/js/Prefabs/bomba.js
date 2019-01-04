@@ -1,4 +1,5 @@
 var Phaser = Phaser || {};
+var Phaser = Phaser || {};
 var tetrisPlus = tetrisPlus || {};
 
 tetrisPlus.bomba = function(game, x1, y1, startj, starti, GridTetris)
