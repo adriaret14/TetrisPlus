@@ -17,7 +17,7 @@ var tapL=false;
 var tapR=false;
 var tapZ=false;
 var dropSpeed=80;
-var dropMaceSpeed=260;
+var dropMaceSpeed=360;
 var realDropSpeed=dropSpeed;
 var initialRot=0;
 
@@ -31,6 +31,11 @@ var Piecei4;
 var Piecej1;
 
 var destroyables;
+
+//pause
+var pause;
+var pauseBool;
+var imgPause;
 
 //PLAYER
 var Player;
@@ -50,6 +55,22 @@ var currentLevel;
 var Score;
 var contLinesToScore;
 
+//SOUNDS
+var bgSound;
+var singleSound;
+var doubleSound;
+var tripleSound;
+var tetrisSound;
+var gameOverSound;
+var moveRotPieceSound;
+var pieceDroppedSound;
+var bombExplosionSound;
+var ProfesorYeahSound;
+var ProfessorFantasticSound;
+var ProfesorClimbSound;
+var ProfesorJumpSound;
+var ProfesorDeadSound;
+
 var tetrisAchieved;
 var Modo;
 
@@ -68,6 +89,7 @@ tetrisPlus.gameState = {
         this.game.physics.arcade.gravity.y = 0;
         this.scale.pageAlignHorizontally = true;
         this.scale.pageAlignVertically = true;
+        pauseBool=false;
     },
     
     preload:function(){
@@ -97,6 +119,25 @@ tetrisPlus.gameState = {
          tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
          tetrisPlus.game.load.image('auxx','assets/img/puzzleAux.png');
         
+        //SOUNDS
+        tetrisPlus.game.load.audio('backgroundMusic', 'assets/sounds/Level1.mp3')
+        tetrisPlus.game.load.audio('single', 'assets/sounds/TetrisPlusSingle.mp3')
+        tetrisPlus.game.load.audio('double', 'assets/sounds/TetrisPlusDouble.mp3')
+        tetrisPlus.game.load.audio('triple', 'assets/sounds/TetrisPlusTriple.mp3')
+        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TerisPlusTetris.mp3')
+        tetrisPlus.game.load.audio('gameOver', 'assets/sounds/TetrisPlusGameOver.mp3')
+        tetrisPlus.game.load.audio('PieceMoveRot', 'assets/sounds/Move_Rot_Sound.wav')
+        tetrisPlus.game.load.audio('PieceDropped', 'assets/sounds/Piece_Dropped.wav')
+        tetrisPlus.game.load.audio('ProfessorYeah', 'assets/sounds/TetrisPlusYeh.mp3')
+        tetrisPlus.game.load.audio('ProfessorClimb', 'assets/sounds/TetrisPlusEgh.mp3')
+        tetrisPlus.game.load.audio('ProfessorJump', 'assets/sounds/TetrisPlusAha.mp3')
+        tetrisPlus.game.load.audio('ProfessorFantastic', 'assets/sounds/TetrisPlusFantastic.mp3')
+        tetrisPlus.game.load.audio('ProfessorDead', 'assets/sounds/TetrisPlusOhNo.mp3')
+        tetrisPlus.game.load.audio('BombExplosion', 'assets/sounds/Explosion5.wav')
+        
+        //pause
+        tetrisPlus.game.load.image('pauseI','assets/img/pause.png');
+        
         //FONDO
         this.game.load.image('bg1', 'assets/img/Fondo1.png');
         this.game.load.image('Puzzlebg', 'assets/img/Puzzlebg.png');
@@ -115,14 +156,33 @@ tetrisPlus.gameState = {
         this.load.spritesheet('bloque', 'assets/img/squareBreaking.png', 32, 32);
     },
     create:function(){
+        //SOUNDS
+        bgSound=tetrisPlus.game.add.audio('backgroundMusic');
+        singleSound=tetrisPlus.game.add.audio('single');
+        doubleSound=tetrisPlus.game.add.audio('double');
+        tripleSound=tetrisPlus.game.add.audio('triple');
+        tetrisSound=tetrisPlus.game.add.audio('tetris');
+        gameOverSound=tetrisPlus.game.add.audio('gameOver');
+        moveRotPieceSound=tetrisPlus.game.add.audio('PieceMoveRot');
+        pieceDroppedSound=tetrisPlus.game.add.audio('PieceDropped');
+        bombExplosionSound=tetrisPlus.game.add.audio('BombExplosion');
+        ProfesorYeahSound=tetrisPlus.game.add.audio('ProfessorYeah');
+        ProfessorFantasticSound=tetrisPlus.game.add.audio('ProfessorFantastic');
+        ProfesorClimbSound=tetrisPlus.game.add.audio('ProfessorClimb');
+        ProfesorJumpSound=tetrisPlus.game.add.audio('ProfessorJump');
+        ProfesorDeadSound=tetrisPlus.game.add.audio('ProfessorDead');
+        
+        moveRotPieceSound.volume=0.2;
+        bgSound.loopFull(0.6);
         
         //VARIABLES PARA DEFINIR EL CENTRO DE CADA CELDA DEL GRID(BASADAS EN LAS PIEZAS DEL TETRIS QUE SON DE 8X8 PX)
-        
         distX=16;
         distY=distX;
         
         //MODO
         Modo = 2;
+        //pause
+        pause=false;
         
         currentLevel=0;
         Score=0;
@@ -139,13 +199,13 @@ tetrisPlus.gameState = {
         
         //MAZA 
         //new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
-        Mace = new tetrisPlus.Mace(tetrisPlus.game, ((1024 / 2) - (87) + (distX*0.5)), (800/4) -4 + distY*(3) , 0.5, 2, GridTetris);
+        Mace = new tetrisPlus.Mace(tetrisPlus.game, ((1024 / 2) - (87) + (distX*0.5)), (800/4) -4 + distY*(2) , 0.5, 2, GridTetris);
         tetrisPlus.game.add.existing(Mace);
         this.MazeFall = false;
         //Mace.startGrid(GridTetris);
                 
         //HUD
-        HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
+        HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245),0,0);
         tetrisPlus.game.add.existing(HUD);
         
         HUD.updateScore(Score);
@@ -305,15 +365,32 @@ tetrisPlus.gameState = {
         key_left=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         key_down=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+        esc=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.P);        
         key_A=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.A);
         
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
-
+        
+        this.game.time.events.loop(Phaser.Timer.SECOND, HUD.updateTime, this.HUD);
     },
     update:function(){
         //console.log(Score);
         //Drop the piece
         //console.log(destroyables.length);
+       
+        if(esc.isDown)
+            {
+                if( pause==false)
+                    {
+                        tetrisPlus.game.input.onDown.add(this.unpause, self);      
+                        imgPause=tetrisPlus.game.add.image(0, 0, 'pauseI');                         
+                        tetrisPlus.game.paused=true;
+                    }
+                else
+                    {
+                     tetrisPlus.game.paused=false;
+                    }
+              
+            }
         counter++;
         counterMace++;
         
@@ -342,6 +419,7 @@ tetrisPlus.gameState = {
         {
             if(tapL==false)
             {
+                moveRotPieceSound.play();
                 PieceActive.move(1, distX);                        
                 tapL=true;
             }
@@ -357,6 +435,7 @@ tetrisPlus.gameState = {
         {
                 if(tapR==false)
                 {
+                    moveRotPieceSound.play();
                     PieceActive.move(2, distX);                        
                     tapR=true;
                 }
@@ -381,6 +460,7 @@ tetrisPlus.gameState = {
         {
              if(tapZ==false)
              {
+                 moveRotPieceSound.play();
                  initialRot++;
                  if(initialRot>=4)
                  {
@@ -422,6 +502,9 @@ tetrisPlus.gameState = {
                 Player.body.gravity.y = 0;
 
                 //CHANGE PREFAB
+                bgSound.stop();
+                ProfesorYeahSound.play();
+                
                 PlayerVictory = new tetrisPlus.PlayerWin(tetrisPlus.game, (Player.x - 16), (Player.y - 14));
                 Player.destroy();
                 tetrisPlus.game.add.existing(PlayerVictory);
@@ -441,7 +524,7 @@ tetrisPlus.gameState = {
                 this.counterWin = 0;
                 this.flagWinFinally = false;
                 
-                //CHANGE PREFAB
+                //CHANGE PREFAB                
                 Player = new tetrisPlus.Player(tetrisPlus.game, (PlayerVictory.x + 16), (PlayerVictory.y + 14));
                 PlayerVictory.destroy();
                 tetrisPlus.game.add.existing(Player);
@@ -469,6 +552,7 @@ tetrisPlus.gameState = {
             {
                 if(Player.x < this.game.world.centerX - 8)
                 {
+                    //ProfessorFantasticSound.play();
                     this.PuertaLlegada = true;
                 }            
             }
@@ -519,6 +603,8 @@ tetrisPlus.gameState = {
                 {
                     this.explosionBomba(PieceActive.prevj1, PieceActive.previ1);
                     
+                    //SFX
+                    bombExplosionSound.play();
                     //VFX BOMBA
                     VFXBomba = new tetrisPlus.VFXBomba(tetrisPlus.game, (PieceActive.x), (PieceActive.y));
                     tetrisPlus.game.add.existing(VFXBomba);
@@ -530,6 +616,7 @@ tetrisPlus.gameState = {
                 }
                 else
                 {
+                    pieceDroppedSound.play();
                     Piecei1=PieceActive.previ1;
                     Piecej1=PieceActive.prevj1;
                     Piecei2=PieceActive.previ2;
@@ -576,6 +663,7 @@ tetrisPlus.gameState = {
         //PARAMOS ANIMACION
         if(this.PuertaLlegada == true)
         {
+           ProfessorFantasticSound.play();
             Player.ColLeft = false;
             Player.ColRight = false;
             Player.DontMove = true;
@@ -600,7 +688,7 @@ tetrisPlus.gameState = {
                 this.VFXBombaActivada = false;
             }
         }
-        
+    
     },
     
     
@@ -788,6 +876,21 @@ tetrisPlus.gameState = {
                             this.makeStaticsFall(i);
                         } 
                     }  
+            }
+         switch(contLinesToScore)
+            {
+                case 1:
+                    singleSound.play();
+                    break;
+                case 2:
+                    doubleSound.play();
+                    break;
+                case 3:
+                    tripleSound.play();
+                    break;
+                case 4:
+                    tetrisSound.play();
+                    break;    
             }
         this.computeScore(contLinesToScore);
         this.clearGrid();
@@ -1061,7 +1164,7 @@ tetrisPlus.gameState = {
     },
     destroyWithMace:function()
     {
-        console.log(Mace.currentHeightLine);
+        //console.log(Mace.currentHeightLine);
         /*for(var i=0; i<GridTetris.length; i++)
         {
             for(var j=0; j<GridTetris[i].length; j++)
@@ -1091,7 +1194,7 @@ tetrisPlus.gameState = {
         if(GridTetris[Mace.currentHeightLine+1][1]==5)
         {
             GridTetris[Mace.currentHeightLine+1][1]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+1);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+1);
             for(var t=0; t<destroyables.children.length; t++)
                         {
                             //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
@@ -1107,7 +1210,7 @@ tetrisPlus.gameState = {
         if(GridTetris[Mace.currentHeightLine+1][2]==5)
         {
             GridTetris[Mace.currentHeightLine+1][2]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+2);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+2);
             for(var t=0; t<destroyables.children.length; t++)
                         {
                             //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
@@ -1123,7 +1226,7 @@ tetrisPlus.gameState = {
         if(GridTetris[Mace.currentHeightLine+1][3]==5)
         {
             GridTetris[Mace.currentHeightLine+1][3]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+3);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+3);
             for(var t=0; t<destroyables.children.length; t++)
                         {
                             //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
@@ -1139,37 +1242,37 @@ tetrisPlus.gameState = {
         if(GridTetris[Mace.currentHeightLine+1][4]==5)
         {
             GridTetris[Mace.currentHeightLine+1][4]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+4);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+4);
         }
         if(GridTetris[Mace.currentHeightLine+1][5]==5)
         {
             GridTetris[Mace.currentHeightLine+1][5]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+5);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+5);
         }
         if(GridTetris[Mace.currentHeightLine+1][6]==5)
         {
             GridTetris[Mace.currentHeightLine+1][6]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+6);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+6);
         }
         if(GridTetris[Mace.currentHeightLine+1][7]==5)
         {
             GridTetris[Mace.currentHeightLine+1][7]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+7);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+7);
         }
         if(GridTetris[Mace.currentHeightLine+1][8]==5)
         {
             GridTetris[Mace.currentHeightLine+1][8]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+8);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+8);
         }
         if(GridTetris[Mace.currentHeightLine+1][9]==5)
         {
             GridTetris[Mace.currentHeightLine+1][9]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+9);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+9);
         }
         if(GridTetris[Mace.currentHeightLine+1][10]==5)
         {
             GridTetris[Mace.currentHeightLine+1][10]=null;
-            console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+10);
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+10);
         }
         /*for(var i=0; i<GridTetris.length; i++)
         {
@@ -1188,12 +1291,40 @@ tetrisPlus.gameState = {
     },
     CollMaceDestroyables:function()
     {
+        //1-Mirar si por encima de la linea de la sierra hay algun static y romperlo
+        for(var i=0; i<GridTetris.length; i++)
+        {
+            for(var j=0;j<GridTetris[i].length; j++)
+            {
+                if(GridTetris[i][j]==5 && i<=Mace.currentHeightLine && j!=0 && j!==11)
+                {
+                    GridTetris[i][j]=null;
+                    console.log("["+i+", "+j+"], CURRENTHEIGHTLINE: "+Mace.currentHeightLine);
+                    for(var t=0; t<destroyables.children.length; t++)
+                    {
+                        if(destroyables.children[t].starti==i && destroyables.children[t].startj==j)
+                            {
+                                console.log("ASDSDASDADS");
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                    }
+                }
+            }
+        }     
+  
         //destruir
         //activar animacion
     },
     sendDataToPHP:function()
     {
         window.location.href = "ranking.php?score=" + Score + "&modo=" + Modo; 
+    },
+    unpause:function(event)
+    {
+        imgPause.destroy();
+        tetrisPlus.game.paused=false;        
     }
 };
 

@@ -58,7 +58,10 @@ var pieceDroppedSound;
 var changelevelSound;
 
 //HUD
-var HUD
+var HUD;
+
+//Modo
+var Modo;
 
 tetrisPlus.gameStateClassic = {
     
@@ -134,6 +137,8 @@ tetrisPlus.gameStateClassic = {
         changelevelSound=tetrisPlus.game.add.audio('NewLevel');
         changelevelSound.volume=0.5;
         
+        //Modo
+        Modo = 1;
         
         bgSound.loopFull(0.6);
         
@@ -286,7 +291,9 @@ tetrisPlus.gameStateClassic = {
         key_left=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         key_down=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+        key_A=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.A);
         esc=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.P);
+        
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
         HUD.updateNextPiece(nextPiece.type);
     },
@@ -427,6 +434,12 @@ tetrisPlus.gameStateClassic = {
         
         this.seconds = Math.floor(this.time.totalElapsedSeconds());
         
+        //KEY_A
+        if(key_A.isDown)
+        {
+            this.sendDataToPHP();
+        }  
+        
     },
     createNewPiece:function(tipo)
     {
@@ -537,8 +550,7 @@ tetrisPlus.gameStateClassic = {
                         PieceActive.startGrid(GridTetris);
                         initialRot=0;
                     }
-            }
-        
+            }      
     },
     makeLines:function()
     {        
@@ -820,6 +832,10 @@ tetrisPlus.gameStateClassic = {
     {
         imgPause.destroy();
         tetrisPlus.game.paused=false;        
+    },
+    sendDataToPHP:function()
+    {
+        window.location.href = "rankingClassic.php?score=" + Score + "&modo=" + Modo; 
     }
 };
 

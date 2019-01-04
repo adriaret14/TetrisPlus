@@ -40,6 +40,7 @@ $MySQLi_CON->close();
      margin-top: 50px;
      margin-left: 25px;
      margin-right: 25px;
+    font-family: joystix;
     }
     a.button7:active{
      box-shadow:inset 0 0.6em 2em -0.3em rgba(0,0,0,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
@@ -49,6 +50,11 @@ $MySQLi_CON->close();
       display:block;
       margin:0.4em auto;
      }
+    }
+    
+    @font-face {
+    font-family: joystix;
+    src: url(assets/fonts/Font_Arcade/joystix.ttf);
     }
 </style>
 <!-- SCRIPTS -->
@@ -85,11 +91,11 @@ $MySQLi_CON->close();
                               font-family:Verdana, Geneva, sans-serif;
                               font-size:35px; background-color: #000000; padding: 150px">
     
-    <h1 style="color: white; font-weight: bold">Credits</h1>
-    <h2 style="color: white; font-weight: bold">This Game has been developed by: </h1>
-    <h3 style="color: white">Adrià Fret García</h3>
-    <h3 style="color: white">Ignacio Pérez Velasco</h3>
-    <h3 style="color: white">Martí Gómez Prunera</h3>
+    <h1 style="color: white; font-weight: bold; font-family: joystix;">Credits</h1>
+    <h2 style="color: white; font-weight: bold; font-family: joystix;">This Game has been developed by: </h1>
+    <h3 style="color: white; font-family: joystix;">Adrià Fret García</h3>
+    <h3 style="color: white; font-family: joystix;">Ignacio Pérez Velasco</h3>
+    <h3 style="color: white; font-family: joystix;">Martí Gómez Prunera</h3>
     
     <a href="home.php" class="button7">Restart</a>
     

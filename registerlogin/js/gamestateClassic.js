@@ -1,6 +1,11 @@
 var Phaser = Phaser || {};
 var tetrisPlus = tetrisPlus || {};
 
+//pause
+var pause;
+var pauseBool;
+var imgPause;
+
 var counter=0;
 var startX=4;
 var startY=1;
@@ -48,9 +53,15 @@ var doubleSound;
 var tripleSound;
 var tetrisSound;
 var gameOverSound;
+var moveRotPieceSound;
+var pieceDroppedSound;
+var changelevelSound;
 
 //HUD
-var HUD
+var HUD;
+
+//Modo
+var Modo;
 
 tetrisPlus.gameStateClassic = {
     
@@ -97,16 +108,22 @@ tetrisPlus.gameStateClassic = {
         tetrisPlus.game.load.audio('single', 'assets/sounds/TetrisPlusSingle.mp3')
         tetrisPlus.game.load.audio('double', 'assets/sounds/TetrisPlusDouble.mp3')
         tetrisPlus.game.load.audio('triple', 'assets/sounds/TetrisPlusTriple.mp3')
-        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TetrisPlusTetris.mp3')
+        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TerisPlusTetris.mp3')
         tetrisPlus.game.load.audio('gameOver', 'assets/sounds/TetrisPlusGameOver.mp3')
+        tetrisPlus.game.load.audio('PieceMoveRotate', 'assets/sounds/Move_Rot_Sound.wav')
+        tetrisPlus.game.load.audio('PieceDrop', 'assets/sounds/Piece_Dropped.wav')
+        tetrisPlus.game.load.audio('NewLevel', 'assets/sounds/ChangeLevel.wav')
         
+        //pause
+        tetrisPlus.game.load.image('pauseI','assets/img/pause.png');
         
         //FONDO
         this.game.load.image('bg1', 'assets/img/FondoClassico.png');
         this.game.load.image('Classicbg', 'assets/img/Classicbg.png');
     },
     create:function(){     
-        
+        //pause
+        pause=false;
         //SOUNDS
         bgSound=tetrisPlus.game.add.audio('backgroundMusic');
         singleSound=tetrisPlus.game.add.audio('single');
@@ -114,6 +131,14 @@ tetrisPlus.gameStateClassic = {
         tripleSound=tetrisPlus.game.add.audio('triple');
         tetrisSound=tetrisPlus.game.add.audio('tetris');
         gameOverSound=tetrisPlus.game.add.audio('gameOver');
+        moveRotPieceSound=tetrisPlus.game.add.audio('PieceMoveRotate');
+        pieceDroppedSound=tetrisPlus.game.add.audio('PieceDrop');
+        moveRotPieceSound.volume=0.2;
+        changelevelSound=tetrisPlus.game.add.audio('NewLevel');
+        changelevelSound.volume=0.5;
+        
+        //Modo
+        Modo = 1;
         
         bgSound.loopFull(0.6);
         
@@ -266,12 +291,28 @@ tetrisPlus.gameStateClassic = {
         key_left=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         key_down=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+        key_A=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.A);
+        esc=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.P);
         
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
         HUD.updateNextPiece(nextPiece.type);
     },
     update:function(){
         console.log(Score);
+         if(esc.isDown)
+            {
+                if( pause==false)
+                    {
+                        tetrisPlus.game.input.onDown.add(this.unpause, self);      
+                        imgPause=tetrisPlus.game.add.image(0, 0, 'pauseI');                         
+                        tetrisPlus.game.paused=true;
+                    }
+                else
+                    {
+                     tetrisPlus.game.paused=false;
+                    }
+              
+            }
         /*if(PrevNext!=null)
             {
                 console.log("Previous: "+PrevNext.type+", Piece: "+PieceActive.type+", Next: "+nextPiece.type);
@@ -289,6 +330,7 @@ tetrisPlus.gameStateClassic = {
         {
             if(tapL==false)
             {
+                moveRotPieceSound.play();
                 PieceActive.move(1, distX);                        
                 tapL=true;
             }
@@ -304,6 +346,7 @@ tetrisPlus.gameStateClassic = {
         {
                 if(tapR==false)
                 {
+                    moveRotPieceSound.play();
                     PieceActive.move(2, distX);                        
                     tapR=true;
                 }
@@ -328,6 +371,7 @@ tetrisPlus.gameStateClassic = {
         {
              if(tapZ==false)
              {
+                 moveRotPieceSound.play();
                  initialRot++;
                  if(initialRot>=4)
                  {
@@ -349,6 +393,7 @@ tetrisPlus.gameStateClassic = {
         //SPAWNEAR NUEVA PIEZA
         if(PieceActive.cantMoveDown)
             {
+                pieceDroppedSound.play();
                 Piecei1=PieceActive.previ1;
                 Piecej1=PieceActive.prevj1;
                 Piecei2=PieceActive.previ2;
@@ -388,6 +433,12 @@ tetrisPlus.gameStateClassic = {
             }
         
         this.seconds = Math.floor(this.time.totalElapsedSeconds());
+        
+        //KEY_A
+        if(key_A.isDown)
+        {
+            this.sendDataToPHP();
+        }  
         
     },
     createNewPiece:function(tipo)
@@ -499,8 +550,7 @@ tetrisPlus.gameStateClassic = {
                         PieceActive.startGrid(GridTetris);
                         initialRot=0;
                     }
-            }
-        
+            }      
     },
     makeLines:function()
     {        
@@ -734,6 +784,7 @@ tetrisPlus.gameStateClassic = {
         if(currentLevelLinesCleared>=(currentLevel*10)+10)
             {
                 console.log("Cambiando de nivel");
+                changelevelSound.play();
                 if(currentLevel<29)
                     {
                         currentLevel++;
@@ -752,6 +803,8 @@ tetrisPlus.gameStateClassic = {
             {
                 //TODO: Game Lost go to ranking screen
                 console.log("PARTIDA FINALIZADA");
+                bgSound.stop();
+                gameOverSound.play();
             }
     },
     computeScore:function(cont)
@@ -774,6 +827,15 @@ tetrisPlus.gameStateClassic = {
             }
         
         HUD.updateScore(Score);
+    },
+    unpause:function(event)
+    {
+        imgPause.destroy();
+        tetrisPlus.game.paused=false;        
+    },
+    sendDataToPHP:function()
+    {
+        window.location.href = "rankingClassic.php?score=" + Score + "&modo=" + Modo; 
     }
 };
 

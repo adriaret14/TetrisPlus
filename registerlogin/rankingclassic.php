@@ -22,8 +22,7 @@ $userRow=$query->fetch_array();
 <link rel="stylesheet" href="style.css" type="text/css" />
 
 <style>
-    
-    @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
+ @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
 
     div.table-title {
        display: block;
@@ -262,13 +261,13 @@ $userRow=$query->fetch_array();
             $modo = $_GET['modo'];
                     
             //COMPROBAMOS QUE EXISTA O NO LA SCORE INSERTADA
-            $userscore = $MySQLi_CON->query("SELECT * FROM score WHERE user = ".$uid." && modo = 2");
+            $userscore = $MySQLi_CON->query("SELECT * FROM score WHERE user = ".$uid." && modo = 1");
             $row_cnt = $userscore->num_rows;
     
             //EN CASO QUE YA HAYA UN SCORE AÑADIDO
             if($row_cnt >= 1)
             {
-                $userscore = $MySQLi_CON->query("SELECT score FROM score WHERE user = ".$uid." && modo = 2");
+                $userscore = $MySQLi_CON->query("SELECT score FROM score WHERE user = ".$uid." && modo = 1");
                 while($row = mysqli_fetch_array($userscore))
                 {
                     $highScore = $row['score'];
@@ -277,7 +276,7 @@ $userRow=$query->fetch_array();
                 //EN CASO QUE LA SCORE SEA MEJOR QUE LA ANTERIOR
                 if($highScore < $score)
                 {
-                     $updateScore = "UPDATE score SET score=".$score." WHERE user=".$uid." && modo = 2";
+                     $updateScore = "UPDATE score SET score=".$score." WHERE user=".$uid." && modo = 1";
                      $query = $MySQLi_CON->query($updateScore);
                 }
             }
@@ -287,7 +286,7 @@ $userRow=$query->fetch_array();
             }
 
             //RECOGEMOS DATOS
-            $result = $MySQLi_CON->query("SELECT * FROM score WHERE modo = 2 ORDER BY score DESC LIMIT 5");
+            $result = $MySQLi_CON->query("SELECT * FROM score WHERE modo = 1 ORDER BY score DESC LIMIT 5");
     
             $position = 1;
             //MOSTRAMOS TABLA

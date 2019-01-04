@@ -31,7 +31,7 @@ tetrisPlus.Player = function(game, x, y)
     this.ColLeft = false;
         
     //LIMITES PANTALLA
-    this.LimitLeft = (-81 + 16);
+    this.LimitLeft = (-81+ 16);
     this.LimitRight = (79 - 16);     
         
     //GOLPE EN LA PARED
