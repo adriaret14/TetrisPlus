@@ -20,6 +20,7 @@ var dropSpeed=80;
 var dropMaceSpeed=360;
 var realDropSpeed=dropSpeed;
 var initialRot=0;
+var nextLevel;
 
 var Piecei1;
 var Piecej1;
@@ -81,8 +82,6 @@ var VFXBomba;
 var VFXBloque;
 
 tetrisPlus.gameState = {
-    
-  
     
     init:function(){
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -560,9 +559,12 @@ tetrisPlus.gameState = {
                 }            
             }
             
+            //NIVEL AL QUE IR
+            nextLevel = 1;
+            
             //CAMBIAMOS DE NIVEL
-            this.game.state.add('main',tetrisPlus.gameState1);
-            this.game.state.start('main', Score);
+            this.game.state.add('main',tetrisPlus.loadingScreen);
+            this.game.state.start('main', Score, nextLevel);
         }
     
         //COLLISION ARRIBA (SEGUN SI A ACABO EL NIVEL O NO)

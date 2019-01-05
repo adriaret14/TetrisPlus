@@ -47,6 +47,7 @@ var MaceFall;
 var GridTetris;
 
 var Score;
+var nextLevel;
 //pause
 var pause;
 var pauseBool;
@@ -100,7 +101,8 @@ tetrisPlus.gameState1 = {
         
         //SCORE
         //this.Score = Score;
-        console.log('HEYYY' + Score);
+        //console.log('HEYYY' + Score);
+        console.log(nextLevel);
     
     },
     create:function(){        

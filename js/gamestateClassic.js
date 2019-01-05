@@ -192,6 +192,7 @@ tetrisPlus.gameStateClassic = {
             GridTetris[i]=new Array(10);
         }
         
+        console.log(nextLevel);
         
         //BORDES DEL MAPA
 
