@@ -32,7 +32,7 @@ tetrisPlus.loadingScreen = {
            switch(nextLevel)
             {
             case 1:
-                this.game.state.add('main',tetrisPlus.gameState1);
+                this.game.state.add('main',tetrisPlus.gameState4);
                 this.game.state.start('main', Score);
                 break;
             case 2:

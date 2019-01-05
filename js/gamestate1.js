@@ -291,10 +291,10 @@ tetrisPlus.gameState1 = {
         GridTetris[17][6]=5;
         GridTetris[17][7]=5;
         GridTetris[17][8]=5;
-
+        
         GridTetris[19][1]=5;
         GridTetris[19][10]=5;
-
+        
         GridTetris[20][1]=5;
         GridTetris[20][2]=5;
         GridTetris[20][3]=5;
@@ -304,7 +304,7 @@ tetrisPlus.gameState1 = {
         GridTetris[20][8]=5;
         GridTetris[20][9]=5;
         GridTetris[20][10]=5;
-
+    
         //GridTetris[21][1]=5;
         //GridTetris[21][2]=5;
         GridTetris[21][3]=5;
@@ -315,7 +315,7 @@ tetrisPlus.gameState1 = {
         GridTetris[21][8]=5;
         //GridTetris[21][9]=5;
         //GridTetris[21][10]=5;
-
+        
         GridTetris[22][1]=5;
         GridTetris[22][2]=5;
         GridTetris[22][3]=5;
