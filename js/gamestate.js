@@ -683,6 +683,10 @@ tetrisPlus.gameState = {
         
         //DIE PLAYER
         this.haveDie = this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
+        if(this.haveDie==true)
+        {
+            ProfesorDeadSound.play();
+        }
         
         //PHP
         if(key_A.isDown)
