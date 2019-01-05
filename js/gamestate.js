@@ -17,7 +17,7 @@ var tapL=false;
 var tapR=false;
 var tapZ=false;
 var dropSpeed=80;
-var dropMaceSpeed=360;
+var dropMaceSpeed=720;
 var realDropSpeed=dropSpeed;
 var initialRot=0;
 var nextLevel;

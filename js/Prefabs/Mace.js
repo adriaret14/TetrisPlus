@@ -16,7 +16,6 @@ tetrisPlus.Mace = function(game, x1, y1, startj, starti, GridTetris)
     
     this.game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.setSize(160, 30);
     //this.body.immovable = true;
 };
 

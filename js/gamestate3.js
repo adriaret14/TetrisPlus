@@ -1,0 +1,1382 @@
+var Phaser = Phaser || {};
+var tetrisPlus = tetrisPlus || {};
+
+var counter=0;
+var counterMace=0;
+var startX=4;
+var startY=1;
+var distX;
+var distY;
+var PrevNext;
+var currentPiece;
+var nextPiece;
+var PieceActive;
+var piece=new Array(4);
+var blocks=new Array();
+var tapL=false;
+var tapR=false;
+var tapZ=false;
+var dropSpeed=80;
+var dropMaceSpeed=720;
+var realDropSpeed=dropSpeed;
+var initialRot=0;
+var nextLevel;
+
+var Piecei1;
+var Piecej1;
+var Piecei2;
+var Piecej2;
+var Piecei3;
+var Piecej3;
+var Piecei4;
+var Piecej1;
+
+var destroyables;
+
+//pause
+var pause;
+var pauseBool;
+var imgPause;
+
+//PLAYER
+var Player;
+var PlayerVictory;
+var PuertaLlegada;
+var seACABO;
+
+//WIN
+var counterWin;
+
+//MAZA
+var Mace;
+var MaceFall;
+var flagClearOnDestroyMace;
+
+var GridTetris;
+var currentLevel;
+var Score;
+var contLinesToScore;
+
+//SOUNDS
+var bgSound;
+var singleSound;
+var doubleSound;
+var tripleSound;
+var tetrisSound;
+var gameOverSound;
+var moveRotPieceSound;
+var pieceDroppedSound;
+var bombExplosionSound;
+var ProfesorYeahSound;
+var ProfessorFantasticSound;
+var ProfesorClimbSound;
+var ProfesorJumpSound;
+var ProfesorDeadSound;
+
+var tetrisAchieved;
+var Modo;
+
+//VFXBOMBA
+var VFXBomba;
+
+//VFXBOMBA
+var VFXBloque;
+
+tetrisPlus.gameState3 = {
+    
+    init:function(){
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        
+        //VARIABLES FISICAS
+        this.game.physics.arcade.gravity.y = 0;
+        this.scale.pageAlignHorizontally = true;
+        this.scale.pageAlignVertically = true;
+        pauseBool=false;
+    },
+    
+    preload:function(){
+        //this.stage.backgroundColor="E7D69C";
+        //Añadimos las imagenes simples
+        tetrisPlus.game.load.image('R','assets/img/Box_Single.png');
+        tetrisPlus.game.load.image('I','assets/img/Bar_Single.png');
+        tetrisPlus.game.load.image('L','assets/img/L_Single.png');
+        tetrisPlus.game.load.image('J','assets/img/L_Inverted_Single.png');
+        tetrisPlus.game.load.image('S','assets/img/S_Single.png');
+        tetrisPlus.game.load.image('Z','assets/img/S_Inverted_Single.png');
+        tetrisPlus.game.load.image('T','assets/img/T_Single.png');
+        
+        //Añadimos las imagenes completas
+        tetrisPlus.game.load.image('R_Complete','assets/img/Box.png');
+        tetrisPlus.game.load.image('I_Complete','assets/img/Bar.png');
+        tetrisPlus.game.load.image('L_Complete','assets/img/L.png');
+        tetrisPlus.game.load.image('J_Complete','assets/img/L_Inverted.png');
+        tetrisPlus.game.load.image('S_Complete','assets/img/S.png');
+        tetrisPlus.game.load.image('Z_Complete','assets/img/S_Inverted.png');
+        tetrisPlus.game.load.image('T_Complete','assets/img/T.png');
+        
+        //Añadimos extras
+        tetrisPlus.game.load.image('MaceCompleted','assets/img/Sierra.png');
+        
+        //HUD
+         tetrisPlus.game.load.image('HUD','assets/img/HUD.png');
+         tetrisPlus.game.load.image('auxx','assets/img/puzzleAux.png');
+        
+        //SOUNDS
+        tetrisPlus.game.load.audio('backgroundMusic', 'assets/sounds/Level4.mp3')
+        tetrisPlus.game.load.audio('single', 'assets/sounds/TetrisPlusSingle.mp3')
+        tetrisPlus.game.load.audio('double', 'assets/sounds/TetrisPlusDouble.mp3')
+        tetrisPlus.game.load.audio('triple', 'assets/sounds/TetrisPlusTriple.mp3')
+        tetrisPlus.game.load.audio('tetris', 'assets/sounds/TerisPlusTetris.mp3')
+        tetrisPlus.game.load.audio('gameOver', 'assets/sounds/TetrisPlusGameOver.mp3')
+        tetrisPlus.game.load.audio('PieceMoveRot', 'assets/sounds/Move_Rot_Sound.wav')
+        tetrisPlus.game.load.audio('PieceDropped', 'assets/sounds/Piece_Dropped.wav')
+        tetrisPlus.game.load.audio('ProfessorYeah', 'assets/sounds/TetrisPlusYeh.mp3')
+        tetrisPlus.game.load.audio('ProfessorClimb', 'assets/sounds/TetrisPlusEgh.mp3')
+        tetrisPlus.game.load.audio('ProfessorJump', 'assets/sounds/TetrisPlusAha.mp3')
+        tetrisPlus.game.load.audio('ProfessorFantastic', 'assets/sounds/TetrisPlusFantastic.mp3')
+        tetrisPlus.game.load.audio('ProfessorDead', 'assets/sounds/TetrisPlusOhNo.mp3')
+        tetrisPlus.game.load.audio('BombExplosion', 'assets/sounds/Explosion5.wav')
+        
+        //pause
+        tetrisPlus.game.load.image('pauseI','assets/img/pause.png');
+        
+        //FONDO
+        this.game.load.image('bg1', 'assets/img/Fondo1.png');
+        this.game.load.image('Puzzlebg', 'assets/img/Puzzlebg.png');
+        
+        //PERSONAJE ANIMS
+        this.load.spritesheet('Player', 'assets/img/SpriteSheetPersonaje.png', 16, 16);
+        this.load.spritesheet('PlayerVictoria', 'assets/img/SpriteSheetVictoria.png', 32, 32);
+        
+        //BOMBA
+        this.load.image('bomba', 'assets/img/bomba.png');
+        
+        //VFX EXPLOSION BOMBA
+        this.load.spritesheet('explosion', 'assets/img/SpriteSheetExplosion.png', 24, 24);
+        
+        //VFX BLOQUE
+        this.load.spritesheet('bloque', 'assets/img/LineDoneYellow.png', 80, 28);
+    },
+    create:function(){
+        //SOUNDS
+        bgSound=tetrisPlus.game.add.audio('backgroundMusic');
+        singleSound=tetrisPlus.game.add.audio('single');
+        doubleSound=tetrisPlus.game.add.audio('double');
+        tripleSound=tetrisPlus.game.add.audio('triple');
+        tetrisSound=tetrisPlus.game.add.audio('tetris');
+        gameOverSound=tetrisPlus.game.add.audio('gameOver');
+        moveRotPieceSound=tetrisPlus.game.add.audio('PieceMoveRot');
+        pieceDroppedSound=tetrisPlus.game.add.audio('PieceDropped');
+        bombExplosionSound=tetrisPlus.game.add.audio('BombExplosion');
+        ProfesorYeahSound=tetrisPlus.game.add.audio('ProfessorYeah');
+        ProfessorFantasticSound=tetrisPlus.game.add.audio('ProfessorFantastic');
+        ProfesorClimbSound=tetrisPlus.game.add.audio('ProfessorClimb');
+        ProfesorJumpSound=tetrisPlus.game.add.audio('ProfessorJump');
+        ProfesorDeadSound=tetrisPlus.game.add.audio('ProfessorDead');
+        
+        moveRotPieceSound.volume=0.2;
+        bgSound.loopFull(0.6);
+        
+        //VARIABLES PARA DEFINIR EL CENTRO DE CADA CELDA DEL GRID(BASADAS EN LAS PIEZAS DEL TETRIS QUE SON DE 8X8 PX)
+        distX=16;
+        distY=distX;
+        
+        //MODO
+        Modo = 2;
+        //pause
+        pause=false;
+        
+        currentLevel=0;
+        Score=0;
+        contLinesToScore=0;
+        
+        //BACKGROUND
+        this.Puzzlebg = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,1024,800,'Puzzlebg');
+        this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');      
+        
+        //TRANSFORMACIONES
+        this.bg1.anchor.setTo(.5);
+        this.bg1.scale.setTo(2);
+        this.Puzzlebg.anchor.setTo(.5);
+        
+        //MAZA 
+        //new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
+        Mace = new tetrisPlus.Mace(tetrisPlus.game, this.game.world.centerX, (800/4) -4 + distY*(2) , 0.5, 2, GridTetris);
+        tetrisPlus.game.add.existing(Mace);
+        this.MazeFall = false;
+        this.flagClearOnDestroyMace=false;
+        //Mace.startGrid(GridTetris);
+                
+        //HUD
+        HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245),0,0);
+        tetrisPlus.game.add.existing(HUD);
+        
+        HUD.updateScore(Score);
+        
+        
+        //PREFAB PLAYER
+        //92
+        Player = new tetrisPlus.Player(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY + 50);
+        tetrisPlus.game.add.existing(Player);
+        
+        //VFX BOMBA
+        /*VFXBomba = new tetrisPlus.VFXBomba(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY);
+        tetrisPlus.game.add.existing(VFXBomba);*/
+        
+        //VFX BLOQUE
+        /*VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, this.game.world.centerX, this.game.world.centerY);
+        tetrisPlus.game.add.existing(VFXBloque);*/
+        
+        //BOMBA
+        tetrisAchieved = false;
+        
+        //COUNTER PLAYER
+        this.LastCollision = 0;
+        
+        //WIN
+        this.counterWin = 0;
+        this.finallyCollision = false;
+        this.PuertaLlegada = false;
+        this.SeACABO = false;
+        
+        /************************ FRET ********************************/
+        //CREAMOS EL GRUPO DE PIEZAS ESTATICAS
+        destroyables=tetrisPlus.game.add.group();
+        
+        //FISICAS JUEGO
+        this.game.physics.arcade.enable(destroyables);
+        
+        //CREACIÓN DEL GRID DE JUEGO
+         
+        GridTetris=new Array(30);
+        for(var i=0; i<GridTetris.length; i++)
+        {
+            GridTetris[i]=new Array(10);
+        }
+        
+        GridTetris[0][0]=5;
+        GridTetris[1][0]=5;
+        GridTetris[2][0]=5;
+        GridTetris[3][0]=5;
+        GridTetris[4][0]=5;
+        GridTetris[5][0]=5;
+        GridTetris[6][0]=5;
+        GridTetris[7][0]=5;
+        GridTetris[8][0]=5;
+        GridTetris[9][0]=5;
+        GridTetris[10][0]=5;
+        GridTetris[11][0]=5;
+        GridTetris[12][0]=5;
+        GridTetris[13][0]=5;
+        GridTetris[14][0]=5;
+        GridTetris[15][0]=5;
+        GridTetris[16][0]=5;
+        GridTetris[17][0]=5;
+        GridTetris[18][0]=5;
+        GridTetris[19][0]=5;
+        GridTetris[20][0]=5;
+        GridTetris[21][0]=5;
+        GridTetris[22][0]=5;
+        
+        GridTetris[0][11]=5;
+        GridTetris[1][11]=5;
+        GridTetris[2][11]=5;
+        GridTetris[3][11]=5;
+        GridTetris[4][11]=5;
+        GridTetris[5][11]=5;
+        GridTetris[6][11]=5;
+        GridTetris[7][11]=5;
+        GridTetris[8][11]=5;
+        GridTetris[9][11]=5;
+        GridTetris[10][11]=5;
+        GridTetris[11][11]=5;
+        GridTetris[12][11]=5;
+        GridTetris[13][11]=5;
+        GridTetris[14][11]=5;
+        GridTetris[15][11]=5;
+        GridTetris[16][11]=5;
+        GridTetris[17][11]=5;
+        GridTetris[18][11]=5;
+        GridTetris[19][11]=5;
+        GridTetris[20][11]=5;
+        GridTetris[21][11]=5;
+        GridTetris[22][11]=5;
+        GridTetris[23][11]=5;
+        GridTetris[24][11]=5;
+        GridTetris[25][11]=5;
+        GridTetris[26][11]=5;
+        GridTetris[27][11]=5;
+        GridTetris[28][11]=5;
+        GridTetris[29][11]=5;
+        
+        
+        GridTetris[14][2]=5;
+        GridTetris[14][3]=5;
+        GridTetris[14][4]=5;
+        GridTetris[14][7]=5;
+        GridTetris[14][8]=5;
+        GridTetris[14][9]=5;
+
+        GridTetris[15][2]=5;
+        GridTetris[15][9]=5;
+
+        
+        GridTetris[16][2]=5;
+        GridTetris[16][9]=5;
+
+        
+
+        GridTetris[17][2]=5;
+        GridTetris[17][9]=5;
+
+    
+
+        GridTetris[18][2]=5;
+        GridTetris[18][3]=5;
+        GridTetris[18][4]=5;
+        GridTetris[18][5]=5;
+        GridTetris[18][6]=5;
+        GridTetris[18][7]=5;
+        GridTetris[18][8]=5;
+        GridTetris[18][9]=5;
+
+        
+        GridTetris[22][1]=5;
+        GridTetris[22][2]=5;
+        GridTetris[22][3]=5;
+        GridTetris[22][4]=5;
+        GridTetris[22][5]=5;
+        GridTetris[22][6]=5;
+        GridTetris[22][7]=5;
+        GridTetris[22][8]=5;
+        GridTetris[22][9]=5;
+        GridTetris[22][10]=5;
+        
+        for(var i=0; i<GridTetris.length; i++)
+            {
+                for(var j=0; j< GridTetris[i].length; j++)
+                    {
+                        if(GridTetris[i][j]==5)
+                            {
+                                if(i<22 && (j>0 && j<11))
+                                    {
+                                      var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
+                                      destroyables.add(Static);
+                                    }
+                            }
+                    }
+            }
+
+        //ASIGNAMOS LA PIEZA MEDIANTE UN TRUE RANDOM
+        PrevNext=null;
+        this.createNewPiece("Current");
+        this.createNewPiece("Next");       
+        
+        
+        //ASIGNAMOS LOS INPUTS
+        space=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        key_right=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        key_left=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        key_down=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+        key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+        esc=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.P);        
+        key_A=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.A);
+        
+        cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
+        
+        this.game.time.events.loop(Phaser.Timer.SECOND, HUD.updateTime, this.HUD);
+    },
+    update:function(){
+        //console.log(Score);
+        //Drop the piece
+        //console.log(destroyables.length);
+       
+        if(esc.isDown)
+            {
+                if( pause==false)
+                    {
+                        tetrisPlus.game.input.onDown.add(this.unpause, self);      
+                        imgPause=tetrisPlus.game.add.image(0, 0, 'pauseI');                         
+                        tetrisPlus.game.paused=true;
+                    }
+                else
+                    {
+                     tetrisPlus.game.paused=false;
+                    }
+              
+            }
+        counter++;
+        counterMace++;
+        
+        //console.log(destroyables.children[0].PieceType);
+        if(counter>=realDropSpeed)
+        {
+            //console.log(PieceActive.cantMoveDown);
+            //console.log(PieceActive.cantMoveLeft);
+            PieceActive.move(3, distY);
+            counter=0;
+        }
+        
+        if(this.MazeFall == false)
+        {
+            if(counterMace>=dropMaceSpeed)
+            {
+                Mace.fall(distY);
+                counterMace=0;
+                //this.game.physics.arcade.overlap(Mace, destroyables, this.CollMaceDestroyables(), null, this);
+                this.CollMaceDestroyables();
+                /*if(this.flagClearOnDestroyMace==true)
+                {
+                    this.clearGrid();
+                    this.flagClearOnDestroyMace==false;
+                }*/
+                //this.destroyWithMace();
+                //this.CollMaceDestroyables();
+            
+            }
+        }
+        
+        //MOVER HACIA LA IZQUIERDA
+        if(cursores.left.isDown)
+        {
+            if(tapL==false)
+            {
+                moveRotPieceSound.play();
+                PieceActive.move(1, distX);                        
+                tapL=true;
+            }
+           
+        }
+        else 
+        {
+            tapL=false;
+        }
+        
+        //MOVER HACIA LA DERECHA
+        if(cursores.right.isDown)
+        {
+                if(tapR==false)
+                {
+                    moveRotPieceSound.play();
+                    PieceActive.move(2, distX);                        
+                    tapR=true;
+                }
+            }
+        else 
+        {
+            tapR=false;
+        }
+        
+        //ACELERAR EL DROP DE PIEZAS
+        if(cursores.down.isDown)
+        {
+            realDropSpeed=dropSpeed/8;
+        }
+        else
+        {
+            realDropSpeed=dropSpeed;
+        }
+        
+        //ROTAR LA PIEZA
+        if(key_Z.isDown)
+        {
+             if(tapZ==false)
+             {
+                 moveRotPieceSound.play();
+                 initialRot++;
+                 if(initialRot>=4)
+                 {
+                    initialRot=0;    
+                 }
+                 PieceActive.rotate(initialRot);
+                 initialRot=PieceActive.currRot;
+
+                 //console.log(initialRot);
+                 tapZ=true;
+             }
+        }
+        else
+        {
+            tapZ=false;
+        }
+        
+        //PULSAR SPACE
+        //tetrisAchieved = true;
+        if(space.isDown)
+        {
+            if(tetrisAchieved)
+            {
+                //nextPiece = new tetrisPlus.bomba(tetrisPlus.game, ((1024 / 2) - (87) + (distX*5)), (800/4) -4 + distY*(3) , 5, 3, GridTetris);
+                nextPiece = new tetrisPlus.bomba(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                //console.log("NextPiece: " + 5);
+                //console.log("NextPiece: " + 2);
+                tetrisAchieved = false;
+            }
+        }
+        
+        //SI NO HA GANADO
+        if(PlayerVictory == null)
+        {
+            //GANAR
+            if((Player.y > (this.game.world.centerY + 124)) && (Player.y < (this.game.world.centerY + 130)))
+            {
+                Player.y = this.game.world.centerY + 124;
+                Player.body.gravity.y = 0;
+
+                //CHANGE PREFAB
+                bgSound.stop();
+                ProfesorYeahSound.play();
+                
+                PlayerVictory = new tetrisPlus.PlayerWin(tetrisPlus.game, (Player.x - 16), (Player.y - 14));
+                Player.destroy();
+                tetrisPlus.game.add.existing(PlayerVictory);
+                
+                //AFTER CERT TIME
+                this.flagWinFinally = true;
+            }
+        }
+        
+        //CAER DESPUES DE GANAR
+        if(this.flagWinFinally == true)
+        {
+            this.counterWin++;
+            
+            if(this.counterWin == 36)
+            {
+                this.counterWin = 0;
+                this.flagWinFinally = false;
+                
+                //CHANGE PREFAB                
+                Player = new tetrisPlus.Player(tetrisPlus.game, (PlayerVictory.x + 16), (PlayerVictory.y + 14));
+                PlayerVictory.destroy();
+                tetrisPlus.game.add.existing(Player);
+                
+                //YA HA GANADO
+                this.flagWinFinally = false;
+                
+                //NO HAY MAS PIEZAS
+                PieceActive.destroy();
+                
+                //PARAMOS SIERRA
+                this.MazeFall = true;
+            }
+        }
+        
+        //COLLISION CON FINAL DE MAPA
+        if(Player.y >= this.game.world.centerY + 234)
+        {
+            Player.y = this.game.world.centerY + 234;
+            Player.body.gravity.y = 0;
+            this.finallyCollision = true;
+            
+            //HACIA LA PUERTA
+            if(this.PuertaLlegada == false)
+            {
+                if(Player.x < this.game.world.centerX - 8)
+                {
+                    //ProfessorFantasticSound.play();
+                    this.PuertaLlegada = true;
+                }            
+            }
+            
+            //NIVEL AL QUE IR
+            nextLevel = 1;
+            
+            //CAMBIAMOS DE NIVEL
+            this.game.state.add('main',tetrisPlus.loadingScreen);
+            this.game.state.start('main', Score, nextLevel);
+        }
+    
+        //COLLISION ARRIBA (SEGUN SI A ACABO EL NIVEL O NO)
+        if(this.finallyCollision == false)
+        {
+           this.collisionUp = this.game.physics.arcade.collide(Player, destroyables, this.collideHandler, null, this);
+        }
+        else
+        {
+            this.collisionUp = true;
+        }
+        
+        if(this.collisionUp == true)
+        {
+            //COLLISION LATERAL
+            if(Player.ColLeft == true)
+            {
+                this.game.physics.arcade.collide(Player, destroyables, this.collideLeft, null, this);
+                //this.collisionLateral = true;
+            }
+            else if(Player.ColRight == true)
+            {
+                this.game.physics.arcade.collide(Player, destroyables, this.collideRight, null, this);
+                //this.collisionLateral = true;
+            }
+            Player.DontMove = false;
+        }
+        else
+        {
+            Player.DontMove = true; 
+        }        
+        
+        //OVERLAP
+        this.game.physics.arcade.overlap(Player, destroyables, this.overlapScale, null, this);
+        //this.game.physics.arcade.overlap(Mace, destroyables, this.CollMaceDestroyables(), null, this);
+        
+        //SPAWNEAR NUEVA PIEZA
+        if(PieceActive.cantMoveDown)
+            {
+                if(PieceActive.type == "B")
+                {
+                    this.explosionBomba(PieceActive.prevj1, PieceActive.previ1);
+                    
+                    //SFX
+                    bombExplosionSound.play();
+                    //VFX BOMBA
+                    VFXBomba = new tetrisPlus.VFXBomba(tetrisPlus.game, (PieceActive.x), (PieceActive.y));
+                    tetrisPlus.game.add.existing(VFXBomba);
+                    this.VFXBombaActivada = true;
+                    
+                    PieceActive.destroy();
+                    this.createNewPiece("Next");
+                    //this.makeLines();   
+                }
+                else
+                {
+                    pieceDroppedSound.play();
+                    Piecei1=PieceActive.previ1;
+                    Piecej1=PieceActive.prevj1;
+                    Piecei2=PieceActive.previ2;
+                    Piecej2=PieceActive.prevj2;
+                    Piecei3=PieceActive.previ3;
+                    Piecej3=PieceActive.prevj3;
+                    Piecei4=PieceActive.previ4;
+                    Piecej4=PieceActive.prevj4;
+
+                    var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej1)), (800/4) -4 + distY*(Piecei1+1) , Piecej1, Piecei1, GridTetris);
+                    destroyables.add(Static);
+                     var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej2)), (800/4) -4 + distY*(Piecei2+1) , Piecej2, Piecei2, GridTetris);
+                    destroyables.add(Static);
+                     var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej3)), (800/4) -4 + distY*(Piecei3+1) , Piecej3, Piecei3, GridTetris);
+                    destroyables.add(Static);
+                     var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*Piecej4)), (800/4) -4 + distY*(Piecei4+1) , Piecej4, Piecei4, GridTetris);
+                    destroyables.add(Static);
+
+                    this.GridTetris=PieceActive.GridTetris;
+
+                    for(var i=0; i<GridTetris.length; i++)
+                    {
+                        for(var j=0; j<GridTetris[i].length; j++)
+                            {
+                                if(GridTetris[i][j]==1 || GridTetris[i][j]==2 || GridTetris[i][j]==3 || GridTetris[i][j]==4)
+                                    {
+                                        GridTetris[i][j]=5;
+                                    }
+                            }
+                    }
+
+
+                    //console.log(Piecei1+1+","+Piecej1);
+                    //console.log(GridTetris[21][5]);
+
+                    //console.log(Piecei1);
+                    PieceActive.destroy();
+                    this.createNewPiece("Next");
+                    this.makeLines();     
+                }
+            }
+        
+        this.seconds = Math.floor(this.time.totalElapsedSeconds());
+        //PARAMOS ANIMACION
+        if(this.PuertaLlegada == true)
+        {
+           ProfessorFantasticSound.play();
+            Player.ColLeft = false;
+            Player.ColRight = false;
+            Player.DontMove = true;
+        }
+        
+        //DIE PLAYER
+        this.haveDie = this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
+        if(this.haveDie==true)
+        {
+            ProfesorDeadSound.play();
+        }
+        
+        //PHP
+        if(key_A.isDown)
+        {
+            this.sendDataToPHP();
+        }
+        
+        
+        //VFX (EFECTOS VISUALES)
+        //BOMBA
+        if(this.VFXBombaActivada == true)
+        {
+            if(VFXBomba.flag == true)
+            {
+                VFXBomba.destroy();
+                this.VFXBombaActivada = false;
+            }
+        }
+             
+        
+        //LINE
+        if(this.VFXLineActivada == true)
+        {
+            if(VFXBloque.flag == true)
+            {
+                VFXBloque.destroy();
+                this.VFXLineActivada = false;
+            }
+        }
+    
+    },
+    
+    
+    //NEW FUNCTIONS
+    collideLeft:function()
+    {
+        Player.ColLeft = false;
+        Player.ColRight = true;
+    },
+    collideRight:function()
+    {
+        Player.ColLeft = true;
+        Player.ColRight = false;
+    },
+    collideUp:function(Player, destroyables)
+    {
+        //ENCIMA DE LAS PIEZAS
+        if(Player.body.touching.down && destroyables.body.touching.up)
+        {
+            Player.body.gravity.y = 0;
+        }    
+    },
+    overlapScale:function()
+    {
+        Player.y -= 1
+    },
+    loseGame:function()
+    {
+        //Flip/Flop diretion player
+        Player.Die();
+        this.MazeFall=true;
+    },
+    createNewPiece:function(tipo)
+    {
+        
+        if(tipo=="Next")
+            {
+                    PrevNext=nextPiece;
+            }
+        for(var i=0; i<GridTetris.length; i++)
+            {
+                for(var j=0; j<GridTetris[i].length; j++)
+                    {
+                        if(GridTetris[i][j]==5)
+                            {
+                                //console.log(i+","+j);
+                            }
+                    }
+            }
+        
+        currentPiece=Math.floor((Math.random() * 7) + 1);
+        //currentPiece=7;
+        switch(currentPiece)
+            {
+                case 1:
+                    if(tipo=="Current")
+                        {
+                             PieceActive = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.Bar_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    break;
+                case 2:
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.Box_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    break;
+                case 3:
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.J_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    break;
+                case 4:
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.L_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    break;
+                case 5:
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece= new tetrisPlus.S_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    break;
+                case 6:
+                    if(tipo=="Current")
+                        {
+                             PieceActive = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.Z_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    break;
+                case 7:
+                    if(tipo=="Current")
+                        {
+                            PieceActive = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    else if(tipo=="Next")
+                        {
+                            nextPiece = new tetrisPlus.T_Piece(tetrisPlus.game, ((1024 / 2) - (89) + (distX*5)), (800/4) -4 + distY*2 , 5, 2, GridTetris);
+                        }
+                    break;
+            }
+        
+        if(tipo=="Current")
+            {
+                tetrisPlus.game.add.existing(PieceActive);
+                PieceActive.startGrid(GridTetris);
+                initialRot=0;
+            }
+        else if(tipo=="Next")
+            {
+                if(PrevNext!=null)
+                    {
+                        PieceActive=PrevNext;
+                        tetrisPlus.game.add.existing(PieceActive);
+                        PieceActive.startGrid(GridTetris);
+                        initialRot=0;
+                    }
+            }
+        
+    },
+    makeLines:function()
+    {        
+        for(var i=0; i<GridTetris.length; i++)
+            {
+                if(i!=22)
+                    {
+                       if(GridTetris[i][1]==5 && GridTetris[i][2]==5 && GridTetris[i][3]==5 && GridTetris[i][4]==5 && GridTetris[i][5]==5 && GridTetris[i][6]==5 && GridTetris[i][7]==5 && GridTetris[i][8]==5 && GridTetris[i][9]==5 && GridTetris[i][10]==5)
+                        {
+                            contLinesToScore++;
+                            //console.log("BORRAR LINEA: "+i);
+                            //Borrar la linea y dropear todos los 5's de encima hacia abajo
+                            GridTetris[i][1]=null;
+                            GridTetris[i][2]=null;
+                            GridTetris[i][3]=null;
+                            GridTetris[i][4]=null;
+                            GridTetris[i][5]=null;
+                            GridTetris[i][6]=null;
+                            GridTetris[i][7]=null;
+                            GridTetris[i][8]=null;
+                            GridTetris[i][9]=null;
+                            GridTetris[i][10]=null;
+                            
+                            //VFX BLOQUE
+                            VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, ((1024 / 2) - (87) + (distX*5)), (800/4) -4 + distY*(i), GridTetris);
+                            tetrisPlus.game.add.existing(VFXBloque);
+                            
+                            VFXBloque.animationBloque();
+                            //VFXBloque.destroy();
+                            
+                            for(var j=0; j<destroyables.children.length; j++)
+                                {
+                                    //console.log("TODOS: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                                    if(destroyables.children[j].starti==i-1 && (destroyables.children[j].startj==1 || destroyables.children[j].startj==2 || destroyables.children[j].startj==3 || destroyables.children[j].startj==4 || destroyables.children[j].startj==5 || destroyables.children[j].startj==6 || destroyables.children[j].startj==7 || destroyables.children[j].startj==8 || destroyables.children[j].startj==9 || destroyables.children[j].startj==10))
+                                        {
+                                            //console.log("ELIMINA: "+destroyables.children[j].starti+","+destroyables.children[j].startj);
+                                            var aux=destroyables.children[j];
+                                            //destroyables.remove(aux);
+                                            //aux.destroy;
+                                            aux.kill();
+                                            //aux.destroy;
+                                        }
+                                }
+                            
+                            this.makeStaticsFall(i);
+                        } 
+                    }  
+            }
+         switch(contLinesToScore)
+            {
+                case 1:
+                    singleSound.play();
+                    break;
+                case 2:
+                    doubleSound.play();
+                    break;
+                case 3:
+                    tripleSound.play();
+                    break;
+                case 4:
+                    tetrisSound.play();
+                    break;    
+            }
+        this.computeScore(contLinesToScore);
+        this.clearGrid();
+        
+        //this.VFXLineActivada = true;
+        
+    },
+    makeStaticsFall:function(row)
+    {
+        //console.log("Bajar las siguientes piezas: "+row);
+        //console.log(GridTetris.length-1);
+        for(var i=GridTetris.length-1; i>=0; i--)
+        {
+            for(var j=0; j<GridTetris[i].length; j++)
+            {
+                //if(GridTetris[i][j]==5 && (j>0 && j<11))
+                if(i<row && GridTetris[i][j]==5 && (j>0 && j<11))
+                {
+                    //console.log(i+","+j);
+                    this.makeSingleFall(i, j);
+                }
+            }
+        }
+    },
+    makeSingleFall:function(row, col)
+    {
+        for(var cont=0; cont<destroyables.length; cont++)
+            {
+                if(destroyables.children[cont].starti==row)
+                    {
+                        //console.log(destroyables.children[cont].PieceType);
+                    }
+            }
+        GridTetris[row][col]=null;
+        GridTetris[row+1][col]=5;
+        
+        for(var j=0; j<destroyables.children.length; j++)
+            {
+                if(destroyables.children[j].starti!=22)
+                    {
+                        destroyables.children[j].kill();
+                    }
+                
+                //if(destroyables.children[j].starti==row && destroyables.children[j].startj==col)
+                    //{
+                        //destroyables.children[j].kill();
+                        //console.log("Previous: "+destroyables.children[j].y+"//"+destroyables.children[j].starti);
+                        //destroyables.children[j].starti+=1;
+                        //destroyables.children[j].y+=16;
+                        //destroyables.children[j].moveSingle(distY);
+                        //console.log("Updated: "+destroyables.children[j].y+"//"+destroyables.children[j].starti);
+                    //}
+            }
+        
+    },
+    clearGrid:function()
+    {
+        console.log("Limpia");
+        for(var i=GridTetris.length-1; i>=0; i--)
+        {
+            for(var j=0; j<GridTetris[i].length; j++)
+            {
+                if(GridTetris[i][j]==5 && (j>0 && j<11) && i!=22)
+                {
+                    //console.log(i+","+j);
+                    var Static= new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
+                    destroyables.add(Static);
+                }
+            }
+        }
+    },
+    computeScore:function(cont)
+    {
+        //console.log("Entra  "+cont);
+        switch (cont)
+            {
+                case 1:
+                    Score+=40*(currentLevel+1);
+                    break;
+                case 2:
+                    Score+=100*(currentLevel+1);
+                    break;
+                case 3:
+                    Score+=300*(currentLevel+1);
+                    break;
+                case 4:
+                    //TETRIS!!!!
+                    Score+=1200*(currentLevel+1);
+                    tetrisAchieved = true;
+                    break;
+            }
+        contLinesToScore=0;
+        HUD.updateScore(Score);
+    },
+    explosionBomba:function(x, y)
+    {   
+        /*console.log("A: "+GridTetris[y][x]);
+        console.log("B: "+GridTetris[y+1][x]);
+        console.log("C: "+GridTetris[y+2][x]);
+        console.log("D: "+GridTetris[y][x+1]);
+        console.log("E: "+GridTetris[y+1][x]);
+        console.log("F: "+GridTetris[y+2][x]);*/
+        //console.log("Originales: "+y+", "+x);
+        
+        var yB;
+        var xB;
+        
+        for(var i=0; i<GridTetris.length; i++)
+            {
+                for(var j=0; j<GridTetris[i].length; j++)
+                    {
+                        if(GridTetris[i][j]==6)
+                            {
+                                 //console.log("Bomba: "+i+", "+j);
+                                 yB=i;
+                                 xB=x;
+                            }
+                    }
+            }
+        //console.log("BombaB: "+(y+1)+", "+x+" // "+GridTetris[y+1][x]);
+        
+        //Debajo
+        if(GridTetris[yB+1][xB]==5)
+        {
+            //console.log("He de borrar el de abajo");
+            GridTetris[yB+1][xB]=null;
+            
+            
+            for(var j=0; j<destroyables.children.length; j++)
+            {
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                if(destroyables.children[j].starti==(yB) && destroyables.children[j].startj==xB)
+                {
+                    //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    var aux=destroyables.children[j];
+                    //aux.destroy;
+                    aux.kill();
+                }
+            }
+        }
+        //Derecha
+        if(GridTetris[yB][xB+1]==5)
+        {
+            //console.log("He de borrar el de abajo");
+            GridTetris[yB][xB+1]=null;
+            
+            
+            for(var j=0; j<destroyables.children.length; j++)
+            {
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                if(destroyables.children[j].starti==(yB-1) && destroyables.children[j].startj==xB+1)
+                {
+                    //console.log("ELIMINA DEBAJO: "+(yB-1)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    var aux=destroyables.children[j];
+                    //aux.destroy;
+                    aux.kill();
+                }
+            }
+        }
+        //Izquierda
+        if(GridTetris[yB][xB-1]==5)
+        {
+            //console.log("He de borrar el de abajo");
+            GridTetris[yB][xB-1]=null;
+            
+            
+            for(var j=0; j<destroyables.children.length; j++)
+            {
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                if(destroyables.children[j].starti==(yB-1) && destroyables.children[j].startj==xB-1)
+                {
+                    //console.log("ELIMINA DEBAJO: "+(yB-1)+", "+(xB-1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    var aux=destroyables.children[j];
+                    //aux.destroy;
+                    aux.kill();
+                }
+            }
+        }
+        //Arriba
+        if(GridTetris[yB-1][xB]==5)
+        {
+            //console.log("He de borrar el de abajo");
+            GridTetris[yB-1][xB]=null;
+            
+            
+            for(var j=0; j<destroyables.children.length; j++)
+            {
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                if(destroyables.children[j].starti==(yB-2) && destroyables.children[j].startj==xB)
+                {
+                    //console.log("ELIMINA DEBAJO: "+(yB-2)+", "+(xB)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    var aux=destroyables.children[j];
+                    //aux.destroy;
+                    aux.kill();
+                }
+            }
+        }
+        //Arriba izquierda
+        if(GridTetris[yB-1][xB-1]==5)
+        {
+            //console.log("He de borrar el de abajo");
+            GridTetris[yB-1][xB-1]=null;
+            
+            
+            for(var j=0; j<destroyables.children.length; j++)
+            {
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                if(destroyables.children[j].starti==(yB-2) && destroyables.children[j].startj==xB-1)
+                {
+                    //console.log("ELIMINA DEBAJO: "+(yB-2)+", "+(xB-1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    var aux=destroyables.children[j];
+                    //aux.destroy;
+                    aux.kill();
+                }
+            }
+        }
+        //Arriba derecha
+        if(GridTetris[yB-1][xB+1]==5)
+        {
+            //console.log("He de borrar el de abajo");
+            GridTetris[yB-1][xB+1]=null;
+            
+            
+            for(var j=0; j<destroyables.children.length; j++)
+            {
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                if(destroyables.children[j].starti==(yB-2) && destroyables.children[j].startj==xB+1)
+                {
+                    //console.log("ELIMINA DEBAJO: "+(yB-2)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    var aux=destroyables.children[j];
+                    //aux.destroy;
+                    aux.kill();
+                }
+            }
+        }
+        //Debajo izquierda
+        if(GridTetris[yB+1][xB-1]==5)
+        {
+            //console.log("He de borrar el de abajo");
+            GridTetris[yB+1][xB-1]=null;
+            
+            
+            for(var j=0; j<destroyables.children.length; j++)
+            {
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                if(destroyables.children[j].starti==(yB) && destroyables.children[j].startj==xB-1)
+                {
+                    //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB-1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    var aux=destroyables.children[j];
+                    //aux.destroy;
+                    aux.kill();
+                }
+            }
+        }
+        //Debajo derecha
+        if(GridTetris[yB+1][xB+1]==5)
+        {
+            //console.log("He de borrar el de abajo");
+            GridTetris[yB+1][xB+1]=null;
+            
+            
+            for(var j=0; j<destroyables.children.length; j++)
+            {
+                //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                if(destroyables.children[j].starti==(yB) && destroyables.children[j].startj==xB+1)
+                {
+                    //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                    var aux=destroyables.children[j];
+                    //aux.destroy;
+                    aux.kill();
+                }
+            }
+        }
+    },
+    destroyWithMace:function()
+    {
+        //console.log(Mace.currentHeightLine);
+        /*for(var i=0; i<GridTetris.length; i++)
+        {
+            for(var j=0; j<GridTetris[i].length; j++)
+            {
+                if(GridTetris[i][j]==5 && i<=Mace.currentHeightLine)
+                {
+                    if((j>0 && j<10) && i<22)
+                    {
+                        GridTetris[i][j]=null;
+                        console.log("ROMPER: "+i+", "+j);
+                        for(var t=0; t<destroyables.children.length; t++)
+                        {
+                            //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                            if(destroyables.children[t].starti==i && destroyables.children[t].startj==j)
+                            {
+                                //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                        }
+                    }
+                }
+            }
+        }*/
+        
+        if(GridTetris[Mace.currentHeightLine+1][1]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][1]=null;
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+1);
+            for(var t=0; t<destroyables.children.length; t++)
+                        {
+                            //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                            if(destroyables.children[t].starti==Mace.currentHeightLine+1 && destroyables.children[t].startj==1)
+                            {
+                                //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                        }
+        }
+        if(GridTetris[Mace.currentHeightLine+1][2]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][2]=null;
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+2);
+            for(var t=0; t<destroyables.children.length; t++)
+                        {
+                            //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                            if(destroyables.children[t].starti==Mace.currentHeightLine+1 && destroyables.children[t].startj==2)
+                            {
+                                //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                        }
+        }
+        if(GridTetris[Mace.currentHeightLine+1][3]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][3]=null;
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+3);
+            for(var t=0; t<destroyables.children.length; t++)
+                        {
+                            //console.log("Probando: "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                            if(destroyables.children[t].starti==Mace.currentHeightLine+1 && destroyables.children[t].startj==3)
+                            {
+                                //console.log("ELIMINA DEBAJO: "+(yB)+", "+(xB+1)+" /// "+destroyables.children[j].starti+", "+destroyables.children[j].startj);
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                        }
+        }
+        if(GridTetris[Mace.currentHeightLine+1][4]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][4]=null;
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+4);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][5]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][5]=null;
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+5);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][6]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][6]=null;
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+6);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][7]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][7]=null;
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+7);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][8]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][8]=null;
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+8);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][9]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][9]=null;
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+9);
+        }
+        if(GridTetris[Mace.currentHeightLine+1][10]==5)
+        {
+            GridTetris[Mace.currentHeightLine+1][10]=null;
+            //console.log("ROMPER: "+(Mace.currentHeightLine+1)+", "+10);
+        }
+        /*for(var i=0; i<GridTetris.length; i++)
+        {
+            for(var j=0; j<GridTetris[i].length; j++)
+            {
+                if(i=Mace.currentHeightLine+1)
+                {
+                    if(GridTetris[i][j]==5 && (j>0 && j<11) && i<22)
+                     {
+                         //Destruir las piezas estaticas
+                         console.log("MaceHeight: "+Mace.currentHeightLine+" // "+i+", "+j);
+                     }
+                }
+            }
+        }*/
+    },
+    CollMaceDestroyables:function()
+    {
+        //1-Mirar si por encima de la linea de la sierra hay algun static y romperlo
+        /*for(var i=0; i<GridTetris.length; i++)
+        {
+            for(var j=0;j<GridTetris[i].length; j++)
+            {
+                if(GridTetris[i][j]==5 && i<=Mace.currentHeightLine && j!=0 && j!==11)
+                {
+                    GridTetris[i][j]=null;
+                    console.log("["+i+", "+j+"], CURRENTHEIGHTLINE: "+Mace.currentHeightLine);
+                    for(var t=0; t<destroyables.children.length; t++)
+                    {
+                        if(destroyables.children[t].starti==i && destroyables.children[t].startj==j)
+                            {
+                                console.log("ASDSDASDADS");
+                                var aux=destroyables.children[t];
+                                //aux.destroy;
+                                aux.kill();
+                            }
+                    }
+                }
+            }
+        }*/
+        
+        //this.clearGrid();
+        //destruir
+        //activar animacion
+    },
+    sendDataToPHP:function()
+    {
+        window.location.href = "ranking.php?score=" + Score + "&modo=" + Modo; 
+    },
+    unpause:function(event)
+    {
+        imgPause.destroy();
+        tetrisPlus.game.paused=false;        
+    }
+};
+
+ 
+
+
