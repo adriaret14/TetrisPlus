@@ -214,20 +214,42 @@ tetrisPlus.gameState2 = {
         GridTetris[19][10]=5;
         GridTetris[19][11]=5;
         
-        GridTetris[20][1]=5;
-        GridTetris[20][10]=5;
-    
-        /*GridTetris[21][1]=5;
-        GridTetris[21][2]=5;
-        GridTetris[21][3]=5;
-        GridTetris[21][4]=5;*/
-        //GridTetris[21][5]=5;
-        /*GridTetris[21][6]=5;
+        GridTetris[17][4]=5;
+        GridTetris[17][5]=5;
+        GridTetris[17][6]=5;
+        GridTetris[17][7]=5;
+
+        GridTetris[18][3]=5;
+        GridTetris[18][4]=5;
+        GridTetris[18][5]=5;
+        GridTetris[18][6]=5;
+        GridTetris[18][7]=5;
+        GridTetris[18][8]=5;
+
+        GridTetris[19][2]=5;
+        GridTetris[19][3]=5;
+        GridTetris[19][4]=5;
+        GridTetris[19][5]=5;
+        GridTetris[19][6]=5;
+        GridTetris[19][7]=5;
+        GridTetris[19][8]=5;
+        GridTetris[19][9]=5;
+
+
+
+        GridTetris[20][3]=5;
+        GridTetris[20][4]=5;
+        GridTetris[20][5]=5;
+        GridTetris[20][6]=5;
+        GridTetris[20][7]=5;
+        GridTetris[20][8]=5;
+
+        GridTetris[21][4]=5;
+        GridTetris[21][5]=5;
+        GridTetris[21][6]=5;
         GridTetris[21][7]=5;
-        GridTetris[21][8]=5;
-        GridTetris[21][9]=5;
-        GridTetris[21][10]=5;*/
-        
+
+
         GridTetris[22][1]=5;
         GridTetris[22][2]=5;
         GridTetris[22][3]=5;
