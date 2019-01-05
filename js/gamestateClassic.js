@@ -120,6 +120,9 @@ tetrisPlus.gameStateClassic = {
         //FONDO
         this.game.load.image('bg1', 'assets/img/FondoClassico.png');
         this.game.load.image('Classicbg', 'assets/img/Classicbg.png');
+        
+        //VFX BLOQUE
+        this.load.spritesheet('bloque', 'assets/img/LineDoneYellow.png', 80, 28);
     },
     create:function(){     
         //pause
@@ -573,6 +576,11 @@ tetrisPlus.gameStateClassic = {
                             GridTetris[i][8]=null;
                             GridTetris[i][9]=null;
                             GridTetris[i][10]=null;
+                            
+                            VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, ((1024 / 2) - (87) + (distX*5)), (800/4) -4 + distY*(i), GridTetris);
+                            tetrisPlus.game.add.existing(VFXBloque);
+                            
+                            VFXBloque.animationBloque();
 
                             for(var j=0; j<destroyables.children.length; j++)
                                 {
