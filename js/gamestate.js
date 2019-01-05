@@ -50,6 +50,7 @@ var counterWin;
 //MAZA
 var Mace;
 var MaceFall;
+var flagClearOnDestroyMace;
 
 var GridTetris;
 var currentLevel;
@@ -204,6 +205,7 @@ tetrisPlus.gameState = {
         Mace = new tetrisPlus.Mace(tetrisPlus.game, this.game.world.centerX, (800/4) -4 + distY*(2) , 0.5, 2, GridTetris);
         tetrisPlus.game.add.existing(Mace);
         this.MazeFall = false;
+        this.flagClearOnDestroyMace=false;
         //Mace.startGrid(GridTetris);
                 
         //HUD
@@ -410,6 +412,13 @@ tetrisPlus.gameState = {
             {
                 Mace.fall(distY);
                 counterMace=0;
+                //this.game.physics.arcade.overlap(Mace, destroyables, this.CollMaceDestroyables(), null, this);
+                this.CollMaceDestroyables();
+                /*if(this.flagClearOnDestroyMace==true)
+                {
+                    this.clearGrid();
+                    this.flagClearOnDestroyMace==false;
+                }*/
                 //this.destroyWithMace();
                 //this.CollMaceDestroyables();
             
@@ -481,7 +490,7 @@ tetrisPlus.gameState = {
         }
         
         //PULSAR SPACE
-        tetrisAchieved = true;
+        //tetrisAchieved = true;
         if(space.isDown)
         {
             if(tetrisAchieved)
@@ -676,6 +685,10 @@ tetrisPlus.gameState = {
         
         //DIE PLAYER
         this.haveDie = this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
+        if(this.haveDie==true)
+        {
+            ProfesorDeadSound.play();
+        }
         
         //PHP
         if(key_A.isDown)
@@ -968,6 +981,7 @@ tetrisPlus.gameState = {
     },
     clearGrid:function()
     {
+        console.log("Limpia");
         for(var i=GridTetris.length-1; i>=0; i--)
         {
             for(var j=0; j<GridTetris[i].length; j++)
