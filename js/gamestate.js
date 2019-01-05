@@ -77,6 +77,9 @@ var Modo;
 //VFXBOMBA
 var VFXBomba;
 
+//VFXBOMBA
+var VFXBloque;
+
 tetrisPlus.gameState = {
     
   
@@ -153,7 +156,7 @@ tetrisPlus.gameState = {
         this.load.spritesheet('explosion', 'assets/img/SpriteSheetExplosion.png', 24, 24);
         
         //VFX BLOQUE
-        this.load.spritesheet('bloque', 'assets/img/squareBreaking.png', 32, 32);
+        this.load.spritesheet('bloque', 'assets/img/LineDoneYellow.png', 80, 28);
     },
     create:function(){
         //SOUNDS
@@ -199,7 +202,7 @@ tetrisPlus.gameState = {
         
         //MAZA 
         //new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
-        Mace = new tetrisPlus.Mace(tetrisPlus.game, ((1024 / 2) - (87) + (distX*0.5)), (800/4) -4 + distY*(2) , 0.5, 2, GridTetris);
+        Mace = new tetrisPlus.Mace(tetrisPlus.game, this.game.world.centerX, (800/4) -4 + distY*(2) , 0.5, 2, GridTetris);
         tetrisPlus.game.add.existing(Mace);
         this.MazeFall = false;
         //Mace.startGrid(GridTetris);
@@ -251,7 +254,6 @@ tetrisPlus.gameState = {
             GridTetris[i]=new Array(10);
         }
         
-
         GridTetris[0][0]=5;
         GridTetris[1][0]=5;
         GridTetris[2][0]=5;
@@ -410,7 +412,8 @@ tetrisPlus.gameState = {
                 Mace.fall(distY);
                 counterMace=0;
                 //this.destroyWithMace();
-                
+                //this.CollMaceDestroyables();
+            
             }
         }
         
@@ -594,7 +597,7 @@ tetrisPlus.gameState = {
         
         //OVERLAP
         this.game.physics.arcade.overlap(Player, destroyables, this.overlapScale, null, this);
-        this.game.physics.arcade.overlap(Mace, destroyables, this.CollMaceDestroyables(), null, this);
+        //this.game.physics.arcade.overlap(Mace, destroyables, this.CollMaceDestroyables(), null, this);
         
         //SPAWNEAR NUEVA PIEZA
         if(PieceActive.cantMoveDown)
@@ -680,12 +683,24 @@ tetrisPlus.gameState = {
         
         
         //VFX (EFECTOS VISUALES)
+        //BOMBA
         if(this.VFXBombaActivada == true)
         {
             if(VFXBomba.flag == true)
             {
                 VFXBomba.destroy();
                 this.VFXBombaActivada = false;
+            }
+        }
+             
+        
+        //LINE
+        if(this.VFXLineActivada == true)
+        {
+            if(VFXBloque.flag == true)
+            {
+                VFXBloque.destroy();
+                this.VFXLineActivada = false;
             }
         }
     
@@ -856,8 +871,11 @@ tetrisPlus.gameState = {
                             GridTetris[i][10]=null;
                             
                             //VFX BLOQUE
-                            VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, GridTetris[i], GridTetris[1], GridTetris);
+                            VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, ((1024 / 2) - (87) + (distX*5)), (800/4) -4 + distY*(i), GridTetris);
                             tetrisPlus.game.add.existing(VFXBloque);
+                            
+                            VFXBloque.animationBloque();
+                            //VFXBloque.destroy();
                             
                             for(var j=0; j<destroyables.children.length; j++)
                                 {
@@ -894,6 +912,8 @@ tetrisPlus.gameState = {
             }
         this.computeScore(contLinesToScore);
         this.clearGrid();
+        
+        //this.VFXLineActivada = true;
         
     },
     makeStaticsFall:function(row)
@@ -1292,7 +1312,7 @@ tetrisPlus.gameState = {
     CollMaceDestroyables:function()
     {
         //1-Mirar si por encima de la linea de la sierra hay algun static y romperlo
-        for(var i=0; i<GridTetris.length; i++)
+        /*for(var i=0; i<GridTetris.length; i++)
         {
             for(var j=0;j<GridTetris[i].length; j++)
             {
@@ -1312,8 +1332,9 @@ tetrisPlus.gameState = {
                     }
                 }
             }
-        }     
-  
+        }*/
+        
+        //this.clearGrid();
         //destruir
         //activar animacion
     },
