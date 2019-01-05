@@ -35,16 +35,12 @@ tetrisPlus.HUD = function(game, x1, y1,mins,seconds)
         fill: "#000000",
         align: "center"
     });
-    textTime = game.add.text(x1+120, y1+390, "Time", {
+    textTime = game.add.text(x1+120, y1+270, "Time", {
         font: "35px Revalia",
         fill: "#000000",
         align: "center"
     });
-    this.textBestTime = game.add.text(x1+120, y1+270, "BTime", {
-        font: "35px Revalia",
-        fill: "#000000",
-        align: "center"
-    });
+   
 };
 
 tetrisPlus.HUD.prototype = Object.create(Phaser.Sprite.prototype);
@@ -76,10 +72,6 @@ tetrisPlus.HUD.prototype.updateTime=function()
     
 };
 
-tetrisPlus.HUD.prototype.updateBestTime=function(minute,seconds)
-{ 
-    this.textBestTime.setText( minute + " : " + seconds);
-};
 
 
 
