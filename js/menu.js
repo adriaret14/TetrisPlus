@@ -47,7 +47,7 @@ tetrisPlus.menuState = {
     openClassicMode:function()
     {
         bgSound.stop();
-        this.game.state.add('main', tetrisPlus.loadingScreen);
+        this.game.state.add('main', tetrisPlus.gameStateClassic);
         this.game.state.start('main');
     },
     openPuzzleMode:function()

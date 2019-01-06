@@ -574,7 +574,7 @@ tetrisPlus.gameState = {
             }
             
             //NIVEL AL QUE IR
-            nextLevel = 3;
+            nextLevel = 1;
             
             //CAMBIAMOS DE NIVEL
             this.game.state.add('main', tetrisPlus.loadingScreen);
