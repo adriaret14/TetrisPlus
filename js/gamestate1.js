@@ -77,6 +77,9 @@ var VFXBomba;
 //VFXBOMBA
 var VFXBloque;
 
+var seconds;
+var mins;
+
 tetrisPlus.gameState1 = {
     
     init:function(){
@@ -174,16 +177,19 @@ tetrisPlus.gameState1 = {
         
         
         currentLevel=0;
-        Score=0;
+        //Score=0;
         contLinesToScore=0;
         
         
         //BACKGROUND
         this.Puzzlebg = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,1024,800,'Puzzlebg');
         this.bg1 = this.game.add.tileSprite(this.game.world.centerX,this.game.world.centerY,119,272,'bg1');
-         //HUD
-        HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245));
-        tetrisPlus.game.add.existing(HUD);        
+        
+        //HUD
+        HUD = new tetrisPlus.HUD(tetrisPlus.game, (this.game.world.centerX+125), (this.game.world.centerY - 245), 0, 0);
+        tetrisPlus.game.add.existing(HUD);
+        HUD.updateScore(Score);
+        HUD.updateTime();
         pause=false;
         //TRANSFORMACIONES
         this.bg1.anchor.setTo(.5);
@@ -540,7 +546,7 @@ tetrisPlus.gameState1 = {
             }
             
             //NIVEL AL QUE IR
-            nextLevel = 1;
+            nextLevel = 2;
             
             //CAMBIAMOS DE NIVEL
             this.game.state.add('main',tetrisPlus.loadingScreen);
@@ -657,14 +663,15 @@ tetrisPlus.gameState1 = {
         this.haveDie = this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
         if(this.haveDie==true)
         {
+            this.sendDataToPHP();
             ProfesorDeadSound.play();
         }
         
         //PHP
-        if(key_A.isDown)
+        /*if(key_A.isDown)
         {
             this.sendDataToPHP();
-        }
+        }*/
         
         
         //VFX (EFECTOS VISUALES)

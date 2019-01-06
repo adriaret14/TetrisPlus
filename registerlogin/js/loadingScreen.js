@@ -3,8 +3,6 @@ var tetrisPlus = tetrisPlus || {};
 
 var nextLevel;
 var Score;
-var seconds;
-var mins;
 var ModoPuzzle;
 var ModoClassic;
 
@@ -21,7 +19,7 @@ tetrisPlus.loadingScreen = {
     },
     
     create:function(){
-        this.stage.backgroundColor="000000";
+        //this.stage.backgroundColor="000000";
         this.bg1 = this.game.add.tileSprite(0 ,0, 1057, 636,'bgLoadingScreen');
         
         //COUNTER NEXT LEVEL
@@ -40,19 +38,19 @@ tetrisPlus.loadingScreen = {
             {
             case 1:
                 this.game.state.add('main',tetrisPlus.gameState1);
-                this.game.state.start('main', Score, seconds, mins);
+                this.game.state.start('main', Score);
                 break;
             case 2:
                 this.game.state.add('main',tetrisPlus.gameState2);
-                this.game.state.start('main', Score, seconds, mins);
+                this.game.state.start('main', Score);
                 break;
             case 3:
                 this.game.state.add('main',tetrisPlus.gameState3);
-                this.game.state.start('main', Score, seconds, mins);
+                this.game.state.start('main', Score);
                 break;
             case 4:
                 this.game.state.add('main',tetrisPlus.gameState4);
-                this.game.state.start('main', Score, seconds, mins);
+                this.game.state.start('main', Score);
                 break;
             case 5:
                 this.sendDataToPHP();

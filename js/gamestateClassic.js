@@ -811,6 +811,12 @@ tetrisPlus.gameStateClassic = {
         if(GridTetris[5][1]==5 || GridTetris[5][2]==5 || GridTetris[5][3]==5 || GridTetris[5][4]==5 || GridTetris[5][5]==5 || GridTetris[5][6]==5 || GridTetris[5][7]==5 || GridTetris[5][8]==5 || GridTetris[5][9]==5 || GridTetris[5][10]==5)
             {
                 //TODO: Game Lost go to ranking screen
+                nextLevel = 6;
+                
+                //CAMBIAMOS DE NIVEL
+                this.game.state.add('main',tetrisPlus.loadingScreen);
+                this.game.state.start('main', Score);
+                
                 console.log("PARTIDA FINALIZADA");
                 bgSound.stop();
                 gameOverSound.play();

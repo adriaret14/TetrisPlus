@@ -5,6 +5,7 @@ tetrisPlus.Mace = function(game, x1, y1, startj, starti, GridTetris)
 {
     Phaser.Sprite.call(this, game, x1, y1, 'MaceCompleted');
     this.scale.setTo(2);
+    this.anchor.setTo(.5);
     this.x1=x1;
     this.y1=y1;
     this.starti=starti;
@@ -15,7 +16,8 @@ tetrisPlus.Mace = function(game, x1, y1, startj, starti, GridTetris)
     
     this.game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
-    this.body.immovable = true;
+    this.body.setSize(160, 30);
+    //this.body.immovable = true;
 };
 
 tetrisPlus.Mace.prototype = Object.create(Phaser.Sprite.prototype);

@@ -20,6 +20,7 @@ var dropSpeed=80;
 var dropMaceSpeed=360;
 var realDropSpeed=dropSpeed;
 var initialRot=0;
+var nextLevel;
 
 var Piecei1;
 var Piecej1;
@@ -49,6 +50,7 @@ var counterWin;
 //MAZA
 var Mace;
 var MaceFall;
+var flagClearOnDestroyMace;
 
 var GridTetris;
 var currentLevel;
@@ -77,9 +79,14 @@ var Modo;
 //VFXBOMBA
 var VFXBomba;
 
+//VFXBOMBA
+var VFXBloque;
+
+//SECONDS
+var seconds;
+var mins;
+
 tetrisPlus.gameState = {
-    
-  
     
     init:function(){
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -153,7 +160,7 @@ tetrisPlus.gameState = {
         this.load.spritesheet('explosion', 'assets/img/SpriteSheetExplosion.png', 24, 24);
         
         //VFX BLOQUE
-        this.load.spritesheet('bloque', 'assets/img/squareBreaking.png', 32, 32);
+        this.load.spritesheet('bloque', 'assets/img/LineDoneYellow.png', 80, 28);
     },
     create:function(){
         //SOUNDS
@@ -199,9 +206,10 @@ tetrisPlus.gameState = {
         
         //MAZA 
         //new tetrisPlus.R_Single(tetrisPlus.game, ((1024 / 2) - (87) + (distX*j)), (800/4) -4 + distY*(i) , j, i-1, GridTetris);
-        Mace = new tetrisPlus.Mace(tetrisPlus.game, ((1024 / 2) - (87) + (distX*0.5)), (800/4) -4 + distY*(2) , 0.5, 2, GridTetris);
+        Mace = new tetrisPlus.Mace(tetrisPlus.game, this.game.world.centerX, (800/4) -4 + distY*(2) , 0.5, 2, GridTetris);
         tetrisPlus.game.add.existing(Mace);
         this.MazeFall = false;
+        this.flagClearOnDestroyMace=false;
         //Mace.startGrid(GridTetris);
                 
         //HUD
@@ -251,7 +259,6 @@ tetrisPlus.gameState = {
             GridTetris[i]=new Array(10);
         }
         
-
         GridTetris[0][0]=5;
         GridTetris[1][0]=5;
         GridTetris[2][0]=5;
@@ -367,6 +374,7 @@ tetrisPlus.gameState = {
         key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
         esc=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.P);        
         key_A=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.A);
+        key_W=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.W);
         
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
         
@@ -409,8 +417,16 @@ tetrisPlus.gameState = {
             {
                 Mace.fall(distY);
                 counterMace=0;
+                //this.game.physics.arcade.overlap(Mace, destroyables, this.CollMaceDestroyables(), null, this);
+                this.CollMaceDestroyables();
+                /*if(this.flagClearOnDestroyMace==true)
+                {
+                    this.clearGrid();
+                    this.flagClearOnDestroyMace==false;
+                }*/
                 //this.destroyWithMace();
-                
+                //this.CollMaceDestroyables();
+            
             }
         }
         
@@ -479,7 +495,7 @@ tetrisPlus.gameState = {
         }
         
         //PULSAR SPACE
-        tetrisAchieved = true;
+        //tetrisAchieved = true;
         if(space.isDown)
         {
             if(tetrisAchieved)
@@ -557,9 +573,16 @@ tetrisPlus.gameState = {
                 }            
             }
             
+            //NIVEL AL QUE IR
+            nextLevel = 3;
+            
+            //SECONDS y MINS del HUD
+            seconds = HUD.seconds;
+            mins = HUD.mins;
+            
             //CAMBIAMOS DE NIVEL
-            this.game.state.add('main',tetrisPlus.gameState1);
-            this.game.state.start('main', Score);
+            this.game.state.add('main',tetrisPlus.loadingScreen);
+            this.game.state.start('main', Score, seconds, mins);
         }
     
         //COLLISION ARRIBA (SEGUN SI A ACABO EL NIVEL O NO)
@@ -594,7 +617,7 @@ tetrisPlus.gameState = {
         
         //OVERLAP
         this.game.physics.arcade.overlap(Player, destroyables, this.overlapScale, null, this);
-        this.game.physics.arcade.overlap(Mace, destroyables, this.CollMaceDestroyables(), null, this);
+        //this.game.physics.arcade.overlap(Mace, destroyables, this.CollMaceDestroyables(), null, this);
         
         //SPAWNEAR NUEVA PIEZA
         if(PieceActive.cantMoveDown)
@@ -671,21 +694,37 @@ tetrisPlus.gameState = {
         
         //DIE PLAYER
         this.haveDie = this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
-        
-        //PHP
-        if(key_A.isDown)
+        if(this.haveDie==true)
         {
             this.sendDataToPHP();
+            ProfesorDeadSound.play();
         }
         
-        
+        //PHP
+        /*if(key_A.isDown)
+        {
+            this.sendDataToPHP();
+        }*/
+                
         //VFX (EFECTOS VISUALES)
+        //BOMBA
         if(this.VFXBombaActivada == true)
         {
             if(VFXBomba.flag == true)
             {
                 VFXBomba.destroy();
                 this.VFXBombaActivada = false;
+            }
+        }
+             
+        
+        //LINE
+        if(this.VFXLineActivada == true)
+        {
+            if(VFXBloque.flag == true)
+            {
+                VFXBloque.destroy();
+                this.VFXLineActivada = false;
             }
         }
     
@@ -856,8 +895,11 @@ tetrisPlus.gameState = {
                             GridTetris[i][10]=null;
                             
                             //VFX BLOQUE
-                            VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, GridTetris[i], GridTetris[1], GridTetris);
+                            VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, ((1024 / 2) - (87) + (distX*5)), (800/4) -4 + distY*(i), GridTetris);
                             tetrisPlus.game.add.existing(VFXBloque);
+                            
+                            VFXBloque.animationBloque();
+                            //VFXBloque.destroy();
                             
                             for(var j=0; j<destroyables.children.length; j++)
                                 {
@@ -894,6 +936,8 @@ tetrisPlus.gameState = {
             }
         this.computeScore(contLinesToScore);
         this.clearGrid();
+        
+        //this.VFXLineActivada = true;
         
     },
     makeStaticsFall:function(row)
@@ -946,6 +990,7 @@ tetrisPlus.gameState = {
     },
     clearGrid:function()
     {
+        console.log("Limpia");
         for(var i=GridTetris.length-1; i>=0; i--)
         {
             for(var j=0; j<GridTetris[i].length; j++)
@@ -1292,7 +1337,7 @@ tetrisPlus.gameState = {
     CollMaceDestroyables:function()
     {
         //1-Mirar si por encima de la linea de la sierra hay algun static y romperlo
-        for(var i=0; i<GridTetris.length; i++)
+        /*for(var i=0; i<GridTetris.length; i++)
         {
             for(var j=0;j<GridTetris[i].length; j++)
             {
@@ -1312,8 +1357,9 @@ tetrisPlus.gameState = {
                     }
                 }
             }
-        }     
-  
+        }*/
+        
+        //this.clearGrid();
         //destruir
         //activar animacion
     },

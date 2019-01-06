@@ -82,6 +82,10 @@ var VFXBomba;
 //VFXBOMBA
 var VFXBloque;
 
+//SECONDS
+var seconds;
+var mins;
+
 tetrisPlus.gameState = {
     
     init:function(){
@@ -370,6 +374,7 @@ tetrisPlus.gameState = {
         key_Z=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.Z);
         esc=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.P);        
         key_A=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.A);
+        key_W=tetrisPlus.game.input.keyboard.addKey(Phaser.Keyboard.W);
         
         cursores=tetrisPlus.game.input.keyboard.createCursorKeys();
         
@@ -569,11 +574,11 @@ tetrisPlus.gameState = {
             }
             
             //NIVEL AL QUE IR
-            nextLevel = 1;
+            nextLevel = 3;
             
             //CAMBIAMOS DE NIVEL
-            this.game.state.add('main',tetrisPlus.loadingScreen);
-            this.game.state.start('main', Score, nextLevel);
+            this.game.state.add('main', tetrisPlus.loadingScreen);
+            this.game.state.start('main', Score);
         }
     
         //COLLISION ARRIBA (SEGUN SI A ACABO EL NIVEL O NO)
@@ -687,16 +692,16 @@ tetrisPlus.gameState = {
         this.haveDie = this.game.physics.arcade.collide(Player, Mace, this.loseGame, null, this);
         if(this.haveDie==true)
         {
+            this.sendDataToPHP();
             ProfesorDeadSound.play();
         }
         
         //PHP
-        if(key_A.isDown)
+        /*if(key_A.isDown)
         {
             this.sendDataToPHP();
-        }
-        
-        
+        }*/
+                
         //VFX (EFECTOS VISUALES)
         //BOMBA
         if(this.VFXBombaActivada == true)

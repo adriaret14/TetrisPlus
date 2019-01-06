@@ -23,35 +23,39 @@ $MySQLi_CON->close();
 <link rel="stylesheet" href="style.css" type="text/css" />
 
 <!-- SCRIPTS -->
-<script src="js/phaser.js"></script>
-<script src="js/Prefabs/T_Piece.js"></script>
-<script src="js/Prefabs/L_Piece.js"></script>
-<script src="js/Prefabs/J_Piece.js"></script>
-<script src="js/Prefabs/S_Piece.js"></script>
-<script src="js/Prefabs/Z_Piece.js"></script>
-<script src="js/Prefabs/Box_Piece.js"></script>
-<script src="js/Prefabs/Bar_Piece.js"></script>
-<script src="js/Prefabs/R_Single.js"></script>
-<script src="js/Prefabs/Bar_Single.js"></script>
-<script src="js/Prefabs/T_Single.js"></script>
-<script src="js/Prefabs/S_Single.js"></script>
-<script src="js/Prefabs/Z_Single.js"></script>
-<script src="js/Prefabs/J_Single.js"></script>
-<script src="js/Prefabs/L_Single.js"></script>
-<script src="js/Prefabs/Player.js"></script>
-<script src="js/Prefabs/PlayerWin.js"></script>
-<script src="js/Prefabs/Mace.js"></script>
-<script src="js/Prefabs/HUDClassic.js"></script>        
-<script src="js/Prefabs/HUD.js"></script>
-<script src="js/Prefabs/bomba.js"></script>
-<script src="js/Prefabs/VFXBomba.js"></script>
-<script src="js/Prefabs/VFXBloque.js"></script>
-<script src="js/gamestate.js"></script>
-<script src="js/gamestate1.js"></script>
-<script src="js/gamestate2.js"></script>
-<script src="js/gamestateClassic.js"></script>
-<script src="js/menu.js"></script>
-<script src="js/main.js"></script>
+        <script src="js/phaser.js"></script>
+        <script src="js/Prefabs/T_Piece.js"></script>
+        <script src="js/Prefabs/L_Piece.js"></script>
+        <script src="js/Prefabs/J_Piece.js"></script>
+        <script src="js/Prefabs/S_Piece.js"></script>
+        <script src="js/Prefabs/Z_Piece.js"></script>
+        <script src="js/Prefabs/Box_Piece.js"></script>
+        <script src="js/Prefabs/Bar_Piece.js"></script>
+        <script src="js/Prefabs/R_Single.js"></script>
+        <script src="js/Prefabs/Bar_Single.js"></script>
+        <script src="js/Prefabs/T_Single.js"></script>
+        <script src="js/Prefabs/S_Single.js"></script>
+        <script src="js/Prefabs/Z_Single.js"></script>
+        <script src="js/Prefabs/J_Single.js"></script>
+        <script src="js/Prefabs/L_Single.js"></script>
+        <script src="js/Prefabs/Player.js"></script>
+        <script src="js/Prefabs/PlayerWin.js"></script>
+        <script src="js/Prefabs/Mace.js"></script>
+        <script src="js/Prefabs/HUDClassic.js"></script>        
+        <script src="js/Prefabs/HUD.js"></script>
+        <script src="js/Prefabs/bomba.js"></script>
+        <script src="js/Prefabs/VFXBomba.js"></script>
+        <script src="js/Prefabs/VFXBloque.js"></script>
+        <script src="js/gamestate.js"></script>
+        <script src="js/gamestate1.js"></script>
+        <script src="js/gamestate2.js"></script>
+        <script src="js/gamestate3.js"></script>
+        <script src="js/gamestate4.js"></script>
+        <script src="js/gamestateClassic.js"></script>
+        <script src="js/loadingScreen.js"></script>
+        <script src="js/intro.js"></script>
+        <script src="js/menu.js"></script>
+        <script src="js/main.js"></script>
 </head>
 <body>
 
@@ -68,12 +72,9 @@ $MySQLi_CON->close();
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Stats</a></li>
-            <li><a href="#">Server Status</a></li>
-            <li><a href="#">Friends</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp; <?php echo $userRow['username']; ?></a></li>
+            <li><a href="home.php"><span class="glyphicon glyphicon-user"></span>&nbsp; <?php echo $userRow['username']; ?></a></li>
             <li><a href="logout.php?logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp; Logout</a></li>
           </ul>
         </div><!--/.nav-collapse -->

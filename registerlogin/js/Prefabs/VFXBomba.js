@@ -22,7 +22,7 @@ tetrisPlus.VFXBomba.prototype.update = function()
     //EN CUANTO FINALICE DESTRUIMOS
     if(this.flag == false)
     {
-        this.animations.play('VFXExplosion', 5, true);
+        this.animations.play('VFXExplosion', 10, true);
     }
 
     if(this.animations.currentAnim.frame == 6)

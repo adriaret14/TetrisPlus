@@ -62,6 +62,7 @@ var HUD;
 
 //Modo
 var Modo;
+var nextLevel;
 
 tetrisPlus.gameStateClassic = {
     
@@ -120,6 +121,9 @@ tetrisPlus.gameStateClassic = {
         //FONDO
         this.game.load.image('bg1', 'assets/img/FondoClassico.png');
         this.game.load.image('Classicbg', 'assets/img/Classicbg.png');
+        
+        //VFX BLOQUE
+        this.load.spritesheet('bloque', 'assets/img/LineDoneYellow.png', 80, 28);
     },
     create:function(){     
         //pause
@@ -189,6 +193,7 @@ tetrisPlus.gameStateClassic = {
             GridTetris[i]=new Array(10);
         }
         
+        console.log(nextLevel);
         
         //BORDES DEL MAPA
 
@@ -573,6 +578,11 @@ tetrisPlus.gameStateClassic = {
                             GridTetris[i][8]=null;
                             GridTetris[i][9]=null;
                             GridTetris[i][10]=null;
+                            
+                            VFXBloque = new tetrisPlus.VFXBloque(tetrisPlus.game, ((1024 / 2) - (87) + (distX*5)), (800/4) -4 + distY*(i), GridTetris);
+                            tetrisPlus.game.add.existing(VFXBloque);
+                            
+                            VFXBloque.animationBloque();
 
                             for(var j=0; j<destroyables.children.length; j++)
                                 {
@@ -802,6 +812,12 @@ tetrisPlus.gameStateClassic = {
         if(GridTetris[5][1]==5 || GridTetris[5][2]==5 || GridTetris[5][3]==5 || GridTetris[5][4]==5 || GridTetris[5][5]==5 || GridTetris[5][6]==5 || GridTetris[5][7]==5 || GridTetris[5][8]==5 || GridTetris[5][9]==5 || GridTetris[5][10]==5)
             {
                 //TODO: Game Lost go to ranking screen
+                nextLevel = 6;
+                
+                //CAMBIAMOS DE NIVEL
+                this.game.state.add('main',tetrisPlus.loadingScreen);
+                this.game.state.start('main', Score, nextLevel);
+                
                 console.log("PARTIDA FINALIZADA");
                 bgSound.stop();
                 gameOverSound.play();
